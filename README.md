@@ -1,31 +1,12 @@
-[![Build Status](https://github.com/muehmar/pojo-extension/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/muehmar/pojo-extension/blob/master/.github/workflows/gradle.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/muehmar/pojo-extenstion/blob/master/LICENSE)
+[![Build Status](https://github.com/muehmar/pojo-builder/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/muehmar/pojo-builder/blob/master/.github/workflows/gradle.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/muehmar/pojo-builder/blob/master/LICENSE)
 
-# Pojo Extension
+# Pojo Builder
 
-Generates advanced boilerplate code for your immutable data classes or Java 16 records.
+Generates advanced builders for your immutable data classes or Java 16 records.
 
-This annotation processor extends your data classes or records with simple, well known boilerplate code but also with
-more advanced features like the Safe Builder or allows to distinguish between required and optional fields in the class.
-The generated code follows the convention not using `null` to improve compiler support.
-
-This annotation processor does intentionally not modify the AST. The processor creates new classes or interfaces to add
-the features to your data classes or records.
-
-The annotation processor can distinguish between optional and required fields in a data class or a record, i.e. which
-fields must be present all times and which may be absent.
-
-Currently, the following features are supported:
-
-* SafeBuilder - Special builder class which enforces (at compile time) setting all required attributes.
-    * User defined methods for fields in SafeBuilder
-* `withXX()` method for each field
-* `mapXX()` methods for fluent 'updates'
-* Convenience getters for optional fields
-
-This processor does not generate `equals/hashCode` as well as the `toString` method. Records since Java 16 provide this
-out of the box, if an earlier version is used, there are a lot of tools which do this already (for example lombok
-with `@Value`).
+REMARK: This is a fork of the pojo-extension project, which will contain only the builder part. The description gets 
+updated as soon as the migration is finished.
 
 ## Usage
 
