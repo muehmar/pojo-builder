@@ -6,7 +6,7 @@ let
 in
 
 nixpkgs.mkShell {
-  name = "PojoExtension";
+  name = "PojoBuilder";
   JAVA_HOME = "${java}/lib/openjdk";
   JDK_HOME = "${java}/lib/openjdk";
 
