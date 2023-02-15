@@ -1,4 +1,4 @@
-rootProject.name = "pojo-extension"
+rootProject.name = "pojo-builder"
 
 include 'core'
 include 'core-annotations'
