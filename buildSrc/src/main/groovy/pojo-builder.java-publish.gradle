@@ -12,16 +12,16 @@ java {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'pojo-extension' + project.name.replace('core', '')
+            artifactId = 'pojo-builder' + project.name.replace('core', '')
             from components.java
             pom {
-                name = 'Pojo Extension'
-                description = 'Java Annotation Processor for Pojo Extension class'
-                url = 'https://github.com/muehmar/pojo-extension'
+                name = 'Pojo Builder'
+                description = 'Java Annotation Processor for advanced Pojo Builder'
+                url = 'https://github.com/muehmar/pojo-builder'
                 licenses {
                     license {
                         name = 'MIT License'
-                        url = 'https://github.com/muehmar/pojo-extension/blob/main/LICENSE'
+                        url = 'https://github.com/muehmar/pojo-builder/blob/main/LICENSE'
                     }
                 }
                 developers {
@@ -32,9 +32,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:git://github.com/muehmar/pojo-extension.git'
-                    developerConnection = 'scm:git:ssh://github.com/muehmar/pojo-extension.git'
-                    url = 'https://github.com/muehmar/pojo-extension.git'
+                    connection = 'scm:git:git://github.com/muehmar/pojo-builder.git'
+                    developerConnection = 'scm:git:ssh://github.com/muehmar/pojo-builder.git'
+                    url = 'https://github.com/muehmar/pojo-builder.git'
                 }
             }
         }
