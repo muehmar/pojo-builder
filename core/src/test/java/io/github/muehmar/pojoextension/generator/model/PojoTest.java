@@ -2,7 +2,6 @@ package io.github.muehmar.pojoextension.generator.model;
 
 import static io.github.muehmar.pojoextension.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojoextension.generator.impl.gen.Refs.JAVA_UTIL_LIST;
-import static io.github.muehmar.pojoextension.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojoextension.generator.model.OptionalFieldRelation.SAME_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojoextension.generator.Pojos;
-import io.github.muehmar.pojoextension.generator.model.type.Types;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -62,26 +60,6 @@ class PojoTest {
     final Optional<MatchingConstructor> matchingConstructor = pojo.findMatchingConstructor();
 
     assertFalse(matchingConstructor.isPresent());
-  }
-
-  @Test
-  void findMatchingGetter_when_calledForFieldInPojo_then_returnsFieldGetter() {
-    final Pojo pojo = Pojos.sample();
-    final Optional<FieldGetter> fieldGetter = pojo.findMatchingGetter(pojo.getFields().head());
-
-    final FieldGetter expected =
-        new FieldGetter(pojo.getGetters().head(), pojo.getFields().head(), SAME_TYPE);
-    assertEquals(Optional.of(expected), fieldGetter);
-  }
-
-  @Test
-  void findMatchingGetter_when_calledForOtherField_then_returnsEmpty() {
-    final Pojo pojo = Pojos.sample();
-    final Optional<FieldGetter> fieldGetter =
-        pojo.findMatchingGetter(
-            new PojoField(Name.fromString("notAFieldInTheSamplePojo"), Types.string(), REQUIRED));
-
-    assertEquals(Optional.empty(), fieldGetter);
   }
 
   @Test

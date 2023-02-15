@@ -3,7 +3,6 @@ package io.github.muehmar.pojoextension.processor;
 import static io.github.muehmar.pojoextension.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojoextension.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojoextension.generator.model.type.Types.integer;
-import static io.github.muehmar.pojoextension.generator.model.type.Types.primitiveBoolean;
 import static io.github.muehmar.pojoextension.generator.model.type.Types.string;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,8 +16,6 @@ import io.github.muehmar.pojoextension.generator.PojoFields;
 import io.github.muehmar.pojoextension.generator.model.Argument;
 import io.github.muehmar.pojoextension.generator.model.Constructor;
 import io.github.muehmar.pojoextension.generator.model.Generic;
-import io.github.muehmar.pojoextension.generator.model.Getter;
-import io.github.muehmar.pojoextension.generator.model.GetterBuilder;
 import io.github.muehmar.pojoextension.generator.model.Name;
 import io.github.muehmar.pojoextension.generator.model.Necessity;
 import io.github.muehmar.pojoextension.generator.model.PackageName;
@@ -62,7 +59,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -96,7 +92,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -130,7 +125,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -173,7 +167,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -220,7 +213,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         className, PList.single(new Argument(Names.id(), Types.string())))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -252,7 +244,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(PList.single(new Constructor(className, PList.empty())))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -299,7 +290,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -338,79 +328,11 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
 
     assertEquals(expected, pojoAndSettings.getPojo());
-  }
-
-  @Test
-  void run_when_gettersPresent_then_extractOnlyGettersCorrectly() {
-    final Name className = randomClassName();
-
-    final String classString =
-        TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(PojoExtension.class)
-            .withImport(Optional.class)
-            .annotation(PojoExtension.class)
-            .className(className)
-            .withField("Optional<String>", "data")
-            .withField("Integer", "key")
-            .constructor()
-            .getter("Optional<String>", "data")
-            .getter("Integer", "key")
-            .method("void", "doSomething", "")
-            .method("boolean", "isFlag", "return true")
-            .create();
-
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedClassName(className), classString);
-
-    final PList<Getter> expected =
-        PList.of(
-            GetterBuilder.create()
-                .name(Name.fromString("getData"))
-                .returnType(Types.optional(string()))
-                .build(),
-            GetterBuilder.create().name(Name.fromString("getKey")).returnType(integer()).build(),
-            GetterBuilder.create()
-                .name(Name.fromString("isFlag"))
-                .returnType(primitiveBoolean())
-                .build());
-
-    assertEquals(expected, pojoAndSettings.getPojo().getGetters());
-  }
-
-  @Test
-  void run_when_annotatedGetterPresent_then_extractGetterWithFieldName() {
-    final Name className = randomClassName();
-
-    final String classString =
-        TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(PojoExtension.class)
-            .withImport(io.github.muehmar.pojoextension.annotations.Getter.class)
-            .annotation(PojoExtension.class)
-            .className(className)
-            .withField("Integer", "key")
-            .constructor()
-            .getterWithAnnotation("Integer", "key", "@Getter(\"key\")")
-            .create();
-
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedClassName(className), classString);
-
-    final PList<Getter> expected =
-        PList.of(
-            GetterBuilder.create()
-                .name(Name.fromString("getKey"))
-                .returnType(Types.integer())
-                .andOptionals()
-                .fieldName(Name.fromString("key"))
-                .build());
-
-    assertEquals(expected, pojoAndSettings.getPojo().getGetters());
   }
 
   @Test
@@ -439,7 +361,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -493,7 +414,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.single(generic))
             .fieldBuilders(PList.empty())
             .build();
@@ -542,7 +462,6 @@ class PojoExtensionProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(className, fields.map(PojoFields::toArgument))))
-            .getters(PList.empty())
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .build();

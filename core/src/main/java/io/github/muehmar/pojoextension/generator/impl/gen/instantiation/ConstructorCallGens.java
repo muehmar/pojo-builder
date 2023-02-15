@@ -7,11 +7,9 @@ import static io.github.muehmar.pojoextension.generator.model.OptionalFieldRelat
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.pojoextension.Mapper;
-import io.github.muehmar.pojoextension.generator.model.FieldGetter;
 import io.github.muehmar.pojoextension.generator.model.MatchingConstructor;
 import io.github.muehmar.pojoextension.generator.model.OptionalFieldRelation;
 import io.github.muehmar.pojoextension.generator.model.Pojo;
-import io.github.muehmar.pojoextension.generator.model.PojoField;
 import io.github.muehmar.pojoextension.generator.model.settings.PojoSettings;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,55 +36,6 @@ public class ConstructorCallGens {
                           fa ->
                               FinalConstructorArgument.ofFieldVariable(
                                   new FieldVariable(pojo, fa.getField(), SAME_TYPE), fa));
-
-              return new ConstructorCall(pojo, fields, matchingConstructor);
-            });
-  }
-
-  public static Generator<FieldVariable, PojoSettings> callWithSingleFieldVariable(String prefix) {
-    return Generator.<FieldVariable, PojoSettings>emptyGen()
-        .append(
-            constructorCallForFields(prefix),
-            fieldVariable -> {
-              final Pojo pojo = fieldVariable.getPojo();
-              final MatchingConstructor matchingConstructor = pojo.getMatchingConstructorOrThrow();
-
-              final PList<FinalConstructorArgument> fields =
-                  matchingConstructor
-                      .getFieldArguments()
-                      .map(
-                          fa -> {
-                            final PojoField pojoField = fa.getField();
-                            if (pojoField.equals(fieldVariable.getField())) {
-                              return FinalConstructorArgument.ofFieldVariable(fieldVariable, fa);
-                            } else {
-                              final FieldGetter fieldGetter =
-                                  pojo.getMatchingGetterOrThrow(pojoField);
-                              return FinalConstructorArgument.ofGetter(fieldGetter, fa);
-                            }
-                          });
-
-              return new ConstructorCall(pojo, fields, matchingConstructor);
-            });
-  }
-
-  public static Generator<Pojo, PojoSettings> callWithNoFieldVariables(String prefix) {
-    return Generator.<Pojo, PojoSettings>emptyGen()
-        .append(
-            constructorCallForFields(prefix),
-            pojo -> {
-              final MatchingConstructor matchingConstructor = pojo.getMatchingConstructorOrThrow();
-
-              final PList<FinalConstructorArgument> fields =
-                  matchingConstructor
-                      .getFieldArguments()
-                      .map(
-                          fa -> {
-                            final PojoField pojoField = fa.getField();
-                            final FieldGetter fieldGetter =
-                                pojo.getMatchingGetterOrThrow(pojoField);
-                            return FinalConstructorArgument.ofGetter(fieldGetter, fa);
-                          });
 
               return new ConstructorCall(pojo, fields, matchingConstructor);
             });

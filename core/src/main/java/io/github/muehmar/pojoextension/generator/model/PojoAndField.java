@@ -12,8 +12,4 @@ public class PojoAndField implements PojoAndFieldExtension {
   public static PojoAndField of(Pojo pojo, PojoField field) {
     return new PojoAndField(pojo, field);
   }
-
-  public FieldGetter getMatchingGetterOrThrow() {
-    return pojo.getMatchingGetterOrThrow(field);
-  }
 }

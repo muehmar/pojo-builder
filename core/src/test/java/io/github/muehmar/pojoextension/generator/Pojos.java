@@ -7,7 +7,6 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojoextension.generator.model.Argument;
 import io.github.muehmar.pojoextension.generator.model.Constructor;
 import io.github.muehmar.pojoextension.generator.model.Generic;
-import io.github.muehmar.pojoextension.generator.model.Getter;
 import io.github.muehmar.pojoextension.generator.model.Name;
 import io.github.muehmar.pojoextension.generator.model.PackageName;
 import io.github.muehmar.pojoextension.generator.model.Pojo;
@@ -28,15 +27,12 @@ public class Pojos {
             new PojoField(Name.fromString("username"), Types.string(), REQUIRED),
             new PojoField(Name.fromString("nickname"), Types.string(), OPTIONAL));
 
-    final PList<Getter> getters = fields.map(PojoFields::toGetter);
-
     final Pojo pojo =
         PojoBuilder.create()
             .name(Name.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
-            .getters(getters)
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .andAllOptionals()
@@ -70,8 +66,6 @@ public class Pojos {
                 Types.typeVariable(Name.fromString("S")),
                 OPTIONAL));
 
-    final PList<Getter> getters = fields.map(PojoFields::toGetter);
-
     final PList<Generic> generics =
         PList.of(
             new Generic(Name.fromString("T"), PList.single(Types.list(Types.string()))),
@@ -83,7 +77,6 @@ public class Pojos {
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
-            .getters(getters)
             .generics(generics)
             .fieldBuilders(PList.empty())
             .andAllOptionals()

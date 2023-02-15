@@ -2,11 +2,11 @@ package io.github.muehmar.pojoextension.example;
 
 import io.github.muehmar.pojoextension.annotations.Getter;
 import io.github.muehmar.pojoextension.annotations.Nullable;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojoextension.annotations.SafeBuilder;
 import java.util.Optional;
 
-@PojoExtension
-public class Customer implements CustomerExtension {
+@SafeBuilder
+public class Customer {
   private final String id;
   private final String name;
   private final Optional<String> nickname;
@@ -63,8 +63,8 @@ public class Customer implements CustomerExtension {
     return flag;
   }
 
-  @PojoExtension
-  public static class Address implements CustomerAddressExtension {
+  @SafeBuilder
+  public static class Address {
     private final String street;
     private final String city;
 

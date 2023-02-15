@@ -19,18 +19,6 @@ class GenericClassTest {
     assertEquals(Code.A1, genericClass.getCode());
   }
 
-  @Test
-  void withProp1_when_called_then_prop1Changed() {
-    assertEquals("prop1Changed", sampleInstance().withProp1("prop1Changed").getProp1());
-  }
-
-  @Test
-  void map_when_called_then_mapFunctionApplied() {
-    final GenericClass<Data, String> genericClass = sampleInstance();
-    final Data data = genericClass.map(GenericClass::getData);
-    assertEquals("Hello World!", data.get(0));
-  }
-
   public static class Data extends ArrayList<String> implements Comparable<Data> {
     @Override
     public int compareTo(Data o) {
@@ -41,18 +29,6 @@ class GenericClassTest {
     public String toString() {
       return "Data{}";
     }
-  }
-
-  private static GenericClass<Data, String> sampleInstance() {
-    final Data data = new Data();
-    data.add("Hello World!");
-    return GenericClassBuilder.<Data, String>create()
-        .prop1("prop1")
-        .data(data)
-        .code(Code.A2)
-        .andAllOptionals()
-        .additionalData("additionalData")
-        .build();
   }
 
   private enum Code {

@@ -1,7 +1,6 @@
 package io.github.muehmar.pojoextension.generator.impl.gen.instantiation;
 
 import io.github.muehmar.pojoextension.generator.model.FieldArgument;
-import io.github.muehmar.pojoextension.generator.model.FieldGetter;
 import io.github.muehmar.pojoextension.generator.model.OptionalFieldRelation;
 import java.util.Objects;
 
@@ -20,14 +19,6 @@ class FinalConstructorArgument {
     return new FinalConstructorArgument(
         fieldVariable.getField().getName().asString(),
         fieldVariable.getRelation().andThen(fieldArgument.getRelation()));
-  }
-
-  public static FinalConstructorArgument ofGetter(
-      FieldGetter fieldGetter, FieldArgument fieldArgument) {
-    final OptionalFieldRelation relation =
-        fieldGetter.getRelation().andThen(fieldArgument.getRelation());
-    return new FinalConstructorArgument(
-        fieldGetter.getGetter().getName().append("()").asString(), relation);
   }
 
   public String getFieldString() {

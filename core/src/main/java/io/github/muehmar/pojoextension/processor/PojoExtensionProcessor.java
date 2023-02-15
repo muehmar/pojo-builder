@@ -25,14 +25,12 @@ import io.github.muehmar.pojoextension.annotations.Ignore;
 import io.github.muehmar.pojoextension.annotations.Nullable;
 import io.github.muehmar.pojoextension.annotations.OptionalDetection;
 import io.github.muehmar.pojoextension.annotations.PojoExtension;
-import io.github.muehmar.pojoextension.generator.impl.gen.extension.ExtensionGens;
 import io.github.muehmar.pojoextension.generator.impl.gen.safebuilder.SafeBuilderClassGens;
 import io.github.muehmar.pojoextension.generator.model.BuildMethod;
 import io.github.muehmar.pojoextension.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojoextension.generator.model.Constructor;
 import io.github.muehmar.pojoextension.generator.model.FieldBuilder;
 import io.github.muehmar.pojoextension.generator.model.Generic;
-import io.github.muehmar.pojoextension.generator.model.Getter;
 import io.github.muehmar.pojoextension.generator.model.Name;
 import io.github.muehmar.pojoextension.generator.model.PackageName;
 import io.github.muehmar.pojoextension.generator.model.Pojo;
@@ -176,7 +174,6 @@ public class PojoExtensionProcessor extends AbstractProcessor {
         new DetectionSettings(settings.getOptionalDetections());
 
     final PList<Constructor> constructors = ConstructorProcessor.process(element);
-    final PList<Getter> getters = GetterProcessor.process(element);
     final PList<Generic> generics = ClassTypeVariableProcessor.processGenerics(element);
     final PList<FieldBuilder> fieldBuilders = FieldBuilderProcessor.process(element);
     final Optional<BuildMethod> buildMethod = BuildMethodProcessor.process(element);
@@ -193,7 +190,6 @@ public class PojoExtensionProcessor extends AbstractProcessor {
         .pkg(classPackage)
         .fields(fields)
         .constructors(constructors)
-        .getters(getters)
         .generics(generics)
         .fieldBuilders(fieldBuilders)
         .andAllOptionals()
@@ -286,12 +282,6 @@ public class PojoExtensionProcessor extends AbstractProcessor {
   }
 
   private void writeExtensionClass(Pojo pojo, PojoSettings settings) {
-    writeJavaFile(
-        settings.qualifiedExtensionName(pojo),
-        ExtensionGens.extensionInterface(),
-        pojo,
-        settings,
-        settings.createExtension());
     writeJavaFile(
         settings.qualifiedBuilderName(pojo),
         SafeBuilderClassGens.safeBuilderClass(),

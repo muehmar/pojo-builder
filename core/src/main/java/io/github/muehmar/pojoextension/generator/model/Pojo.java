@@ -20,7 +20,6 @@ public class Pojo implements io.github.muehmar.pojoextension.generator.model.Poj
   PackageName pkg;
   PList<PojoField> fields;
   PList<Constructor> constructors;
-  PList<Getter> getters;
   PList<Generic> generics;
   PList<FieldBuilder> fieldBuilders;
   Optional<BuildMethod> buildMethod;
@@ -82,40 +81,6 @@ public class Pojo implements io.github.muehmar.pojoextension.generator.model.Poj
             + "it should be accessible from within the same package, i.e. at least package-private. If a field is"
             + "instantiated in the constructor and not part of the arguments, you can annotate it with @Ignore.",
         getName());
-  }
-
-  public Optional<FieldGetter> findMatchingGetter(PojoField field) {
-    return getters.flatMapOptional(g -> g.getFieldGetter(field)).headOption();
-  }
-
-  public FieldGetter getMatchingGetterOrThrow(PojoField field) {
-    return findMatchingGetter(field)
-        .orElseThrow(() -> new IllegalArgumentException(noGetterFoundMessage(field)));
-  }
-
-  public PList<FieldGetter> getAllGettersOrThrow() {
-    final Pojo self = this;
-    return fields.map(self::getMatchingGetterOrThrow);
-  }
-
-  private String noGetterFoundMessage(PojoField field) {
-    final String optionalMessage =
-        field.isOptional()
-            ? "The the actual type of this non-required field can be wrapped into an java.util.Optional."
-            : "";
-    return String.format(
-        "Unable to find the getter for field '%s' in class/record %s.\n"
-            + "The method name should be '%s' and the returnType should match the field type %s.\n"
-            + "In case the method cannot be renamed you can use the @Getter(\"%s\") annotation to mark\n"
-            + "the method as getter for the field '%s'.\n"
-            + "%s",
-        field.getName(),
-        getName(),
-        Getter.javaBeanGetterName(field),
-        field.getType().getTypeDeclaration(),
-        field.getName(),
-        field.getName(),
-        optionalMessage);
   }
 
   public Name findUnusedTypeVariableName() {

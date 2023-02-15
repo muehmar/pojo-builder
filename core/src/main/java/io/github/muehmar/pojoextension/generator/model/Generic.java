@@ -8,7 +8,7 @@ import lombok.Value;
 
 @Value
 @PojoExtension
-public class Generic implements GenericExtension {
+public class Generic {
   Name typeVariable;
   PList<Type> upperBounds;
 
