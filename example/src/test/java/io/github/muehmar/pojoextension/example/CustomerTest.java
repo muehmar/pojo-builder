@@ -25,11 +25,11 @@ class CustomerTest {
             .setAge(empty())
             .build();
 
-    assertEquals(SAMPLE_ID, customer.getIdentification());
+    assertEquals(SAMPLE_ID, customer.getId());
     assertEquals("Dexter", customer.getName());
     assertEquals(12.5d, customer.getRandom());
     assertArrayEquals(new byte[] {0x15}, customer.getKey());
-    assertEquals(Optional.of("Dex"), customer.getNick());
+    assertEquals(Optional.of("Dex"), customer.getNickname());
     assertEquals(empty(), customer.getAge());
   }
 

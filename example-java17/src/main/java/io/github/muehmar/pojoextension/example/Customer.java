@@ -1,6 +1,5 @@
 package io.github.muehmar.pojoextension.example;
 
-import io.github.muehmar.pojoextension.annotations.Getter;
 import io.github.muehmar.pojoextension.annotations.Nullable;
 import io.github.muehmar.pojoextension.annotations.SafeBuilder;
 import java.util.Optional;
@@ -33,7 +32,6 @@ public class Customer {
     this.flag = flag;
   }
 
-  @Getter("id")
   public String getIdentification() {
     return id;
   }
@@ -46,7 +44,6 @@ public class Customer {
     return random;
   }
 
-  @Getter("nickname")
   public Optional<String> getNick() {
     return nickname;
   }
