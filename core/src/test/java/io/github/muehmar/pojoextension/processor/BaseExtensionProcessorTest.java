@@ -26,13 +26,13 @@ public abstract class BaseExtensionProcessorTest {
 
   protected static PojoAndSettings runAnnotationProcessor(Name name, String content) {
     final AtomicReference<PojoAndSettings> ref = new AtomicReference<>();
-    final PojoExtensionProcessor pojoExtensionProcessor =
-        new PojoExtensionProcessor(
+    final PojoBuilderProcessor pojoBuilderProcessor =
+        new PojoBuilderProcessor(
             ((pojo, settings) -> ref.set(new PojoAndSettings(pojo, settings))));
 
     try {
       Reflect.compile(
-          name.asString(), content, new CompileOptions().processors(pojoExtensionProcessor));
+          name.asString(), content, new CompileOptions().processors(pojoBuilderProcessor));
     } catch (Exception e) {
       Assertions.fail("Compilation failed: " + e.getMessage());
     }

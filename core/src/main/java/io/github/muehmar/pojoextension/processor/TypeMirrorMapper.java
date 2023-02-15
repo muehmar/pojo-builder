@@ -12,7 +12,7 @@ import static javax.lang.model.type.TypeKind.VOID;
 import static javax.lang.model.type.TypeKind.WILDCARD;
 
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojoextension.exception.PojoExtensionException;
+import io.github.muehmar.pojoextension.exception.PojoBuilderException;
 import io.github.muehmar.pojoextension.generator.model.Name;
 import io.github.muehmar.pojoextension.generator.model.type.ClassnameParser;
 import io.github.muehmar.pojoextension.generator.model.type.Type;
@@ -36,7 +36,7 @@ public class TypeMirrorMapper {
         .map(mapper -> mapper.apply(typeMirror))
         .orElseThrow(
             () ->
-                new PojoExtensionException(
+                new PojoBuilderException(
                     "TypeKind "
                         + typeMirror.getKind()
                         + " not supported for TypeMirror "

@@ -3,7 +3,7 @@ package io.github.muehmar.pojoextension.generator.model;
 import static io.github.muehmar.pojoextension.Booleans.not;
 
 import io.github.muehmar.pojoextension.annotations.PojoExtension;
-import io.github.muehmar.pojoextension.exception.PojoExtensionException;
+import io.github.muehmar.pojoextension.exception.PojoBuilderException;
 import io.github.muehmar.pojoextension.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojoextension.generator.model.type.Type;
 import java.util.Optional;
@@ -61,7 +61,7 @@ public class PojoField implements PojoFieldExtension {
     final boolean sameType = method.getReturnType().equals(type);
     if (not(sameType)) {
       final String message = formatErrorMessage(pojoName, method);
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
     return true;
   }
@@ -80,7 +80,7 @@ public class PojoField implements PojoFieldExtension {
       final String message =
           formatErrorMessage(pojoName, method)
               + " As this field is optional, the actual type could also be wrapped into a java.util.Optional.";
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
     return true;
   }

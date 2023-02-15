@@ -1,6 +1,5 @@
 package io.github.muehmar.pojoextension.generator.impl.gen.safebuilder;
 
-import static io.github.muehmar.pojoextension.generator.model.settings.Ability.DISABLED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -379,20 +378,6 @@ class CompleteSafeBuilderGensTest {
   }
 
   @Test
-  void completeSafeBuilder_when_safeBuilderDisabled_then_emptyOutput() {
-    final Generator<Pojo, PojoSettings> generator = CompleteSafeBuilderGens.completeSafeBuilder();
-    final String output =
-        generator
-            .generate(
-                Pojos.sample(),
-                PojoSettings.defaultSettings().withSafeBuilderAbility(DISABLED),
-                Writer.createDefault())
-            .asString();
-
-    assertEquals("", output);
-  }
-
-  @Test
   void newBuilderMethod_when_called_then_correctOutput() {
     final Generator<Pojo, PojoSettings> gen = CompleteSafeBuilderGens.newBuilderMethod();
     final String output =
@@ -402,19 +387,6 @@ class CompleteSafeBuilderGensTest {
     assertEquals(
         "public static Builder0 newBuilder() {\n" + "  return new Builder0(new Builder());\n" + "}",
         output);
-  }
-
-  @Test
-  void newBuilderMethod_when_safeBuilderDisabled_then_emptyOutput() {
-    final Generator<Pojo, PojoSettings> gen = CompleteSafeBuilderGens.newBuilderMethod();
-    final String output =
-        gen.generate(
-                Pojos.sample(),
-                PojoSettings.defaultSettings().withSafeBuilderAbility(DISABLED),
-                Writer.createDefault())
-            .asString();
-
-    assertEquals("", output);
   }
 
   @Test

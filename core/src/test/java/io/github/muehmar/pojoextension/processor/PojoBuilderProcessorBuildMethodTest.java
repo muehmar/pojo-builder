@@ -2,22 +2,22 @@ package io.github.muehmar.pojoextension.processor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojoextension.annotations.SafeBuilder;
 import io.github.muehmar.pojoextension.generator.model.BuildMethod;
 import io.github.muehmar.pojoextension.generator.model.Name;
 import io.github.muehmar.pojoextension.generator.model.type.Types;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-class PojoExtensionProcessorBuildMethodTest extends BaseExtensionProcessorTest {
+class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
   @Test
   void run_when_simplePojoWithoutBuildMethod_then_noBuildMethodInPojo() {
     final Name className = randomClassName();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(PojoExtension.class)
-            .annotation(PojoExtension.class)
+            .withImport(SafeBuilder.class)
+            .annotation(SafeBuilder.class)
             .className(className)
             .withField("String", "id")
             .constructor()
@@ -36,9 +36,9 @@ class PojoExtensionProcessorBuildMethodTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(PojoExtension.class)
+            .withImport(SafeBuilder.class)
             .withImport(io.github.muehmar.pojoextension.annotations.BuildMethod.class)
-            .annotation(PojoExtension.class)
+            .annotation(SafeBuilder.class)
             .className(className)
             .withField("String", "id")
             .constructor()

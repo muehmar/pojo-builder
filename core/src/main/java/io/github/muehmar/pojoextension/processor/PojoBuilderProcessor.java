@@ -3,15 +3,8 @@ package io.github.muehmar.pojoextension.processor;
 import static io.github.muehmar.pojoextension.Booleans.not;
 import static io.github.muehmar.pojoextension.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojoextension.generator.model.Necessity.REQUIRED;
-import static io.github.muehmar.pojoextension.generator.model.settings.ExtensionUsage.INHERITED;
-import static io.github.muehmar.pojoextension.generator.model.settings.ExtensionUsage.STATIC;
 import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getBuilderName;
 import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getBuilderSetMethodPrefix;
-import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getEnableMappers;
-import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getEnableOptionalGetters;
-import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getEnableSafeBuilder;
-import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getEnableWithers;
-import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getExtensionName;
 import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getOptionalDetection;
 import static io.github.muehmar.pojoextension.processor.AnnotationMemberExtractor.getPackagePrivateBuilder;
 
@@ -24,7 +17,7 @@ import io.github.muehmar.pojoextension.Strings;
 import io.github.muehmar.pojoextension.annotations.Ignore;
 import io.github.muehmar.pojoextension.annotations.Nullable;
 import io.github.muehmar.pojoextension.annotations.OptionalDetection;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojoextension.annotations.SafeBuilder;
 import io.github.muehmar.pojoextension.generator.impl.gen.safebuilder.SafeBuilderClassGens;
 import io.github.muehmar.pojoextension.generator.model.BuildMethod;
 import io.github.muehmar.pojoextension.generator.model.ClassAccessLevelModifier;
@@ -36,8 +29,6 @@ import io.github.muehmar.pojoextension.generator.model.PackageName;
 import io.github.muehmar.pojoextension.generator.model.Pojo;
 import io.github.muehmar.pojoextension.generator.model.PojoBuilder;
 import io.github.muehmar.pojoextension.generator.model.PojoField;
-import io.github.muehmar.pojoextension.generator.model.settings.Ability;
-import io.github.muehmar.pojoextension.generator.model.settings.ExtensionUsage;
 import io.github.muehmar.pojoextension.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojoextension.generator.model.type.ClassnameParser;
 import io.github.muehmar.pojoextension.generator.model.type.DeclaredType;
@@ -64,16 +55,16 @@ import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes("*")
 @AutoService(Processor.class)
-public class PojoExtensionProcessor extends AbstractProcessor {
+public class PojoBuilderProcessor extends AbstractProcessor {
   private static final int MAX_ANNOTATION_PATH_DEPTH = 50;
 
   private final Optional<BiConsumer<Pojo, PojoSettings>> redirectPojo;
 
-  private PojoExtensionProcessor(Optional<BiConsumer<Pojo, PojoSettings>> redirectPojo) {
+  private PojoBuilderProcessor(Optional<BiConsumer<Pojo, PojoSettings>> redirectPojo) {
     this.redirectPojo = redirectPojo;
   }
 
-  public PojoExtensionProcessor() {
+  public PojoBuilderProcessor() {
     this(Optional.empty());
   }
 
@@ -81,7 +72,7 @@ public class PojoExtensionProcessor extends AbstractProcessor {
    * Creates an annotation processor which does not actually produce output but redirects the
    * created {@link Pojo} and {@link PojoSettings} instances to the given consumer.
    */
-  public PojoExtensionProcessor(BiConsumer<Pojo, PojoSettings> redirectPojo) {
+  public PojoBuilderProcessor(BiConsumer<Pojo, PojoSettings> redirectPojo) {
     this(Optional.of(redirectPojo));
   }
 
@@ -128,7 +119,7 @@ public class PojoExtensionProcessor extends AbstractProcessor {
         extractPojo(
             classElement, pojoSettings, nameAndPackage.getClassname().asName(), classPackage);
 
-    outputPojo(pojo, deviateExtensionUsage(classElement, pojoSettings, pojo));
+    outputPojo(pojo, pojoSettings);
   }
 
   private Optional<ElementAndAnnotationPath> findAnnotationPath(TypeElement element) {
@@ -152,7 +143,7 @@ public class PojoExtensionProcessor extends AbstractProcessor {
                     .asElement()
                     .asType()
                     .toString()
-                    .equals(PojoExtension.class.getName()));
+                    .equals(SafeBuilder.class.getName()));
 
     return pojoExtension
         .map(currentPath::cons)
@@ -197,21 +188,6 @@ public class PojoExtensionProcessor extends AbstractProcessor {
         .build();
   }
 
-  private PojoSettings deviateExtensionUsage(
-      TypeElement element, PojoSettings settings, Pojo pojo) {
-
-    final String superclassString = element.getSuperclass().toString();
-    final String unqualifiedExtensionName = settings.extensionName(pojo).asString();
-    final String qualifiedExtensionName = settings.qualifiedExtensionName(pojo).asString();
-    final ExtensionUsage extensionUsage =
-        superclassString.equals(unqualifiedExtensionName)
-                || superclassString.equals(qualifiedExtensionName)
-            ? INHERITED
-            : STATIC;
-
-    return settings.withExtensionUsage(extensionUsage);
-  }
-
   private PojoSettings extractSettingsFromAnnotationPath(PList<AnnotationMirror> annotations) {
     return extractSettingsFromAnnotationPath(annotations, PojoSettings.defaultSettings());
   }
@@ -232,12 +208,6 @@ public class PojoExtensionProcessor extends AbstractProcessor {
     return currentSettings
         .mapIfPresent(getOptionalDetection(annotation), PojoSettings::withOptionalDetections)
         .mapIfPresent(
-            getExtensionName(annotation)
-                .map(String::trim)
-                .filter(Strings::nonEmpty)
-                .map(Name::fromString),
-            PojoSettings::withExtensionName)
-        .mapIfPresent(
             getBuilderName(annotation)
                 .map(String::trim)
                 .filter(Strings::nonEmpty)
@@ -250,21 +220,9 @@ public class PojoExtensionProcessor extends AbstractProcessor {
                 .map(Name::fromString),
             PojoSettings::withBuilderSetMethodPrefix)
         .mapIfPresent(
-            getEnableSafeBuilder(annotation).map(Ability::fromBoolean),
-            PojoSettings::withSafeBuilderAbility)
-        .mapIfPresent(
             getPackagePrivateBuilder(annotation)
                 .map(this::classAccessLevelModifierFromIsPackagePrivateFlag),
-            PojoSettings::withBuilderAccessLevel)
-        .mapIfPresent(
-            getEnableWithers(annotation).map(Ability::fromBoolean),
-            PojoSettings::withWithersAbility)
-        .mapIfPresent(
-            getEnableOptionalGetters(annotation).map(Ability::fromBoolean),
-            PojoSettings::withOptionalGettersAbility)
-        .mapIfPresent(
-            getEnableMappers(annotation).map(Ability::fromBoolean),
-            PojoSettings::withMappersAbility);
+            PojoSettings::withBuilderAccessLevel);
   }
 
   private ClassAccessLevelModifier classAccessLevelModifierFromIsPackagePrivateFlag(
@@ -286,19 +244,14 @@ public class PojoExtensionProcessor extends AbstractProcessor {
         settings.qualifiedBuilderName(pojo),
         SafeBuilderClassGens.safeBuilderClass(),
         pojo,
-        settings,
-        settings.createDiscreteBuilder());
+        settings);
   }
 
   private void writeJavaFile(
       Name qualifiedClassName,
       Generator<Pojo, PojoSettings> gen,
       Pojo pojo,
-      PojoSettings pojoSettings,
-      boolean createFile) {
-    if (not(createFile)) {
-      return;
-    }
+      PojoSettings pojoSettings) {
     final String javaContent = gen.generate(pojo, pojoSettings, Writer.createDefault()).asString();
     try {
       final JavaFileObject builderFile =

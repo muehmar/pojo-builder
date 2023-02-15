@@ -3,7 +3,7 @@ package io.github.muehmar.pojoextension.processor;
 import static io.github.muehmar.pojoextension.Booleans.not;
 
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojoextension.exception.PojoExtensionException;
+import io.github.muehmar.pojoextension.exception.PojoBuilderException;
 import io.github.muehmar.pojoextension.generator.model.BuildMethod;
 import io.github.muehmar.pojoextension.generator.model.Name;
 import io.github.muehmar.pojoextension.generator.model.type.Type;
@@ -32,7 +32,7 @@ public class BuildMethodProcessor {
               "There is only one custom build method allowed (annotated with @%s) in class %s",
               io.github.muehmar.pojoextension.annotations.BuildMethod.class.getSimpleName(),
               pojo.getSimpleName());
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
 
     return buildMethods.headOption();
@@ -62,7 +62,7 @@ public class BuildMethodProcessor {
               annotatedMethod.getSimpleName(),
               pojo.getSimpleName(),
               io.github.muehmar.pojoextension.annotations.BuildMethod.class.getSimpleName());
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
   }
 
@@ -74,7 +74,7 @@ public class BuildMethodProcessor {
               io.github.muehmar.pojoextension.annotations.BuildMethod.class.getSimpleName(),
               annotatedMethod.getSimpleName(),
               pojo.getSimpleName());
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
   }
 
@@ -86,7 +86,7 @@ public class BuildMethodProcessor {
               annotatedMethod.getSimpleName(),
               pojo.getSimpleName(),
               io.github.muehmar.pojoextension.annotations.BuildMethod.class.getSimpleName());
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
   }
 
@@ -102,7 +102,7 @@ public class BuildMethodProcessor {
               pojo.getSimpleName(),
               io.github.muehmar.pojoextension.annotations.BuildMethod.class.getSimpleName(),
               pojo.getSimpleName());
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
     final Type argumentType = TypeMirrorMapper.map(parameters.get(0).asType());
     if (not(pojoType.equals(argumentType))) {
@@ -113,7 +113,7 @@ public class BuildMethodProcessor {
               pojo.getSimpleName(),
               io.github.muehmar.pojoextension.annotations.BuildMethod.class.getSimpleName(),
               pojo.getSimpleName());
-      throw new PojoExtensionException(message);
+      throw new PojoBuilderException(message);
     }
     return annotatedMethod1;
   }

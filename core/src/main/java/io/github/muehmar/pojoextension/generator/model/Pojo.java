@@ -5,7 +5,7 @@ import static io.github.muehmar.pojoextension.Booleans.not;
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojoextension.Strings;
 import io.github.muehmar.pojoextension.annotations.PojoExtension;
-import io.github.muehmar.pojoextension.exception.PojoExtensionException;
+import io.github.muehmar.pojoextension.exception.PojoBuilderException;
 import io.github.muehmar.pojoextension.generator.model.type.Type;
 import java.util.Optional;
 import lombok.Value;
@@ -70,7 +70,7 @@ public class Pojo implements io.github.muehmar.pojoextension.generator.model.Poj
 
   public MatchingConstructor getMatchingConstructorOrThrow() {
     return findMatchingConstructor()
-        .orElseThrow(() -> new PojoExtensionException(noMatchingConstructorMessage()));
+        .orElseThrow(() -> new PojoBuilderException(noMatchingConstructorMessage()));
   }
 
   private String noMatchingConstructorMessage() {

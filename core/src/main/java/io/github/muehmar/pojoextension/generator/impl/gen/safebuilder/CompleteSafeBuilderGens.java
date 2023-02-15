@@ -24,8 +24,7 @@ public class CompleteSafeBuilderGens {
         .append(newLine())
         .appendList(
             SafeBuilderGens.fieldBuilderClass().append(newLine()), BuilderField::optionalFromPojo)
-        .append(SafeBuilderGens.finalOptionalBuilder())
-        .filter((p, s) -> s.getSafeBuilderAbility().isEnabled());
+        .append(SafeBuilderGens.finalOptionalBuilder());
   }
 
   public static Generator<Pojo, PojoSettings> newBuilderMethod() {
@@ -41,7 +40,6 @@ public class CompleteSafeBuilderGens {
                     "return new Builder0%s(new Builder%s());",
                     p.getDiamond(), p.getTypeVariablesSection()))
         .build()
-        .filter((p, s) -> s.getSafeBuilderAbility().isEnabled())
         .append(RefsGen.genericRefs());
   }
 }

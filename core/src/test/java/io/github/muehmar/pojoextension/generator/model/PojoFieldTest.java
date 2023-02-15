@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.muehmar.pojoextension.FieldBuilderMethods;
-import io.github.muehmar.pojoextension.exception.PojoExtensionException;
+import io.github.muehmar.pojoextension.exception.PojoBuilderException;
 import io.github.muehmar.pojoextension.generator.PojoFields;
 import io.github.muehmar.pojoextension.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojoextension.generator.model.type.Types;
@@ -82,7 +82,7 @@ class PojoFieldTest {
             .withReturnType(Types.string());
 
     assertThrows(
-        PojoExtensionException.class,
+        PojoBuilderException.class,
         () -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
   }
 
@@ -97,7 +97,7 @@ class PojoFieldTest {
             .withReturnType(Types.optional(field.getType()));
 
     assertThrows(
-        PojoExtensionException.class,
+        PojoBuilderException.class,
         () -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
   }
 
@@ -112,7 +112,7 @@ class PojoFieldTest {
             .withReturnType(Types.integer());
 
     assertThrows(
-        PojoExtensionException.class,
+        PojoBuilderException.class,
         () -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
   }
 

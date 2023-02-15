@@ -6,7 +6,7 @@ import static io.github.muehmar.pojoextension.Functions.mapFirst;
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojoextension.annotations.FieldBuilder;
-import io.github.muehmar.pojoextension.exception.PojoExtensionException;
+import io.github.muehmar.pojoextension.exception.PojoBuilderException;
 import io.github.muehmar.pojoextension.generator.model.Argument;
 import io.github.muehmar.pojoextension.generator.model.FieldBuilderMethod;
 import io.github.muehmar.pojoextension.generator.model.FieldBuilderMethodBuilder;
@@ -158,7 +158,7 @@ public class FieldBuilderProcessor {
     throw new IllegalArgumentException(message);
   }
 
-  private static PojoExtensionException noMethodsFoundException(String fieldName) {
+  private static PojoBuilderException noMethodsFoundException(String fieldName) {
     final String message = String.format("", fieldName);
     throw new IllegalArgumentException(message);
   }
