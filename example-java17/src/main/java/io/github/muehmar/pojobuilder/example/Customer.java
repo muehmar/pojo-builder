@@ -1,10 +1,10 @@
 package io.github.muehmar.pojobuilder.example;
 
 import io.github.muehmar.pojobuilder.annotations.Nullable;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.util.Optional;
 
-@SafeBuilder
+@PojoBuilder
 public class Customer {
   private final String id;
   private final String name;
@@ -60,7 +60,7 @@ public class Customer {
     return flag;
   }
 
-  @SafeBuilder
+  @PojoBuilder
   public static class Address {
     private final String street;
     private final String city;

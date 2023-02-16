@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-class SafeBuilderClassGensTest {
+class PojoBuilderClassGensTest {
 
   @Test
   void createMethod_when_calledWithSamplePojo_then_correctOutput() {

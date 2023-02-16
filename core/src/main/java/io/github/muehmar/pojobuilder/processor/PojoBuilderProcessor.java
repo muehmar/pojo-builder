@@ -13,7 +13,7 @@ import io.github.muehmar.pojobuilder.Strings;
 import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.annotations.Nullable;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder.SafeBuilderClassGens;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
@@ -23,7 +23,6 @@ import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
-import io.github.muehmar.pojobuilder.generator.model.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.ClassnameParser;
@@ -139,7 +138,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
                     .asElement()
                     .asType()
                     .toString()
-                    .equals(SafeBuilder.class.getName()));
+                    .equals(PojoBuilder.class.getName()));
 
     return safeBuilder
         .map(currentPath::cons)
@@ -172,7 +171,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
             .filter(this::isNotIgnoredField)
             .map(e -> convertToPojoField(e, detectionSettings));
 
-    return PojoBuilder.create()
+    return io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
         .name(className)
         .pkg(classPackage)
         .fields(fields)

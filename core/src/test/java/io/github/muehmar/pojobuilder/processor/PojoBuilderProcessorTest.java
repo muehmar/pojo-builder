@@ -10,7 +10,7 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.annotations.Nullable;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.Names;
 import io.github.muehmar.pojobuilder.generator.PojoFields;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
@@ -20,7 +20,6 @@ import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Necessity;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
-import io.github.muehmar.pojobuilder.generator.model.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
 import io.github.muehmar.pojobuilder.generator.model.type.Classname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
@@ -40,8 +39,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotation(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("String", "id")
             .constructor()
@@ -53,7 +52,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField m1 = new PojoField(Names.id(), string(), REQUIRED);
     final PList<PojoField> fields = PList.single(m1);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -72,9 +71,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(Optional.class)
-            .annotation(SafeBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("Optional<String>", "id")
             .constructor()
@@ -86,7 +85,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField m1 = new PojoField(Names.id(), string(), OPTIONAL);
     final PList<PojoField> fields = PList.single(m1);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -105,9 +104,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(Nullable.class)
-            .annotation(SafeBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("String", "id", Nullable.class)
             .constructor()
@@ -119,7 +118,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField m1 = new PojoField(Names.id(), string(), OPTIONAL);
     final PList<PojoField> fields = PList.single(m1);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -141,10 +140,10 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(Nullable.class)
             .annotationEnumParam(
-                SafeBuilder.class, "optionalDetection", OptionalDetection.class, optionalDetection)
+                PojoBuilder.class, "optionalDetection", OptionalDetection.class, optionalDetection)
             .className(className)
             .withField("String", "id", Nullable.class)
             .constructor()
@@ -158,7 +157,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField m1 = new PojoField(Names.id(), string(), necessity);
     final PList<PojoField> fields = PList.single(m1);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PackageName.fromString("io.github.muehmar"))
             .fields(fields)
@@ -180,10 +179,10 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(Optional.class)
             .annotationEnumParam(
-                SafeBuilder.class, "optionalDetection", OptionalDetection.class, optionalDetection)
+                PojoBuilder.class, "optionalDetection", OptionalDetection.class, optionalDetection)
             .className(className)
             .withField("Optional<String>", "id")
             .constructor()
@@ -199,7 +198,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField m1 = new PojoField(Names.id(), type, required);
     final PList<PojoField> fields = PList.single(m1);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -220,9 +219,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(Ignore.class)
-            .annotation(SafeBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("String", "id", Ignore.class)
             .constructor()
@@ -233,7 +232,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final PList<PojoField> fields = PList.empty();
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -251,8 +250,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotation(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("boolean", "b")
             .withField("int", "i")
@@ -278,7 +277,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField f8 = new PojoField(Name.fromString("c"), Types.primitiveChar(), REQUIRED);
     final PList<PojoField> fields = PList.of(f1, f2, f3, f4, f5, f6, f7, f8);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -297,9 +296,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(Map.class)
-            .annotation(SafeBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("Map<String, Integer>[]", "data")
             .withField("byte[]", "key")
@@ -316,7 +315,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
         new PojoField(Name.fromString("key"), Types.array(Types.primitiveByte()), REQUIRED);
     final PList<PojoField> fields = PList.of(f1, f2);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -335,8 +334,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotation(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("String", "id")
             .withConstant("String", "CONSTANT_VAL=\"123456\"")
@@ -349,7 +348,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PojoField m1 = new PojoField(Names.id(), string(), REQUIRED);
     final PList<PojoField> fields = PList.single(m1);
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -371,8 +370,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             + PACKAGE
             + ";\n"
             + "import java.util.List;\n"
-            + "import io.github.muehmar.pojobuilder.annotations.SafeBuilder;\n"
-            + "@SafeBuilder\n"
+            + "import io.github.muehmar.pojobuilder.annotations.PojoBuilder;\n"
+            + "@PojoBuilder\n"
             + "public class "
             + className
             + "<T extends List<String> & Comparable<T>> {\n"
@@ -402,7 +401,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 Types.list(string()), Types.comparable(Types.typeVariable(Name.fromString("T")))));
 
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)
@@ -423,8 +422,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
         "package "
             + PACKAGE
             + ";\n"
-            + "import io.github.muehmar.pojobuilder.annotations.SafeBuilder;\n"
-            + "@SafeBuilder\n"
+            + "import io.github.muehmar.pojobuilder.annotations.PojoBuilder;\n"
+            + "@PojoBuilder\n"
             + "public class "
             + className
             + " {\n"
@@ -450,7 +449,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PList<PojoField> fields = PList.of(f1);
 
     final Pojo expected =
-        PojoBuilder.create()
+        io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .name(className)
             .pkg(PACKAGE)
             .fields(fields)

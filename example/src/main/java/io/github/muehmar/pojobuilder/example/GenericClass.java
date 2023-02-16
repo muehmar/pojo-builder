@@ -1,12 +1,12 @@
 package io.github.muehmar.pojobuilder.example;
 
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.util.List;
 import java.util.Optional;
 import lombok.Value;
 
 @Value
-@SafeBuilder
+@PojoBuilder
 public class GenericClass<T extends List<String> & Comparable<T>, S> {
   String prop1;
   T data;

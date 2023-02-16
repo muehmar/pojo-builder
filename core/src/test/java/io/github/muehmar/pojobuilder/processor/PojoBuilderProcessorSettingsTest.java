@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
@@ -18,8 +18,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotation(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .create();
 
@@ -35,8 +35,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotationStringParam(SafeBuilder.class, "builderName", "CustomBuilderName")
+            .withImport(PojoBuilder.class)
+            .annotationStringParam(PojoBuilder.class, "builderName", "CustomBuilderName")
             .className(className)
             .create();
 
@@ -54,8 +54,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotationBooleanParam(SafeBuilder.class, "packagePrivateBuilder", true)
+            .withImport(PojoBuilder.class)
+            .annotationBooleanParam(PojoBuilder.class, "packagePrivateBuilder", true)
             .className(className)
             .create();
 
@@ -74,9 +74,9 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .annotationEnumParam(
-                SafeBuilder.class,
+                PojoBuilder.class,
                 "optionalDetection",
                 OptionalDetection.class,
                 OptionalDetection.NONE)
@@ -97,8 +97,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
-            .annotationStringParam(SafeBuilder.class, "builderName", "SafeBuilder")
+            .withImport(PojoBuilder.class)
+            .annotationStringParam(PojoBuilder.class, "builderName", "SafeBuilder")
             .className(className)
             .create();
 

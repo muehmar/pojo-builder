@@ -31,7 +31,7 @@ import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-class SafeBuilderGensTest {
+class PojoBuilderGensTest {
 
   @Test
   void buildMethod_when_calledWithGenericSample_then_correctOutput() {

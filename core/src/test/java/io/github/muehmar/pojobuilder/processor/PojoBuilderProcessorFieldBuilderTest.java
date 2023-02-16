@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilderMethod;
@@ -24,9 +24,9 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(io.github.muehmar.pojobuilder.annotations.FieldBuilder.class)
-            .annotation(SafeBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("Integer", "key")
             .constructor()
@@ -69,9 +69,9 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
         "package "
             + PACKAGE
             + ";\n"
-            + "import io.github.muehmar.pojobuilder.annotations.SafeBuilder;\n"
+            + "import io.github.muehmar.pojobuilder.annotations.PojoBuilder;\n"
             + "import io.github.muehmar.pojobuilder.annotations.FieldBuilder;\n"
-            + "@SafeBuilder\n"
+            + "@PojoBuilder\n"
             + "public class "
             + className
             + " {\n"
@@ -142,9 +142,9 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
-            .withImport(SafeBuilder.class)
+            .withImport(PojoBuilder.class)
             .withImport(io.github.muehmar.pojobuilder.annotations.FieldBuilder.class)
-            .annotation(SafeBuilder.class)
+            .annotation(PojoBuilder.class)
             .className(className)
             .withField("Integer", "key")
             .constructor()
@@ -180,9 +180,9 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
         "package "
             + PACKAGE
             + ";\n"
-            + "import io.github.muehmar.pojobuilder.annotations.SafeBuilder;\n"
+            + "import io.github.muehmar.pojobuilder.annotations.PojoBuilder;\n"
             + "import io.github.muehmar.pojobuilder.annotations.FieldBuilder;\n"
-            + "@SafeBuilder\n"
+            + "@PojoBuilder\n"
             + "public class "
             + className
             + " {\n"

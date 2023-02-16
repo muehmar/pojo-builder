@@ -1,14 +1,14 @@
 package io.github.muehmar.pojobuilder.example.fieldbuilder;
 
 import io.github.muehmar.pojobuilder.annotations.FieldBuilder;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 import lombok.Value;
 
 @Value
-@SafeBuilder
+@PojoBuilder
 public class FieldBuilderClass<T> {
   String prop1;
   String prop2;

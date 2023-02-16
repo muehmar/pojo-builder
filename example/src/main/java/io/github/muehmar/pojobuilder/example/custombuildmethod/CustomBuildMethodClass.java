@@ -1,12 +1,12 @@
 package io.github.muehmar.pojobuilder.example.custombuildmethod;
 
 import io.github.muehmar.pojobuilder.annotations.BuildMethod;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.util.Optional;
 import lombok.Value;
 
 @Value
-@SafeBuilder
+@PojoBuilder
 public class CustomBuildMethodClass<T> {
   String prop1;
   String prop2;

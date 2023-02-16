@@ -1,11 +1,11 @@
 package io.github.muehmar.pojobuilder.example.ignorefield;
 
 import io.github.muehmar.pojobuilder.annotations.Ignore;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@SafeBuilder
+@PojoBuilder
 @EqualsAndHashCode
 @Getter
 public class IgnoreFieldClass {

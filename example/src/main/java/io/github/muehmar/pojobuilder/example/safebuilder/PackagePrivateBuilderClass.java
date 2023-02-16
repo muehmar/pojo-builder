@@ -1,10 +1,10 @@
 package io.github.muehmar.pojobuilder.example.safebuilder;
 
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import lombok.Value;
 
 @Value
-@SafeBuilder(packagePrivateBuilder = true)
+@PojoBuilder(packagePrivateBuilder = true)
 public class PackagePrivateBuilderClass {
   String prop1;
   String prop2;

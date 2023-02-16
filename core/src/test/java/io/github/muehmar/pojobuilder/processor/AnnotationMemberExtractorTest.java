@@ -2,7 +2,7 @@ package io.github.muehmar.pojobuilder.processor;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class AnnotationMemberExtractorTest {
   @Test
   void SafeBuilderContainsAllMethods() {
-    final Class<?> clazz = SafeBuilder.class;
+    final Class<?> clazz = PojoBuilder.class;
 
     assertTrue(hasMethod(clazz, AnnotationMemberExtractor.OPTIONAL_DETECTION));
     assertTrue(hasMethod(clazz, AnnotationMemberExtractor.BUILDER_NAME));

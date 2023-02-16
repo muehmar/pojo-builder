@@ -12,7 +12,7 @@ import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import org.junit.jupiter.api.Test;
 
-class CompleteSafeBuilderGensTest {
+class CompletePojoBuilderGensTest {
   @Test
   void completeSafeBuilder_when_generatorUsedWithSamplePojo_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator = CompleteSafeBuilderGens.completeSafeBuilder();

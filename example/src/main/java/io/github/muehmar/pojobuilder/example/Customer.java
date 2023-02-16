@@ -1,11 +1,11 @@
 package io.github.muehmar.pojobuilder.example;
 
 import io.github.muehmar.pojobuilder.annotations.Nullable;
-import io.github.muehmar.pojobuilder.annotations.SafeBuilder;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.util.Optional;
 import lombok.Value;
 
-@SafeBuilder(builderSetMethodPrefix = "set")
+@PojoBuilder(builderSetMethodPrefix = "set")
 @Value
 public class Customer {
   String id;
@@ -21,7 +21,7 @@ public class Customer {
   }
 
   @Value
-  @SafeBuilder(builderName = "CustomerAddressBuilder")
+  @PojoBuilder(builderName = "CustomerAddressBuilder")
   public static class Address {
     String street;
     String city;
