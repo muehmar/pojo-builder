@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'pojo-extension.java-publish'
+    id 'pojo-builder.java-publish'
 }
 
 dependencies {
