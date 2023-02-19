@@ -302,11 +302,14 @@ public class IgnoreFieldClass {
 
 The following annotations exists:
 
-* `@SafeBuilder` Creates the builder class
+* `@PojoBuilder` Creates the builder class
 * `@FieldBuilder` Used to mark custom methods used in the Builder. `fieldName` is required and defines the field for
   which the custom method should be used.
 * `@Ignore` Used to mark a field which should get ignored by the processor. Used particularly for fields which are
   instantiated withing the constructor and not present as argument in the constructor.
+* `@Nullable` Used to denote optional fields which can be nullable in case of absence
+* `@BuildMethod` Used to mark a method which is used to map the actual instance to another object used by the generated
+  build method.
 
 ### Annotation Parameters
 
