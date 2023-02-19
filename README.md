@@ -5,30 +5,33 @@
 
 Generates advanced builders for your immutable data classes or Java 16 records.
 
-REMARK: This is a fork of the pojo-extension project, which will contain only the builder part. The description gets 
-updated as soon as the migration is finished.
+The processor distinguishes between required and optional properties/fields in a class or record. The generated builder 
+ensures during compile time, that all required properties are set, so you will no longer forgot to set a
+property which is needed. Also in case of refactoring, adding new required properties will fail the build 
+for every usage of the builder until the new property is set for every object creation. This can also be achieved
+with the optional properties, i.e. one can force the initialization of all optional properties.
 
 ## Usage
 
 ### Dependency
 
-Add the `pojo-extension-annotations` module as compile-time dependency and register the `pojo-extension` module as
-annotation processor.In gradle this would look like the following:
+Add the `pojo-builder-annotations` module as compile-time dependency and register the `pojo-builder` module as
+annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-extension-annotations:0.15.1"
-    annotationProcessor "io.github.muehmar:pojo-extension:0.15.1"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:x.x.x"
+    annotationProcessor "io.github.muehmar:pojo-builder:x.x.x"
 }
 ```
 
-### Data class
+### Class / Record annotation
 
-Annotate a simple data class:
+The `@PojoBuilder` annotation is a class level annotation:
 
 ```
-@PojoExtension
-public class Customer implements CustomerExtension {
+@PojoBuilder
+public class Customer {
 private final String name;
 private final String email;
 private final Optional<String> nickname;
@@ -43,47 +46,33 @@ private final Optional<String> nickname;
 }
 ```
 
-The processor will now create the interface `CustomerExtension` and the class `CustomerBuilder`:
+The processor will create the builder `CustomerBuilder`. The name is configurable, see the configuration section.
 
-* `CustomerExtension`: This interface contains the generated methods as default methods.
-* `CustomerBuilder`: This class contains the SafeBuilder.
-
-### Records
-
-Since Java 16 one can use records with a dedicated annotation `RecordExtension`:
+The annotation works also for with Java records:
 
 ```
-@RecordExtension
-public records Customer implements CustomerExtension(
+@PojoBuilder
+public records Customer(
     String name, 
     String email, 
     Optional<String> nickname
-  ) implements CustomerExtension {
+  ) {
 
 }
 ```
 
 ## Features
 
-### SafeBuilder
-
-The 'Safe Builder' is an extended builder pattern which enforces one to create valid instances, i.e. every required
-property in a pojo will be set. The pattern follows also the convention not using `null` in the code which improves
-support by the compiler.
-
-The builder can be part of the extension class or a discrete java file,
-see [Annotation Parameters](#annotation-parameters). There exists a predefined annotation `@SafeBuilder` which creates a
-builder in a discrete class which can be used in case the other features are not used.
-
-The pattern is implemented by creating a single builder class for each required property, with a single method setting
+### Compile-Time safety
+The builder is implemented by creating a single builder class for each required property, with a single method setting
 the corresponding property and returning the next builder for the next property. The `build`
 method will only be present after each required property is set.
 
 For example, given the following class:
 
 ```
-@PojoExtension
-public class Customer implements CustomerExtension {
+@PojoBuilder
+public class Customer {
 private final String name;
 private final String email;
 private final Optional<String> nickname;
@@ -116,8 +105,9 @@ returned class after setting the name has again one single method `email()`. As 
 required property in this example the returned class for `email()` offers three methods:
 
 * `build()` As all required properties are set at that time, building the instance is allowed here.
-* `andOptionals()` Returns the normal builder allowing one to set certain optional properties before creating the
-  instance. This method returns just the normal builder populated with all required properties.
+* `andOptionals()` Returns the well-known simple builder allowing one to set certain optional properties before creating the
+  instance. The builder is populated with all required properties but without the possibility to
+  change or delete them.
 * `andAllOptionals()` Enforces one to set all optional properties in the same way as it is done for the required
   properties. The `build()` method will only be available after all optional properties have been set. This method is
   used in the example above, i.e. the compiler enforces one to set the `nickname` property too. This is especially
@@ -254,120 +244,27 @@ final String customerString = CustomerBuilder.create()
                                 .build();
 ```
 
-A custom build method must be statis and can be package-private.
+A custom build method must be static and can be package-private.
 
-### Method `withXX`
+## Requirements
 
-The extension contains with methods for each field. The methods return a new instance of the data class where the
-corresponding property is set to the provided value.
-
-The method for the optional fields is overloaded, i.e. it accepts also the value wrapped into an Optional. This makes it
-possible to remove a value without the need to pass `null` or can be used for cases the value is already wrapped into an
-Optional.
-
-Utilizing the customer example above, the extension would create the following with methods:
-
-```
-  default Customer withName(String name);
-
-  default Customer withEmail(String email);
-
-  default Customer withNickname(String nickname);
-
-  default Customer withNickname(Optional<String> nickname);
-```
-
-### Convenience getters for optional fields
-
-Getters for optional fields may return the value wrapped into an `Optional.` If one wants to use a default value in case
-the field is not present, one can write the following:
-
-```
-  customer.getNickname().orElse("NoNickname");
-```
-
-The generated optional getter provides this functionality directly where you could provide the default value. The method
-name is equal to the existing getter suffixed with `Or`:
-
-```
-default String getNicknameOr(String nickname);
-```
-
-### Method `mapXX`
-
-The `map` methods allows one to 'update' the immutable data class in a fluent style without the need to create a bunch
-of local variables, especially when the update should happen conditionally. There exists the following methods:
-
-```
-  default <T> T map(Function<Customer, T> f);
-
-  default Customer mapIf(boolean shouldMap, UnaryOperator<Customer> f);
-
-  default <T> Customer mapIfPresent(Optional<T> value, BiFunction<Customer, T, Customer> f);
-```
-
-Consider the case with a mutable data class, where a property should be updated based on some condition:
-
-```
-final Customer customer = getCustomer();
-
-if(isSomeCondition()) {
-  customer.setNickname("nickname");
-}
-```
-
-With an immutable data class we have to write something like the following to get the same behaviour:
-
-```
-final Customer customer = getCustomer();
-
-final Customer updatedCustomer = isSomeCondition() 
-  ? customer.withNickname("nickname")
-  : customer; 
-```
-
-This introduces a new local variable and we have to repeat the variable 'customer' twice in the ternary statement. This
-is error-prone, especially if there is more than one conditional update and more than two different versions of the
-customer. With the `mapIf` method one could write the following:
-
-```
-final Customer customer = getCustomer()
-  .mapIf(isSomeCondition(), c -> c.withNickname("nickname));
-```
-
-One could chain all the map operations if needed:
-
-```
-final Customer customer = getCustomer()
-  .map(c -> doSomething(c, true))
-  .mapIf(isSomeCondition(), c -> c.withNickname("nickname))
-  .mapIfPresent(getOptionalStringValue(), Customer::withNickname);
-```
-
-The `map` method allows one also to return an arbitrary value if needed but is especially useful in cases where one
-needs to pass the data class to another method which returns a new different instance of the data class without the need
-to declare a new local variable like in the example above.
-
-## Pojo Requirements
-
-A data class must provide a constructor with all fields as arguments and getters for each field. The new builder and the
-interface are created in the same package as the class, therefore the constructor as well as the getters can be package
+A data class must provide a constructor with all fields as arguments. The builder 
+is created in the same package as the class, therefore the constructor can be package
 private if needed.
 
-A record (Java 16) provides already a constructor as well as getters and therefore satisfies all requirements
-automatically. If Java below version 16 is used, one of the easiest way is to use lombok with the `@Value` annotation
-until you could upgrade Java 16 or higher.
+A record (Java 16) provides already a constructor and therefore satisfies all requirements
+automatically.
 
 ### Constructor
 
-The constructor must accept all fields as arguments and have to be currently in the same order of declaration. The types
+The constructor must accept all fields as arguments and in the same order of declaration. The types
 of the required fields must match exactly. The types of the optional fields can either be the actual type which may be
 nullable in case of absence or wrapped into a `java.util.Optional`. The annotation processor is smart enough to detect
 which case is used, there can also be a mix for the optional fields in case you really need it.
 
 ```
-@PojoExtension
-public class Customer extends CustomerBase {
+@PojoBuilder
+public class Customer {
 private final String name;
 private final String email;
 private final Optional<String> nickname;
@@ -401,50 +298,25 @@ public class IgnoreFieldClass {
 }
 ```
 
-### Getter
-
-For each field a getter must be present. A getter is detected by the processor for the following cases:
-
-* The getter name is according to the java bean naming convention
-* The getter name is equally to the field name
-* The getter is annotated with `@Getter("fieldName")` where `fieldName` is the name of the corresponding field
-
-The return type for required fields must match exactly where a return type for optional fields can be (like for the
-constructor) either the actual type and nullable or wrapped into an `Optional`.
-
 ## Annotations
 
-The following annotations exists, where only one single annotation should be used.
+The following annotations exists:
 
-* `@PojoExtension` Creates the extension interface, abstract base class and the builder class. Is parameterized and can
-  be used as meta annotation to create your custom annotations.
 * `@SafeBuilder` Creates the builder class
-* `@RecordExtension` Can be used for records, where no `equals`, `hashCode` and `toString` methods are generated, as
-  well as the abstract base class.
-* `@FieldBuilder` Used to mark custom methods used in the SafeBuilder. `fieldName` is required and defines the field for
+* `@FieldBuilder` Used to mark custom methods used in the Builder. `fieldName` is required and defines the field for
   which the custom method should be used.
 * `@Ignore` Used to mark a field which should get ignored by the processor. Used particularly for fields which are
   instantiated withing the constructor and not present as argument in the constructor.
 
 ### Annotation Parameters
 
-The `@PojoExtension` annotation contains the following parameters. The other annotations may contain a subset thereof
-with different default values.
+The `@PojoBuilder` annotation contains the following parameters.
 
 | Parameter                 | Default value                         | Description                                                                                                                                                    |
 |---------------------------|---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `optionalDetection`       | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next section for details.                                                     |
-| `extensionName`           | "{CLASSNAME}Extension"                | Allows to override the default name of the created extension. `{CLASSNAME}` gets replaced by the name of the data class.                                       |
-| `enableSafeBuilder`       | true                                  | Allows to disable the generation of the safe builder                                                                                                           |
 | `builderName`             | "{CLASSNAME}Builder"                  | Allows to override the default name of the discrete builder. `{CLASSNAME}` gets replaced by the name of the data class. Ignored if `discreteBuilder` is false. |
 | `builderSetMethodPrefix`  | ""                                    | Prefix which is used for the setter methods of the builder.                                                                                                    |
-| `enableEqualsAndHashCode` | true                                  | Allows to disable the generation of the equals and hashCode method                                                                                             |
-| `enableToString`          | true                                  | Allows to disable the generation of the toString method                                                                                                        |
-| `enableWithers`           | true                                  | Allows to disable the generation of the with methods                                                                                                           |
-| `enableOptionalGetters`   | true                                  | Allows to disable the generation of the optional getters                                                                                                       |                                                                                                      |
-| `enableMappers`           | true                                  | Allows to disable the generation the map methods                                                                                                               |
-| `enableBaseClass`         | true                                  | Enables the generation of the abstract base class                                                                                                              |
-| `baseClassName`           | "{CLASSNAME}Base"                     | Allows to override the default name of the created base class. `{CLASSNAME}` gets replaced by the name of the data class.                                      |
 
 #### Parameter `optionalDetection`
 
@@ -462,22 +334,22 @@ Both options are active as default.
 
 ## Custom Annotation / Meta Annotation
 
-The `@PojoExtension` annotation can be used as meta annotation to create your own annotation with predefined behaviour.
+The `@PojoBuilder` annotation can be used as meta annotation to create your own annotation with predefined behaviour.
 
 For example if you want to treat every field in an annotated class as required, you could create your own
-annotation `@AllRequiredExtension` which is annotated with `@PojoExtension` with disabled optional detection.
+annotation `@AllRequiredPojoBuilder` which is annotated with `@PojoBuilder` with disabled optional detection.
 
 ```
-@PojoExtension(optionalDetection = OptionalDetection.NONE)
-public @interface AllRequiredExtension {}
+@PojoBuilder(optionalDetection = OptionalDetection.NONE)
+public @interface AllRequiredPojoBuilder {}
 ```
 
 If one wants to create a custom annotation, with default values but allow overriding for certain classes, simply create
 the corresponding method in the annotation with the same name providing the default value, i.e.:
 
 ```
-@PojoExtension
-public @interface AllRequiredExtension {
+@PojoBuilder
+public @interface AllRequiredPojoBuilder {
 
   OptionalDetection[] optionalDetection() default {OptionalDetection.NONE};
   
