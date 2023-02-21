@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:x.x.x"
-    annotationProcessor "io.github.muehmar:pojo-builder:x.x.x"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.0.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.0.0"
 }
 ```
 
@@ -365,6 +365,8 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.0.0 - Fork and Release of PojoBuilder 
+    * Remove the pojo extension generation
 * 0.15.1 - Fix import for nested classes (issue `#15`)
 * 0.15.0
     * Add support for wildcards (issue `#13`)
