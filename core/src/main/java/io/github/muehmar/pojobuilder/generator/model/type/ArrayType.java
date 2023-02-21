@@ -1,13 +1,13 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Name;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class ArrayType implements ArrayTypeExtension, SpecificType {
+@PojoBuilder
+public class ArrayType implements SpecificType {
   Type itemType;
   boolean isVarargs;
 

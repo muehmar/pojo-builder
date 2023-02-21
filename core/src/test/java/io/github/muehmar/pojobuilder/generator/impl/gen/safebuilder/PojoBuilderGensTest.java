@@ -51,7 +51,7 @@ class PojoBuilderGensTest {
         new BuildMethod(Name.fromString("customBuildMethod"), Types.string());
     final Writer writer =
         generator.generate(
-            Pojos.genericSample().withBuildMethod(buildMethod),
+            Pojos.genericSample().withBuildMethod(Optional.of(buildMethod)),
             PojoSettings.defaultSettings(),
             Writer.createDefault());
     assertEquals(
@@ -257,7 +257,9 @@ class PojoBuilderGensTest {
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2)
             .withFieldBuilder(
-                new FieldBuilder(false, NonEmptyList.of(fieldBuilderMethod1, fieldBuilderMethod2)));
+                Optional.of(
+                    new FieldBuilder(
+                        false, NonEmptyList.of(fieldBuilderMethod1, fieldBuilderMethod2))));
     final String output =
         generator
             .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
@@ -521,7 +523,7 @@ class PojoBuilderGensTest {
     final Generator<BuilderField, PojoSettings> generator = SafeBuilderGens.setMethod();
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final PojoSettings settings =
-        PojoSettings.defaultSettings().withBuilderSetMethodPrefix(Name.fromString("set"));
+        PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
 
     final Writer writer = generator.generate(field, settings, Writer.createDefault());
     final String output = writer.asString();
@@ -560,7 +562,7 @@ class PojoBuilderGensTest {
                     Name.fromString("method"),
                     Argument.of(Name.fromString("arg"), Types.integer()))));
     final BuilderField builderField =
-        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(fieldBuilder);
+        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
 
@@ -580,7 +582,7 @@ class PojoBuilderGensTest {
                     Name.fromString("method"),
                     Argument.of(Name.fromString("arg"), Types.integer()))));
     final BuilderField builderField =
-        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(fieldBuilder);
+        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
 
@@ -610,7 +612,7 @@ class PojoBuilderGensTest {
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final PojoSettings settings =
-        PojoSettings.defaultSettings().withBuilderSetMethodPrefix(Name.fromString("set"));
+        PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
 
     final Writer writer = generator.generate(field, settings, Writer.createDefault());
 
@@ -668,7 +670,7 @@ class PojoBuilderGensTest {
                     Name.fromString("method"),
                     Argument.of(Name.fromString("arg"), Types.integer()))));
     final BuilderField builderField =
-        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(fieldBuilder);
+        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
 
@@ -688,7 +690,7 @@ class PojoBuilderGensTest {
                     Name.fromString("method"),
                     Argument.of(Name.fromString("arg"), Types.integer()))));
     final BuilderField builderField =
-        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(fieldBuilder);
+        BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
 
@@ -719,7 +721,8 @@ class PojoBuilderGensTest {
 
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2)
-            .withFieldBuilder(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod)));
+            .withFieldBuilder(
+                Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
@@ -745,7 +748,8 @@ class PojoBuilderGensTest {
 
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.optionalName(), 2)
-            .withFieldBuilder(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod)));
+            .withFieldBuilder(
+                Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
@@ -771,7 +775,8 @@ class PojoBuilderGensTest {
 
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2)
-            .withFieldBuilder(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod)));
+            .withFieldBuilder(
+                Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
@@ -794,11 +799,12 @@ class PojoBuilderGensTest {
                 PojoFields.optionalName(),
                 Name.fromString("customRandomName"),
                 new Argument(Name.fromString("value"), Types.string()))
-            .withInnerClassName(Name.fromString("NameBuilder"));
+            .withInnerClassName(Optional.of(Name.fromString("NameBuilder")));
 
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.optionalName(), 2)
-            .withFieldBuilder(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod)));
+            .withFieldBuilder(
+                Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());

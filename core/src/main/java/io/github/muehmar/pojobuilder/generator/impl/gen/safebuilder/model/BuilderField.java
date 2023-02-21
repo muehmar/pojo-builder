@@ -2,17 +2,19 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder.model;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.Value;
+import lombok.With;
 
 @Value
-@PojoExtension
-public class BuilderField implements BuilderFieldExtension {
+@With
+@PojoBuilder
+public class BuilderField {
   IndexedField indexedField;
   Optional<FieldBuilder> fieldBuilder;
 

@@ -4,15 +4,17 @@ import static io.github.muehmar.pojobuilder.Booleans.not;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Strings;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import lombok.Value;
+import lombok.With;
 
 @Value
-@PojoExtension
-public class Pojo implements io.github.muehmar.pojobuilder.generator.model.PojoExtension {
+@With
+@PojoBuilder
+public class Pojo {
   private static final PList<Name> LETTERS_AZ =
       PList.range(65, 91).map(n -> Character.toString((char) n.intValue())).map(Name::fromString);
 
@@ -24,7 +26,6 @@ public class Pojo implements io.github.muehmar.pojobuilder.generator.model.PojoE
   PList<FieldBuilder> fieldBuilders;
   Optional<BuildMethod> buildMethod;
 
-  @io.github.muehmar.pojoextension.annotations.Getter("pkg")
   public PackageName getPackage() {
     return pkg;
   }

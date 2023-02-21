@@ -4,16 +4,18 @@ import static java.util.Optional.empty;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import lombok.Value;
+import lombok.With;
 
 @Value
-@PojoExtension
-public class PojoSettings implements PojoSettingsExtension {
+@With
+@PojoBuilder
+public class PojoSettings {
   private static final Name CLASS_NAME_PLACEHOLDER = Name.fromString("{CLASSNAME}");
   public static final Name BUILDER_CLASS_POSTFIX = Name.fromString("Builder");
   PList<OptionalDetection> optionalDetections;
@@ -47,5 +49,33 @@ public class PojoSettings implements PojoSettingsExtension {
 
   private Name getClassName(Pojo pojo) {
     return pojo.getName().map(n -> n.replace(".", ""));
+  }
+
+  public PojoSettings withBuilderNameOpt(Name builderName) {
+    return this.withBuilderName(Optional.of(builderName));
+  }
+
+  public PojoSettings withBuilderSetMethodPrefixOpt(Name builderSetMethodPrefix) {
+    return this.withBuilderSetMethodPrefix(Optional.of(builderSetMethodPrefix));
+  }
+
+  public PojoSettings overrideOptionalDetection(
+      Optional<PList<OptionalDetection>> optionalDetections) {
+    return optionalDetections.map(this::withOptionalDetections).orElse(this);
+  }
+
+  public PojoSettings overrideBuilderName(Optional<Name> builderName) {
+    return builderName.map(this::withBuilderNameOpt).orElse(this);
+  }
+
+  public PojoSettings overrideBuilderSetMethodPrefix(Optional<Name> builderSetMethodPrefix) {
+    return builderSetMethodPrefix
+        .map(ignore -> this.withBuilderSetMethodPrefix(builderSetMethodPrefix))
+        .orElse(this);
+  }
+
+  public PojoSettings overrideBuilderAccessLevel(
+      Optional<ClassAccessLevelModifier> classAccessLevelModifier) {
+    return classAccessLevelModifier.map(this::withBuilderAccessLevel).orElse(this);
   }
 }

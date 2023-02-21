@@ -13,6 +13,7 @@ import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilderMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -40,7 +41,7 @@ class BuilderFieldTest {
 
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), Pojos.sample().getFields().apply(0), 0)
-            .withFieldBuilder(fieldBuilder);
+            .withFieldBuilder(Optional.of(fieldBuilder));
 
     assertTrue(builderField.hasFieldBuilder());
   }
@@ -69,7 +70,7 @@ class BuilderFieldTest {
 
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), Pojos.sample().getFields().apply(0), 0)
-            .withFieldBuilder(fieldBuilder);
+            .withFieldBuilder(Optional.of(fieldBuilder));
 
     assertEquals(disableDefaultMethods, builderField.isDisableDefaultMethods());
   }

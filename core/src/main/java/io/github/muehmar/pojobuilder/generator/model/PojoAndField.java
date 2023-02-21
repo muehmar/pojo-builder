@@ -1,11 +1,11 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class PojoAndField implements PojoAndFieldExtension {
+@PojoBuilder
+public class PojoAndField {
   Pojo pojo;
   PojoField field;
 

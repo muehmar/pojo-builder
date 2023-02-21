@@ -201,25 +201,20 @@ public class PojoBuilderProcessor extends AbstractProcessor {
   private PojoSettings overrideWithAnnotationValues(
       AnnotationMirror annotation, PojoSettings currentSettings) {
     return currentSettings
-        .mapIfPresent(
-            AnnotationMemberExtractor.getOptionalDetection(annotation),
-            PojoSettings::withOptionalDetections)
-        .mapIfPresent(
+        .overrideOptionalDetection(AnnotationMemberExtractor.getOptionalDetection(annotation))
+        .overrideBuilderName(
             AnnotationMemberExtractor.getBuilderName(annotation)
                 .map(String::trim)
                 .filter(Strings::nonEmpty)
-                .map(Name::fromString),
-            PojoSettings::withBuilderName)
-        .mapIfPresent(
+                .map(Name::fromString))
+        .overrideBuilderSetMethodPrefix(
             AnnotationMemberExtractor.getBuilderSetMethodPrefix(annotation)
                 .map(String::trim)
                 .filter(Strings::nonEmpty)
-                .map(Name::fromString),
-            PojoSettings::withBuilderSetMethodPrefix)
-        .mapIfPresent(
+                .map(Name::fromString))
+        .overrideBuilderAccessLevel(
             AnnotationMemberExtractor.getPackagePrivateBuilder(annotation)
-                .map(this::classAccessLevelModifierFromIsPackagePrivateFlag),
-            PojoSettings::withBuilderAccessLevel);
+                .map(this::classAccessLevelModifierFromIsPackagePrivateFlag));
   }
 
   private ClassAccessLevelModifier classAccessLevelModifierFromIsPackagePrivateFlag(

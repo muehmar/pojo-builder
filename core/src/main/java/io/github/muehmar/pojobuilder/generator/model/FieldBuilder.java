@@ -1,12 +1,12 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.NonEmptyList;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class FieldBuilder implements FieldBuilderExtension {
+@PojoBuilder
+public class FieldBuilder {
   boolean disableDefaultMethods;
   NonEmptyList<FieldBuilderMethod> methods;
 

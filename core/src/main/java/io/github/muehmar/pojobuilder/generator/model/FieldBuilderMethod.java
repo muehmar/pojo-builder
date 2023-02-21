@@ -1,14 +1,16 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import lombok.Value;
+import lombok.With;
 
 @Value
-@PojoExtension
-public class FieldBuilderMethod implements FieldBuilderMethodExtension {
+@With
+@PojoBuilder
+public class FieldBuilderMethod {
   Name fieldName;
   Optional<Name> innerClassName;
   Name methodName;

@@ -27,7 +27,7 @@ class PojoFieldTest {
   @Test
   void builderSetMethodName_when_with_then_correctPrefixed() {
     final PojoSettings settings =
-        PojoSettings.defaultSettings().withBuilderSetMethodPrefix(Name.fromString("set"));
+        PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
     final Name builderSetMethodName = PojoFields.requiredId().builderSetMethodName(settings);
 
     assertEquals("setId", builderSetMethodName.asString());

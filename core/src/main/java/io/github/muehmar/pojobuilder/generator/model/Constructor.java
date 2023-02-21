@@ -1,13 +1,13 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import java.util.Optional;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class Constructor implements ConstructorExtension {
+@PojoBuilder
+public class Constructor {
   Name name;
   PList<Argument> arguments;
 
