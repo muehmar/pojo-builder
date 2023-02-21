@@ -25,7 +25,7 @@ class PojoSettingsTest {
   void builderName_when_overriddenBuilderName_then_useCustomBuilderName() {
     final Name name =
         PojoSettings.defaultSettings()
-            .withBuilderName(Name.fromString("MyBuilder"))
+            .withBuilderNameOpt(Name.fromString("MyBuilder"))
             .builderName(Pojos.sample());
     assertEquals("MyBuilder", name.asString());
   }
@@ -34,7 +34,7 @@ class PojoSettingsTest {
   void builderName_when_overriddenBuilderNameWithClassname_then_customBuilderNameCreated() {
     final Name name =
         PojoSettings.defaultSettings()
-            .withBuilderName(Name.fromString("{CLASSNAME}SafeBuilder"))
+            .withBuilderNameOpt(Name.fromString("{CLASSNAME}SafeBuilder"))
             .builderName(Pojos.sample());
     assertEquals("CustomerSafeBuilder", name.asString());
   }

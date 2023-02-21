@@ -19,6 +19,7 @@ import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoAndField;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class NormalBuilderGensTest {
@@ -61,7 +62,7 @@ class NormalBuilderGensTest {
     final Generator<Pojo, PojoSettings> generator = NormalBuilderGens.buildMethod();
     final BuildMethod buildMethod =
         new BuildMethod(Name.fromString("customBuildMethod"), Types.string());
-    final Pojo pojo = Pojos.genericSample().withBuildMethod(buildMethod);
+    final Pojo pojo = Pojos.genericSample().withBuildMethod(Optional.of(buildMethod));
     final String output =
         generator.generate(pojo, PojoSettings.defaultSettings(), Writer.createDefault()).asString();
 
@@ -117,7 +118,8 @@ class NormalBuilderGensTest {
 
     final PojoAndField pojoAndField = new PojoAndField(Pojos.sample(), PojoFields.requiredId());
     final PojoSettings settings =
-        PojoSettings.defaultSettings().withBuilderSetMethodPrefix(Name.fromString("set"));
+        PojoSettings.defaultSettings()
+            .withBuilderSetMethodPrefix(Optional.of(Name.fromString("set")));
 
     final Writer writer = generator.generate(pojoAndField, settings, Writer.createDefault());
 
@@ -204,7 +206,7 @@ class NormalBuilderGensTest {
     final PojoAndField pojoAndField =
         new PojoAndField(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL));
     final PojoSettings settings =
-        PojoSettings.defaultSettings().withBuilderSetMethodPrefix(Name.fromString("set"));
+        PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
 
     final Writer writer = generator.generate(pojoAndField, settings, Writer.createDefault());
 

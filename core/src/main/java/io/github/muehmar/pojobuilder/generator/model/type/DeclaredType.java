@@ -1,15 +1,15 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class DeclaredType implements DeclaredTypeExtension, SpecificType {
+@PojoBuilder
+public class DeclaredType implements SpecificType {
   Classname classname;
   Optional<PackageName> pkg;
   PList<Type> typeParameters;

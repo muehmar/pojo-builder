@@ -1,16 +1,16 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import java.util.function.Function;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class Type implements TypeExtension {
+@PojoBuilder
+public class Type {
   SpecificType specificType;
 
   public static Type fromSpecificType(SpecificType specificType) {

@@ -2,12 +2,12 @@ package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Strings;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import lombok.Value;
 
 @Value
-@PojoExtension
+@PojoBuilder
 public class Generic {
   Name typeVariable;
   PList<Type> upperBounds;

@@ -44,7 +44,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
         runAnnotationProcessor(qualifiedClassName(className), classString);
 
     assertEquals(
-        PojoSettings.defaultSettings().withBuilderName(Name.fromString("CustomBuilderName")),
+        PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("CustomBuilderName")),
         pojoAndSettings.getSettings());
   }
 
@@ -106,7 +106,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
         runAnnotationProcessor(qualifiedClassName(className), classString);
 
     assertEquals(
-        PojoSettings.defaultSettings().withBuilderName(Name.fromString("SafeBuilder")),
+        PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("SafeBuilder")),
         pojoAndSettings.getSettings());
   }
 }

@@ -2,17 +2,19 @@ package io.github.muehmar.pojobuilder.generator.model;
 
 import static io.github.muehmar.pojobuilder.Booleans.not;
 
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.Value;
+import lombok.With;
 
 @Value
-@PojoExtension
-public class PojoField implements PojoFieldExtension {
+@With
+@PojoBuilder
+public class PojoField {
   Name name;
   Type type;
   Necessity necessity;

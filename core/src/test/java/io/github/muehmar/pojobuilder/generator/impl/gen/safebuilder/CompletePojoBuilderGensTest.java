@@ -139,7 +139,7 @@ class CompletePojoBuilderGensTest {
     final Writer writer =
         generator.generate(
             Pojos.sample(),
-            PojoSettings.defaultSettings().withBuilderSetMethodPrefix(Name.fromString("set")),
+            PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set")),
             Writer.createDefault());
 
     assertEquals(

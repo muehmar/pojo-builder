@@ -1,12 +1,12 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import lombok.Value;
 
 @Value
-@PojoExtension
-public class MatchingConstructor implements MatchingConstructorExtension {
+@PojoBuilder
+public class MatchingConstructor {
   Constructor constructor;
   PList<FieldArgument> fieldArguments;
 }

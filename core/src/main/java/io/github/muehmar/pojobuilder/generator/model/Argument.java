@@ -2,14 +2,16 @@ package io.github.muehmar.pojobuilder.generator.model;
 
 import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.SAME_TYPE;
 
+import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import io.github.muehmar.pojoextension.annotations.PojoExtension;
 import java.util.Optional;
 import lombok.Value;
+import lombok.With;
 
 @Value
-@PojoExtension
-public class Argument implements ArgumentExtension {
+@With
+@PojoBuilder
+public class Argument {
   Name name;
   Type type;
 

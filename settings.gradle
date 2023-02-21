@@ -10,8 +10,9 @@ enableFeaturePreview('VERSION_CATALOGS')
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            library('pojoextension', 'io.github.muehmar:pojo-extension:0.13.0')
-            library('pojoextension-annotations', 'io.github.muehmar:pojo-extension-annotations:0.13.0')
+            version('pojobuilder', '1.0.0')
+            library('pojobuilder-core', 'io.github.muehmar','pojo-builder').versionRef('pojobuilder')
+            library('pojobuilder-annotations', 'io.github.muehmar','pojo-builder-annotations').versionRef('pojobuilder')
 
             library('codeGenerator', 'io.github.muehmar:code-generator:0.4.0')
 
