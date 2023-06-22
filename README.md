@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.0.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.0.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.1.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.1.0"
 }
 ```
 
@@ -134,7 +134,16 @@ generation
 (see [Annotation Parameters](#annotation-parameters)):
 
 ```
-  Customer.newBuilder()
+  CustomerBuilder.create()
+    .setName("Dexter")
+    .setEmail("dexter@miami-metro.us")
+    .andAllOptionals()
+    .setNickname("Dex")
+    .build();
+```
+or alternatively using the `customerBuilder()` method in `CustomerBuilder` which might be statically imported:
+```
+  customerBuilder()
     .setName("Dexter")
     .setEmail("dexter@miami-metro.us")
     .andAllOptionals()
@@ -365,6 +374,7 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.1.0 - Add second factory method with the pojo name for static imports (issue `#7`)
 * 1.0.0 - Fork and Release of PojoBuilder 
     * Remove the pojo extension generation
 * 0.15.1 - Fix import for nested classes (issue `#15`)

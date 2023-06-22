@@ -51,6 +51,8 @@ public class SafeBuilderClassGens {
         .appendNewLine()
         .append(createMethod())
         .appendNewLine()
+        .append(pojoBuilderCreateMethod())
+        .appendNewLine()
         .append(CompleteSafeBuilderGens.completeSafeBuilder());
   }
 
@@ -68,6 +70,20 @@ public class SafeBuilderClassGens {
         .methodName("create")
         .noArguments()
         .content(content)
+        .build()
+        .append(RefsGen.genericRefs());
+  }
+
+  public static Generator<Pojo, PojoSettings> pojoBuilderCreateMethod() {
+    final Function<Pojo, String> returnType = p -> "Builder0" + p.getTypeVariablesSection();
+    return JavaGenerators.<Pojo, PojoSettings>methodGen()
+        .modifiers(PUBLIC, STATIC)
+        .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))
+        .returnType(returnType)
+        .methodName(
+            (pojo, settings) -> String.format("%s", settings.builderName(pojo).startLowerCase()))
+        .noArguments()
+        .content("return create();")
         .build()
         .append(RefsGen.genericRefs());
   }
