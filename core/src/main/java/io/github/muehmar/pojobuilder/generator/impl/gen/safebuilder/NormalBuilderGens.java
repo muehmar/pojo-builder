@@ -56,6 +56,8 @@ public class NormalBuilderGens {
         .clazz()
         .nested()
         .packageGen(new PackageGen())
+        .noJavaDoc()
+        .noAnnotations()
         .modifiers(PUBLIC, STATIC, FINAL)
         .className(p -> BUILDER_CLASSNAME + p.getGenericTypeDeclarationSection())
         .noSuperClass()

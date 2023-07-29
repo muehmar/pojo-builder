@@ -35,6 +35,8 @@ public class SafeBuilderGens {
         .clazz()
         .nested()
         .packageGen(Generator.emptyGen())
+        .noJavaDoc()
+        .noAnnotations()
         .modifiers(PUBLIC, STATIC, FINAL)
         .className(f -> classDeclaration(f.getIndexedField()))
         .noSuperClass()
@@ -244,6 +246,8 @@ public class SafeBuilderGens {
         .clazz()
         .nested()
         .packageGen(Generator.emptyGen())
+        .noJavaDoc()
+        .noAnnotations()
         .modifiers(PUBLIC, STATIC, FINAL)
         .className(
             (p, s) ->
@@ -280,6 +284,8 @@ public class SafeBuilderGens {
         .clazz()
         .nested()
         .packageGen(Generator.emptyGen())
+        .noJavaDoc()
+        .noAnnotations()
         .modifiers(PUBLIC, STATIC, FINAL)
         .className(
             (p, s) ->

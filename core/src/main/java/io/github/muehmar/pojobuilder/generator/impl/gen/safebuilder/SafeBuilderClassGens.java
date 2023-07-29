@@ -25,6 +25,8 @@ public class SafeBuilderClassGens {
         .clazz()
         .topLevel()
         .packageGen(new PackageGen())
+        .noJavaDoc()
+        .noAnnotations()
         .modifierList((pojo, settings) -> createClassModifiers(settings))
         .className((p, s) -> s.builderName(p).asString())
         .noSuperClass()
