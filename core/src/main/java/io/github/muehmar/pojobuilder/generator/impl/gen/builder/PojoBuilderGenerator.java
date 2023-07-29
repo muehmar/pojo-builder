@@ -1,9 +1,11 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.standardBuilderGenerator;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGenerator.unsafeBuilderGenerator;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
@@ -17,10 +19,10 @@ import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import java.util.function.Function;
 
-public class SafeBuilderClassGens {
-  private SafeBuilderClassGens() {}
+public class PojoBuilderGenerator {
+  private PojoBuilderGenerator() {}
 
-  public static Generator<Pojo, PojoSettings> safeBuilderClass() {
+  public static Generator<Pojo, PojoSettings> pojoBuilderGenerator() {
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()
         .topLevel()
@@ -31,7 +33,7 @@ public class SafeBuilderClassGens {
         .className((p, s) -> s.builderName(p).asString())
         .noSuperClass()
         .noInterfaces()
-        .content(content())
+        .content(pojoBuilderContent())
         .build();
   }
 
@@ -39,7 +41,7 @@ public class SafeBuilderClassGens {
     return PList.fromOptional(settings.getBuilderAccessLevel().asJavaModifier()).cons(FINAL);
   }
 
-  private static Generator<Pojo, PojoSettings> content() {
+  private static Generator<Pojo, PojoSettings> pojoBuilderContent() {
     final Generator<Pojo, PojoSettings> constructor =
         JavaGenerators.<Pojo, PojoSettings>constructorGen()
             .modifiers(PRIVATE)
@@ -48,14 +50,16 @@ public class SafeBuilderClassGens {
             .noContent()
             .build();
     return Generator.<Pojo, PojoSettings>emptyGen()
-        .appendNewLine()
+        .appendSingleBlankLine()
         .append(constructor)
-        .appendNewLine()
+        .appendSingleBlankLine()
         .append(createMethod())
-        .appendNewLine()
+        .appendSingleBlankLine()
         .append(pojoBuilderCreateMethod())
-        .appendNewLine()
-        .append(CompleteSafeBuilderGens.completeSafeBuilder());
+        .appendSingleBlankLine()
+        .append(unsafeBuilderGenerator())
+        .appendSingleBlankLine()
+        .append(standardBuilderGenerator());
   }
 
   public static Generator<Pojo, PojoSettings> createMethod() {

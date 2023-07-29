@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder.model;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.model;
 
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;

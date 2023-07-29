@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder;
 
 import static io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings.defaultSettings;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +19,7 @@ class PojoBuilderClassGensTest {
 
   @Test
   void createMethod_when_calledWithSamplePojo_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> gen = SafeBuilderClassGens.createMethod();
+    final Generator<Pojo, PojoSettings> gen = PojoBuilderGenerator.createMethod();
 
     final Writer writer = gen.generate(Pojos.sample(), defaultSettings(), Writer.createDefault());
 
@@ -32,7 +32,7 @@ class PojoBuilderClassGensTest {
   @EnumSource(ClassAccessLevelModifier.class)
   void safeBuilderClass_when_calledWithSamplePojo_then_correctOutput(
       ClassAccessLevelModifier accessLevelModifier) {
-    final Generator<Pojo, PojoSettings> gen = SafeBuilderClassGens.safeBuilderClass();
+    final Generator<Pojo, PojoSettings> gen = PojoBuilderGenerator.pojoBuilderGenerator();
 
     final Writer writer =
         gen.generate(
@@ -174,7 +174,7 @@ class PojoBuilderClassGensTest {
 
   @Test
   void safeBuilderClass_when_genericPojo_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> gen = SafeBuilderClassGens.safeBuilderClass();
+    final Generator<Pojo, PojoSettings> gen = PojoBuilderGenerator.pojoBuilderGenerator();
 
     final Writer writer =
         gen.generate(Pojos.genericSample(), defaultSettings(), Writer.createDefault());
@@ -309,7 +309,7 @@ class PojoBuilderClassGensTest {
 
   @Test
   void createMethod_when_calledWithGenericSamplePojo_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> gen = SafeBuilderClassGens.createMethod();
+    final Generator<Pojo, PojoSettings> gen = PojoBuilderGenerator.createMethod();
 
     final Writer writer =
         gen.generate(Pojos.genericSample(), defaultSettings(), Writer.createDefault());

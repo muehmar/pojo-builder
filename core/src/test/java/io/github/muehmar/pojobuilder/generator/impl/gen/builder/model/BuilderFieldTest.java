@@ -1,7 +1,9 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder.model;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.model;
 
 import static java.util.Optional.empty;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import io.github.muehmar.pojobuilder.FieldBuilderMethods;

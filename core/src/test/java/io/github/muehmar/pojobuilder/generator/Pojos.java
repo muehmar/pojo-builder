@@ -85,6 +85,21 @@ public class Pojos {
     return pojo.withConstructors(PList.single(deviateStandardConstructor(pojo)));
   }
 
+  public static Pojo fromFields(PojoField... fields) {
+    final Pojo pojo =
+        PojoBuilder.create()
+            .name(Name.fromString("Customer"))
+            .pkg(PACKAGE_NAME)
+            .fields(PList.of(fields))
+            .constructors(PList.empty())
+            .generics(PList.empty())
+            .fieldBuilders(PList.empty())
+            .andAllOptionals()
+            .buildMethod(Optional.empty())
+            .build();
+    return pojo.withConstructors(PList.single(deviateStandardConstructor(pojo)));
+  }
+
   public static Constructor deviateStandardConstructor(Pojo pojo) {
     return new Constructor(
         pojo.getName(), pojo.getFields().map(f -> new Argument(f.getName(), f.getType())));

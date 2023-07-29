@@ -1,0 +1,63 @@
+builderSetMethodePrefix=[
+public Builder setId(Integer id) {
+  this.id = id;
+  return this;
+}
+
+public Builder setId(Optional<Integer> id) {
+  this.id = id.orElse(null);
+  return this;
+}
+
+]
+
+
+fieldOfGenericClass=[
+public Builder<T, S> id(Integer id) {
+  this.id = id;
+  return this;
+}
+
+public Builder<T, S> id(Optional<Integer> id) {
+  this.id = id.orElse(null);
+  return this;
+}
+
+]
+
+
+genericClass=[
+public Builder<T, S> id(Integer id) {
+  this.id = id;
+  return this;
+}
+
+public Builder<T, S> id(Optional<Integer> id) {
+  this.id = id.orElse(null);
+  return this;
+}
+
+]
+
+
+optionalField=[
+public Builder id(Integer id) {
+  this.id = id;
+  return this;
+}
+
+public Builder id(Optional<Integer> id) {
+  this.id = id.orElse(null);
+  return this;
+}
+
+]
+
+
+requiredField=[
+private Builder id(Integer id) {
+  this.id = id;
+  return this;
+}
+
+]

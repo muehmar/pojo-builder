@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,47 +15,13 @@ import org.junit.jupiter.api.Test;
 class CompletePojoBuilderGensTest {
   @Test
   void completeSafeBuilder_when_generatorUsedWithSamplePojo_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = CompleteSafeBuilderGens.completeSafeBuilder();
+    final Generator<Pojo, PojoSettings> generator =
+        StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
         generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault());
 
     assertEquals(
-        "public static final class Builder {\n"
-            + "  private Builder() {\n"
-            + "  }\n"
-            + "\n"
-            + "  private Integer id;\n"
-            + "  private String username;\n"
-            + "  private String nickname;\n"
-            + "\n"
-            + "  private Builder id(Integer id) {\n"
-            + "    this.id = id;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  private Builder username(String username) {\n"
-            + "    this.username = username;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder nickname(String nickname) {\n"
-            + "    this.nickname = nickname;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder nickname(Optional<String> nickname) {\n"
-            + "    this.nickname = nickname.orElse(null);\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Customer build() {\n"
-            + "    final Customer instance =\n"
-            + "        new Customer(id, username, nickname);\n"
-            + "    return instance;\n"
-            + "  }\n"
-            + "}\n"
-            + "\n"
-            + "public static final class Builder0 {\n"
+        "public static final class Builder0 {\n"
             + "  private final Builder builder;\n"
             + "\n"
             + "  private Builder0(Builder builder) {\n"
@@ -135,7 +101,8 @@ class CompletePojoBuilderGensTest {
 
   @Test
   void completeSafeBuilder_when_samplePojoAndBuilderSetMethodPrefix_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = CompleteSafeBuilderGens.completeSafeBuilder();
+    final Generator<Pojo, PojoSettings> generator =
+        StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
         generator.generate(
             Pojos.sample(),
@@ -143,42 +110,7 @@ class CompletePojoBuilderGensTest {
             Writer.createDefault());
 
     assertEquals(
-        "public static final class Builder {\n"
-            + "  private Builder() {\n"
-            + "  }\n"
-            + "\n"
-            + "  private Integer id;\n"
-            + "  private String username;\n"
-            + "  private String nickname;\n"
-            + "\n"
-            + "  private Builder setId(Integer id) {\n"
-            + "    this.id = id;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  private Builder setUsername(String username) {\n"
-            + "    this.username = username;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder setNickname(String nickname) {\n"
-            + "    this.nickname = nickname;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder setNickname(Optional<String> nickname) {\n"
-            + "    this.nickname = nickname.orElse(null);\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Customer build() {\n"
-            + "    final Customer instance =\n"
-            + "        new Customer(id, username, nickname);\n"
-            + "    return instance;\n"
-            + "  }\n"
-            + "}\n"
-            + "\n"
-            + "public static final class Builder0 {\n"
+        "public static final class Builder0 {\n"
             + "  private final Builder builder;\n"
             + "\n"
             + "  private Builder0(Builder builder) {\n"
@@ -258,48 +190,14 @@ class CompletePojoBuilderGensTest {
 
   @Test
   void completeSafeBuilder_when_genericPojo_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = CompleteSafeBuilderGens.completeSafeBuilder();
+    final Generator<Pojo, PojoSettings> generator =
+        StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
         generator.generate(
             Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
 
     assertEquals(
-        "public static final class Builder<T extends List<String>, S> {\n"
-            + "  private Builder() {\n"
-            + "  }\n"
-            + "\n"
-            + "  private String id;\n"
-            + "  private T data;\n"
-            + "  private S additionalData;\n"
-            + "\n"
-            + "  private Builder<T, S> id(String id) {\n"
-            + "    this.id = id;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  private Builder<T, S> data(T data) {\n"
-            + "    this.data = data;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder<T, S> additionalData(S additionalData) {\n"
-            + "    this.additionalData = additionalData;\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder<T, S> additionalData(Optional<S> additionalData) {\n"
-            + "    this.additionalData = additionalData.orElse(null);\n"
-            + "    return this;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Customer<T, S> build() {\n"
-            + "    final Customer<T, S> instance =\n"
-            + "        new Customer<>(id, data, additionalData);\n"
-            + "    return instance;\n"
-            + "  }\n"
-            + "}\n"
-            + "\n"
-            + "public static final class Builder0<T extends List<String>, S> {\n"
+        "public static final class Builder0<T extends List<String>, S> {\n"
             + "  private final Builder<T, S> builder;\n"
             + "\n"
             + "  private Builder0(Builder<T, S> builder) {\n"
@@ -375,33 +273,5 @@ class CompletePojoBuilderGensTest {
     assertTrue(writer.getRefs().exists(Refs.JAVA_UTIL_LIST::equals));
     assertTrue(writer.getRefs().exists(Refs.JAVA_LANG_STRING::equals));
     assertTrue(writer.getRefs().exists(Refs.JAVA_UTIL_OPTIONAL::equals));
-  }
-
-  @Test
-  void newBuilderMethod_when_called_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> gen = CompleteSafeBuilderGens.newBuilderMethod();
-    final String output =
-        gen.generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
-
-    assertEquals(
-        "public static Builder0 newBuilder() {\n" + "  return new Builder0(new Builder());\n" + "}",
-        output);
-  }
-
-  @Test
-  void newBuilderMethod_when_calledWithGenericSample_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> gen = CompleteSafeBuilderGens.newBuilderMethod();
-    final Writer writer =
-        gen.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
-
-    assertEquals(
-        "public static <T extends List<String>, S> Builder0<T, S> newBuilder() {\n"
-            + "  return new Builder0<>(new Builder<T, S>());\n"
-            + "}",
-        writer.asString());
-
-    assertTrue(writer.getRefs().exists(Refs.JAVA_UTIL_LIST::equals));
-    assertTrue(writer.getRefs().exists(Refs.JAVA_LANG_STRING::equals));
   }
 }
