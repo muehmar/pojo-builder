@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 
@@ -9,7 +9,7 @@ import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import java.util.function.Function;
 
-class BuildMethod {
+public class BuildMethod {
   private BuildMethod() {}
 
   public static Generator<Pojo, PojoSettings> buildMethod() {

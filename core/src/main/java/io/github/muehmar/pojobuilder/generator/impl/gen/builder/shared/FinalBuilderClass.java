@@ -1,40 +1,29 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
-import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.BuildMethod.buildMethod;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.BUILDER_ASSIGNMENT;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuilderMethodConstructor.builderMethodConstructor;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
 import io.github.muehmar.pojobuilder.generator.impl.gen.RefsGen;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
-import io.github.muehmar.pojobuilder.generator.model.PojoField;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import java.util.function.ToIntFunction;
 
-class FinalOptionalBuilder {
-  private FinalOptionalBuilder() {}
+public class FinalBuilderClass {
+  private FinalBuilderClass() {}
 
-  public static Generator<Pojo, PojoSettings> finalOptionalBuilder() {
-    final ToIntFunction<Pojo> builderNumber =
-        pojo -> pojo.getFields().filter(PojoField::isOptional).size();
-
-    final Generator<Pojo, PojoSettings> constructor =
-        JavaGenerators.<Pojo, PojoSettings>constructorGen()
-            .modifiers(PRIVATE)
-            .className(p -> String.format("OptBuilder%d", builderNumber.applyAsInt(p)))
-            .singleArgument(p -> String.format("Builder%s builder", p.getTypeVariablesSection()))
-            .content(BUILDER_ASSIGNMENT)
-            .build();
+  public static Generator<Pojo, PojoSettings> finalBuilderClass(
+      RawClassNameGenerator rawClassNameGenerator, ToIntFunction<Pojo> builderNumber) {
 
     final Generator<Pojo, PojoSettings> content =
         BuilderFieldDeclaration.<PojoSettings>builderFieldDeclaration()
             .append(newLine())
-            .append(constructor)
+            .append(builderMethodConstructor(rawClassNameGenerator, builderNumber))
             .append(newLine())
             .append(buildMethod());
 
@@ -48,8 +37,9 @@ class FinalOptionalBuilder {
         .className(
             (p, s) ->
                 String.format(
-                    "OptBuilder%d%s",
-                    builderNumber.applyAsInt(p), p.getGenericTypeDeclarationSection()))
+                    "%s%s",
+                    rawClassNameGenerator.forFieldIndex(builderNumber.applyAsInt(p)),
+                    p.getGenericTypeDeclarationSection()))
         .noSuperClass()
         .noInterfaces()
         .content(content)

@@ -1,12 +1,11 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
-import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.BUILDER_ASSIGNMENT;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuilderMethodConstructor.builderMethodConstructor;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
@@ -19,10 +18,11 @@ import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import java.util.function.Function;
 
-class FieldBuilderClass {
+public class FieldBuilderClass {
   private FieldBuilderClass() {}
 
-  public static Generator<BuilderField, PojoSettings> fieldBuilderClass() {
+  public static Generator<BuilderField, PojoSettings> fieldBuilderClass(
+      RawClassNameGenerator rawClassNameGenerator) {
     return JavaGenerators.<BuilderField, PojoSettings>classGen()
         .clazz()
         .nested()
@@ -30,69 +30,66 @@ class FieldBuilderClass {
         .noJavaDoc()
         .noAnnotations()
         .modifiers(PUBLIC, STATIC, FINAL)
-        .className(f -> classDeclaration(f.getIndexedField()))
+        .className(f -> classDeclaration(rawClassNameGenerator, f.getIndexedField()))
         .noSuperClass()
         .noInterfaces()
-        .content(builderClassContent())
+        .content(builderClassContent(rawClassNameGenerator))
         .build()
         .append(RefsGen.genericRefs(), BuilderField::getPojo);
   }
 
-  private static String rawClassName(IndexedField field) {
-    final String prefix = field.getField().isRequired() ? "" : "Opt";
-    return String.format("%sBuilder%d", prefix, field.getIndex());
+  private static String classDeclaration(
+      RawClassNameGenerator rawClassNameGenerator, IndexedField field) {
+    return rawClassNameGenerator.forField(field)
+        + field.getPojo().getGenericTypeDeclarationSection();
   }
 
-  private static String classDeclaration(IndexedField field) {
-    return rawClassName(field) + field.getPojo().getGenericTypeDeclarationSection();
+  private static String nextClassTypeVariables(
+      RawClassNameGenerator rawClassNameGenerator, IndexedField field) {
+    return nextRawClassName(rawClassNameGenerator, field)
+        + field.getPojo().getTypeVariablesSection();
   }
 
-  private static String nextClassTypeVariables(IndexedField field) {
-    return nextRawClassName(field) + field.getPojo().getTypeVariablesSection();
+  private static String nextClassDiamond(
+      RawClassNameGenerator rawClassNameGenerator, IndexedField field) {
+    return nextRawClassName(rawClassNameGenerator, field) + field.getPojo().getDiamond();
   }
 
-  private static String nextClassDiamond(IndexedField field) {
-    return nextRawClassName(field) + field.getPojo().getDiamond();
+  private static String nextRawClassName(
+      RawClassNameGenerator rawClassNameGenerator, IndexedField field) {
+    return rawClassNameGenerator.forField(field.withIndex(field.getIndex() + 1));
   }
 
-  private static String nextRawClassName(IndexedField field) {
-    return rawClassName(field.withIndex(field.getIndex() + 1));
-  }
-
-  public static Generator<BuilderField, PojoSettings> builderClassContent() {
+  public static Generator<BuilderField, PojoSettings> builderClassContent(
+      RawClassNameGenerator rawClassNameGenerator) {
     return BuilderFieldDeclaration.<PojoSettings>builderFieldDeclaration()
         .contraMap(BuilderField::getPojo)
         .append(newLine())
-        .append(constructor())
+        .append(builderMethodConstructor(rawClassNameGenerator), BuilderField::getIndexedField)
         .append(newLine())
-        .append(setMethod())
-        .appendConditionally(BuilderField::hasFieldBuilder, fieldBuilderMethods().prependNewLine())
-        .appendConditionally(BuilderField::isFieldOptional, setMethodOptional().prependNewLine());
+        .append(setMethod(rawClassNameGenerator))
+        .appendConditionally(
+            BuilderField::hasFieldBuilder,
+            fieldBuilderMethods(rawClassNameGenerator).prependNewLine())
+        .appendConditionally(
+            BuilderField::isFieldOptional,
+            setMethodOptional(rawClassNameGenerator).prependNewLine());
   }
 
-  public static Generator<BuilderField, PojoSettings> constructor() {
-    return JavaGenerators.<BuilderField, PojoSettings>constructorGen()
-        .modifiers(PRIVATE)
-        .className(f -> rawClassName(f.getIndexedField()))
-        .singleArgument(
-            f -> String.format("Builder%s builder", f.getPojo().getTypeVariablesSection()))
-        .content(BUILDER_ASSIGNMENT)
-        .build();
-  }
-
-  public static Generator<BuilderField, PojoSettings> setMethod() {
+  public static Generator<BuilderField, PojoSettings> setMethod(
+      RawClassNameGenerator rawClassNameGenerator) {
     final Generator<BuilderField, PojoSettings> content =
         (f, s, w) ->
             w.println(
                 "return new %s(builder.%s(%s));",
-                nextClassDiamond(f.getIndexedField()),
+                nextClassDiamond(rawClassNameGenerator, f.getIndexedField()),
                 f.getField().builderSetMethodName(s),
                 f.getField().getName());
 
     return JavaGenerators.<BuilderField, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
-        .returnType(f -> nextClassTypeVariables(f.getIndexedField()))
+        .returnType(f -> nextClassTypeVariables(rawClassNameGenerator, f.getIndexedField()))
         .methodName((f, s) -> f.getField().builderSetMethodName(s).asString())
         .singleArgument(
             f ->
@@ -104,19 +101,20 @@ class FieldBuilderClass {
         .filter(BuilderField::isEnableDefaultMethods);
   }
 
-  public static Generator<BuilderField, PojoSettings> setMethodOptional() {
+  public static Generator<BuilderField, PojoSettings> setMethodOptional(
+      RawClassNameGenerator rawClassNameGenerator) {
     final Generator<BuilderField, PojoSettings> content =
         (f, s, w) ->
             w.println(
                 "return new %s(builder.%s(%s));",
-                nextClassDiamond(f.getIndexedField()),
+                nextClassDiamond(rawClassNameGenerator, f.getIndexedField()),
                 f.getField().builderSetMethodName(s),
                 f.getField().getName());
 
     return JavaGenerators.<BuilderField, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
-        .returnType(f -> nextClassTypeVariables(f.getIndexedField()))
+        .returnType(f -> nextClassTypeVariables(rawClassNameGenerator, f.getIndexedField()))
         .methodName((f, s) -> f.getField().builderSetMethodName(s).asString())
         .singleArgument(
             f ->
@@ -130,12 +128,13 @@ class FieldBuilderClass {
         .filter(BuilderField::isEnableDefaultMethods);
   }
 
-  public static Generator<BuilderField, PojoSettings> fieldBuilderMethods() {
+  public static Generator<BuilderField, PojoSettings> fieldBuilderMethods(
+      RawClassNameGenerator rawClassNameGenerator) {
     final Generator<BuilderFieldWithMethod, PojoSettings> content =
         (f, s, w) ->
             w.println(
                 "return new %s(builder.%s(%s%s.%s(%s)));",
-                nextClassDiamond(f.getIndexedField()),
+                nextClassDiamond(rawClassNameGenerator, f.getIndexedField()),
                 f.getField().builderSetMethodName(s),
                 f.getPojo().getName(),
                 f.getFieldBuilderMethod()
@@ -146,7 +145,7 @@ class FieldBuilderClass {
                 f.getFieldBuilderMethod().getArgumentNames().mkString(", "));
 
     final Function<BuilderFieldWithMethod, String> nextClassTypeVariables =
-        f -> nextClassTypeVariables(f.getIndexedField());
+        f -> nextClassTypeVariables(rawClassNameGenerator, f.getIndexedField());
 
     final Generator<BuilderFieldWithMethod, PojoSettings> singleMethod =
         JavaGenerators.<BuilderFieldWithMethod, PojoSettings>methodGen()

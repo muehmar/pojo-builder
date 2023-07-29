@@ -4,6 +4,9 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.Filters.isFullBuilderEnabled;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.Filters.isStandardBuilderEnabled;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.full.FullBuilderGenerator.fullBuilderGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.standardBuilderGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGenerator.unsafeBuilderGenerator;
 
@@ -17,6 +20,7 @@ import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class PojoBuilderGenerator {
@@ -53,16 +57,29 @@ public class PojoBuilderGenerator {
         .appendSingleBlankLine()
         .append(constructor)
         .appendSingleBlankLine()
-        .append(createMethod())
+        .append(standardBuilderFactoryMethod((pojo, settings) -> "create"))
         .appendSingleBlankLine()
-        .append(pojoBuilderCreateMethod())
+        .append(
+            standardBuilderFactoryMethod(
+                (pojo, settings) ->
+                    String.format("%s", settings.builderName(pojo).startLowerCase())))
+        .appendSingleBlankLine()
+        .append(fullBuilderFactoryMethod((pojo, settings) -> "createFull"))
+        .appendSingleBlankLine()
+        .append(
+            fullBuilderFactoryMethod(
+                (pojo, settings) ->
+                    String.format("full%s", settings.builderName(pojo).startUpperCase())))
         .appendSingleBlankLine()
         .append(unsafeBuilderGenerator())
         .appendSingleBlankLine()
-        .append(standardBuilderGenerator());
+        .append(standardBuilderGenerator())
+        .appendSingleBlankLine()
+        .append(fullBuilderGenerator());
   }
 
-  public static Generator<Pojo, PojoSettings> createMethod() {
+  private static Generator<Pojo, PojoSettings> standardBuilderFactoryMethod(
+      BiFunction<Pojo, PojoSettings, String> methodName) {
     final Function<Pojo, String> returnType = p -> "Builder0" + p.getTypeVariablesSection();
     final Function<Pojo, String> content =
         p ->
@@ -73,24 +90,31 @@ public class PojoBuilderGenerator {
         .modifiers(PUBLIC, STATIC)
         .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))
         .returnType(returnType)
-        .methodName("create")
+        .methodName(methodName)
         .noArguments()
         .content(content)
         .build()
-        .append(RefsGen.genericRefs());
+        .append(RefsGen.genericRefs())
+        .filter(isStandardBuilderEnabled());
   }
 
-  public static Generator<Pojo, PojoSettings> pojoBuilderCreateMethod() {
-    final Function<Pojo, String> returnType = p -> "Builder0" + p.getTypeVariablesSection();
+  private static Generator<Pojo, PojoSettings> fullBuilderFactoryMethod(
+      BiFunction<Pojo, PojoSettings, String> methodName) {
+    final Function<Pojo, String> returnType = p -> "FullBuilder0" + p.getTypeVariablesSection();
+    final Function<Pojo, String> content =
+        p ->
+            String.format(
+                "return new FullBuilder0%s(new Builder%s());",
+                p.getDiamond(), p.getTypeVariablesSection());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
         .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))
         .returnType(returnType)
-        .methodName(
-            (pojo, settings) -> String.format("%s", settings.builderName(pojo).startLowerCase()))
+        .methodName(methodName)
         .noArguments()
-        .content("return create();")
+        .content(content)
         .build()
-        .append(RefsGen.genericRefs());
+        .append(RefsGen.genericRefs())
+        .filter(isFullBuilderEnabled());
   }
 }

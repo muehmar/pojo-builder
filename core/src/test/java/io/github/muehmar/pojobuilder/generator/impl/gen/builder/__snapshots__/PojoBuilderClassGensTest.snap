@@ -1,0 +1,1039 @@
+genericPojo=[
+package io.github.muehmar;
+
+import java.util.List;
+import java.util.Optional;
+
+public final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static <T extends List<String>, S> Builder0<T, S> create() {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> Builder0<T, S> customerBuilder() {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> createFull() {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder() {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static final class Builder<T extends List<String>, S> {
+    private Builder() {
+    }
+
+    private String id;
+    private T data;
+    private S additionalData;
+
+    private Builder<T, S> id(String id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder<T, S> data(T data) {
+      this.data = data;
+      return this;
+    }
+
+    public Builder<T, S> additionalData(S additionalData) {
+      this.additionalData = additionalData;
+      return this;
+    }
+
+    public Builder<T, S> additionalData(Optional<S> additionalData) {
+      this.additionalData = additionalData.orElse(null);
+      return this;
+    }
+
+    public Customer<T, S> build() {
+      final Customer<T, S> instance =
+          new Customer<>(id, data, additionalData);
+      return instance;
+    }
+  }
+
+  public static final class Builder0<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private Builder0(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Builder1<T, S> id(String id) {
+      return new Builder1<>(builder.id(id));
+    }
+  }
+
+  public static final class Builder1<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private Builder1(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Builder2<T, S> data(T data) {
+      return new Builder2<>(builder.data(data));
+    }
+  }
+
+  public static final class Builder2<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private Builder2(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder0<T, S> andAllOptionals() {
+      return new OptBuilder0<>(builder);
+    }
+
+    public Builder<T, S> andOptionals() {
+      return builder;
+    }
+
+    public Customer<T, S> build() {
+      return builder.build();
+    }
+  }
+
+  public static final class OptBuilder0<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private OptBuilder0(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder1<T, S> additionalData(S additionalData) {
+      return new OptBuilder1<>(builder.additionalData(additionalData));
+    }
+
+    public OptBuilder1<T, S> additionalData(Optional<S> additionalData) {
+      return new OptBuilder1<>(builder.additionalData(additionalData));
+    }
+  }
+
+  public static final class OptBuilder1<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private OptBuilder1(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Customer<T, S> build() {
+      return builder.build();
+    }
+  }
+
+  public static final class FullBuilder0<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder0(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder1<T, S> id(String id) {
+      return new FullBuilder1<>(builder.id(id));
+    }
+  }
+
+  public static final class FullBuilder1<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder1(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder2<T, S> data(T data) {
+      return new FullBuilder2<>(builder.data(data));
+    }
+  }
+
+  public static final class FullBuilder2<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder2(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder3<T, S> additionalData(S additionalData) {
+      return new FullBuilder3<>(builder.additionalData(additionalData));
+    }
+
+    public FullBuilder3<T, S> additionalData(Optional<S> additionalData) {
+      return new FullBuilder3<>(builder.additionalData(additionalData));
+    }
+  }
+
+  public static final class FullBuilder3<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder3(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Customer<T, S> build() {
+      return builder.build();
+    }
+  }
+}
+]
+
+
+genericPojoFullBuilderDisabled=[
+package io.github.muehmar;
+
+import java.util.List;
+import java.util.Optional;
+
+public final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static <T extends List<String>, S> Builder0<T, S> create() {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> Builder0<T, S> customerBuilder() {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
+  public static final class Builder<T extends List<String>, S> {
+    private Builder() {
+    }
+
+    private String id;
+    private T data;
+    private S additionalData;
+
+    private Builder<T, S> id(String id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder<T, S> data(T data) {
+      this.data = data;
+      return this;
+    }
+
+    public Builder<T, S> additionalData(S additionalData) {
+      this.additionalData = additionalData;
+      return this;
+    }
+
+    public Builder<T, S> additionalData(Optional<S> additionalData) {
+      this.additionalData = additionalData.orElse(null);
+      return this;
+    }
+
+    public Customer<T, S> build() {
+      final Customer<T, S> instance =
+          new Customer<>(id, data, additionalData);
+      return instance;
+    }
+  }
+
+  public static final class Builder0<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private Builder0(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Builder1<T, S> id(String id) {
+      return new Builder1<>(builder.id(id));
+    }
+  }
+
+  public static final class Builder1<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private Builder1(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Builder2<T, S> data(T data) {
+      return new Builder2<>(builder.data(data));
+    }
+  }
+
+  public static final class Builder2<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private Builder2(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder0<T, S> andAllOptionals() {
+      return new OptBuilder0<>(builder);
+    }
+
+    public Builder<T, S> andOptionals() {
+      return builder;
+    }
+
+    public Customer<T, S> build() {
+      return builder.build();
+    }
+  }
+
+  public static final class OptBuilder0<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private OptBuilder0(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder1<T, S> additionalData(S additionalData) {
+      return new OptBuilder1<>(builder.additionalData(additionalData));
+    }
+
+    public OptBuilder1<T, S> additionalData(Optional<S> additionalData) {
+      return new OptBuilder1<>(builder.additionalData(additionalData));
+    }
+  }
+
+  public static final class OptBuilder1<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private OptBuilder1(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Customer<T, S> build() {
+      return builder.build();
+    }
+  }
+
+}
+]
+
+
+genericPojoStandardBuilderDisabled=[
+package io.github.muehmar;
+
+import java.util.List;
+import java.util.Optional;
+
+public final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> createFull() {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder() {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static final class Builder<T extends List<String>, S> {
+    private Builder() {
+    }
+
+    private String id;
+    private T data;
+    private S additionalData;
+
+    private Builder<T, S> id(String id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder<T, S> data(T data) {
+      this.data = data;
+      return this;
+    }
+
+    public Builder<T, S> additionalData(S additionalData) {
+      this.additionalData = additionalData;
+      return this;
+    }
+
+    public Builder<T, S> additionalData(Optional<S> additionalData) {
+      this.additionalData = additionalData.orElse(null);
+      return this;
+    }
+
+    public Customer<T, S> build() {
+      final Customer<T, S> instance =
+          new Customer<>(id, data, additionalData);
+      return instance;
+    }
+  }
+
+  public static final class FullBuilder0<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder0(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder1<T, S> id(String id) {
+      return new FullBuilder1<>(builder.id(id));
+    }
+  }
+
+  public static final class FullBuilder1<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder1(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder2<T, S> data(T data) {
+      return new FullBuilder2<>(builder.data(data));
+    }
+  }
+
+  public static final class FullBuilder2<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder2(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder3<T, S> additionalData(S additionalData) {
+      return new FullBuilder3<>(builder.additionalData(additionalData));
+    }
+
+    public FullBuilder3<T, S> additionalData(Optional<S> additionalData) {
+      return new FullBuilder3<>(builder.additionalData(additionalData));
+    }
+  }
+
+  public static final class FullBuilder3<T extends List<String>, S> {
+    private final Builder<T, S> builder;
+
+    private FullBuilder3(Builder<T, S> builder) {
+      this.builder = builder;
+    }
+
+    public Customer<T, S> build() {
+      return builder.build();
+    }
+  }
+}
+]
+
+
+samplePojoAndDifferentAccessLevelModifiers[PACKAGE_PRIVATE]=[
+package io.github.muehmar;
+
+import java.util.Optional;
+
+final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static Builder0 create() {
+    return new Builder0(new Builder());
+  }
+
+  public static Builder0 customerBuilder() {
+    return new Builder0(new Builder());
+  }
+
+  public static FullBuilder0 createFull() {
+    return new FullBuilder0(new Builder());
+  }
+
+  public static FullBuilder0 fullCustomerBuilder() {
+    return new FullBuilder0(new Builder());
+  }
+
+  public static final class Builder {
+    private Builder() {
+    }
+
+    private Integer id;
+    private String username;
+    private String nickname;
+
+    private Builder id(Integer id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder username(String username) {
+      this.username = username;
+      return this;
+    }
+
+    public Builder nickname(String nickname) {
+      this.nickname = nickname;
+      return this;
+    }
+
+    public Builder nickname(Optional<String> nickname) {
+      this.nickname = nickname.orElse(null);
+      return this;
+    }
+
+    public Customer build() {
+      final Customer instance =
+          new Customer(id, username, nickname);
+      return instance;
+    }
+  }
+
+  public static final class Builder0 {
+    private final Builder builder;
+
+    private Builder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Builder1 id(Integer id) {
+      return new Builder1(builder.id(id));
+    }
+  }
+
+  public static final class Builder1 {
+    private final Builder builder;
+
+    private Builder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Builder2 username(String username) {
+      return new Builder2(builder.username(username));
+    }
+  }
+
+  public static final class Builder2 {
+    private final Builder builder;
+
+    private Builder2(Builder builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder0 andAllOptionals() {
+      return new OptBuilder0(builder);
+    }
+
+    public Builder andOptionals() {
+      return builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+
+  public static final class OptBuilder0 {
+    private final Builder builder;
+
+    private OptBuilder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder1 nickname(String nickname) {
+      return new OptBuilder1(builder.nickname(nickname));
+    }
+
+    public OptBuilder1 nickname(Optional<String> nickname) {
+      return new OptBuilder1(builder.nickname(nickname));
+    }
+  }
+
+  public static final class OptBuilder1 {
+    private final Builder builder;
+
+    private OptBuilder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+
+  public static final class FullBuilder0 {
+    private final Builder builder;
+
+    private FullBuilder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder1 id(Integer id) {
+      return new FullBuilder1(builder.id(id));
+    }
+  }
+
+  public static final class FullBuilder1 {
+    private final Builder builder;
+
+    private FullBuilder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder2 username(String username) {
+      return new FullBuilder2(builder.username(username));
+    }
+  }
+
+  public static final class FullBuilder2 {
+    private final Builder builder;
+
+    private FullBuilder2(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder3 nickname(String nickname) {
+      return new FullBuilder3(builder.nickname(nickname));
+    }
+
+    public FullBuilder3 nickname(Optional<String> nickname) {
+      return new FullBuilder3(builder.nickname(nickname));
+    }
+  }
+
+  public static final class FullBuilder3 {
+    private final Builder builder;
+
+    private FullBuilder3(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+}
+]
+
+
+samplePojoAndDifferentAccessLevelModifiers[PUBLIC]=[
+package io.github.muehmar;
+
+import java.util.Optional;
+
+public final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static Builder0 create() {
+    return new Builder0(new Builder());
+  }
+
+  public static Builder0 customerBuilder() {
+    return new Builder0(new Builder());
+  }
+
+  public static FullBuilder0 createFull() {
+    return new FullBuilder0(new Builder());
+  }
+
+  public static FullBuilder0 fullCustomerBuilder() {
+    return new FullBuilder0(new Builder());
+  }
+
+  public static final class Builder {
+    private Builder() {
+    }
+
+    private Integer id;
+    private String username;
+    private String nickname;
+
+    private Builder id(Integer id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder username(String username) {
+      this.username = username;
+      return this;
+    }
+
+    public Builder nickname(String nickname) {
+      this.nickname = nickname;
+      return this;
+    }
+
+    public Builder nickname(Optional<String> nickname) {
+      this.nickname = nickname.orElse(null);
+      return this;
+    }
+
+    public Customer build() {
+      final Customer instance =
+          new Customer(id, username, nickname);
+      return instance;
+    }
+  }
+
+  public static final class Builder0 {
+    private final Builder builder;
+
+    private Builder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Builder1 id(Integer id) {
+      return new Builder1(builder.id(id));
+    }
+  }
+
+  public static final class Builder1 {
+    private final Builder builder;
+
+    private Builder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Builder2 username(String username) {
+      return new Builder2(builder.username(username));
+    }
+  }
+
+  public static final class Builder2 {
+    private final Builder builder;
+
+    private Builder2(Builder builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder0 andAllOptionals() {
+      return new OptBuilder0(builder);
+    }
+
+    public Builder andOptionals() {
+      return builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+
+  public static final class OptBuilder0 {
+    private final Builder builder;
+
+    private OptBuilder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder1 nickname(String nickname) {
+      return new OptBuilder1(builder.nickname(nickname));
+    }
+
+    public OptBuilder1 nickname(Optional<String> nickname) {
+      return new OptBuilder1(builder.nickname(nickname));
+    }
+  }
+
+  public static final class OptBuilder1 {
+    private final Builder builder;
+
+    private OptBuilder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+
+  public static final class FullBuilder0 {
+    private final Builder builder;
+
+    private FullBuilder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder1 id(Integer id) {
+      return new FullBuilder1(builder.id(id));
+    }
+  }
+
+  public static final class FullBuilder1 {
+    private final Builder builder;
+
+    private FullBuilder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder2 username(String username) {
+      return new FullBuilder2(builder.username(username));
+    }
+  }
+
+  public static final class FullBuilder2 {
+    private final Builder builder;
+
+    private FullBuilder2(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder3 nickname(String nickname) {
+      return new FullBuilder3(builder.nickname(nickname));
+    }
+
+    public FullBuilder3 nickname(Optional<String> nickname) {
+      return new FullBuilder3(builder.nickname(nickname));
+    }
+  }
+
+  public static final class FullBuilder3 {
+    private final Builder builder;
+
+    private FullBuilder3(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+}
+]
+
+
+samplePojoFullBuilderDisabled=[
+package io.github.muehmar;
+
+import java.util.Optional;
+
+public final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static Builder0 create() {
+    return new Builder0(new Builder());
+  }
+
+  public static Builder0 customerBuilder() {
+    return new Builder0(new Builder());
+  }
+
+  public static final class Builder {
+    private Builder() {
+    }
+
+    private Integer id;
+    private String username;
+    private String nickname;
+
+    private Builder id(Integer id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder username(String username) {
+      this.username = username;
+      return this;
+    }
+
+    public Builder nickname(String nickname) {
+      this.nickname = nickname;
+      return this;
+    }
+
+    public Builder nickname(Optional<String> nickname) {
+      this.nickname = nickname.orElse(null);
+      return this;
+    }
+
+    public Customer build() {
+      final Customer instance =
+          new Customer(id, username, nickname);
+      return instance;
+    }
+  }
+
+  public static final class Builder0 {
+    private final Builder builder;
+
+    private Builder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Builder1 id(Integer id) {
+      return new Builder1(builder.id(id));
+    }
+  }
+
+  public static final class Builder1 {
+    private final Builder builder;
+
+    private Builder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Builder2 username(String username) {
+      return new Builder2(builder.username(username));
+    }
+  }
+
+  public static final class Builder2 {
+    private final Builder builder;
+
+    private Builder2(Builder builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder0 andAllOptionals() {
+      return new OptBuilder0(builder);
+    }
+
+    public Builder andOptionals() {
+      return builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+
+  public static final class OptBuilder0 {
+    private final Builder builder;
+
+    private OptBuilder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public OptBuilder1 nickname(String nickname) {
+      return new OptBuilder1(builder.nickname(nickname));
+    }
+
+    public OptBuilder1 nickname(Optional<String> nickname) {
+      return new OptBuilder1(builder.nickname(nickname));
+    }
+  }
+
+  public static final class OptBuilder1 {
+    private final Builder builder;
+
+    private OptBuilder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+
+}
+]
+
+
+samplePojoStandardBuilderDisabled=[
+package io.github.muehmar;
+
+import java.util.Optional;
+
+public final class CustomerBuilder {
+
+  private CustomerBuilder() {
+  }
+
+  public static FullBuilder0 createFull() {
+    return new FullBuilder0(new Builder());
+  }
+
+  public static FullBuilder0 fullCustomerBuilder() {
+    return new FullBuilder0(new Builder());
+  }
+
+  public static final class Builder {
+    private Builder() {
+    }
+
+    private Integer id;
+    private String username;
+    private String nickname;
+
+    private Builder id(Integer id) {
+      this.id = id;
+      return this;
+    }
+
+    private Builder username(String username) {
+      this.username = username;
+      return this;
+    }
+
+    public Builder nickname(String nickname) {
+      this.nickname = nickname;
+      return this;
+    }
+
+    public Builder nickname(Optional<String> nickname) {
+      this.nickname = nickname.orElse(null);
+      return this;
+    }
+
+    public Customer build() {
+      final Customer instance =
+          new Customer(id, username, nickname);
+      return instance;
+    }
+  }
+
+  public static final class FullBuilder0 {
+    private final Builder builder;
+
+    private FullBuilder0(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder1 id(Integer id) {
+      return new FullBuilder1(builder.id(id));
+    }
+  }
+
+  public static final class FullBuilder1 {
+    private final Builder builder;
+
+    private FullBuilder1(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder2 username(String username) {
+      return new FullBuilder2(builder.username(username));
+    }
+  }
+
+  public static final class FullBuilder2 {
+    private final Builder builder;
+
+    private FullBuilder2(Builder builder) {
+      this.builder = builder;
+    }
+
+    public FullBuilder3 nickname(String nickname) {
+      return new FullBuilder3(builder.nickname(nickname));
+    }
+
+    public FullBuilder3 nickname(Optional<String> nickname) {
+      return new FullBuilder3(builder.nickname(nickname));
+    }
+  }
+
+  public static final class FullBuilder3 {
+    private final Builder builder;
+
+    private FullBuilder3(Builder builder) {
+      this.builder = builder;
+    }
+
+    public Customer build() {
+      return builder.build();
+    }
+  }
+}
+]

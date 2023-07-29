@@ -1,6 +1,6 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.BuildMethod.buildMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.muehmar.codegenerator.Generator;

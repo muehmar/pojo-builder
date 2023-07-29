@@ -3,6 +3,7 @@ package io.github.muehmar.pojobuilder.generator.model.settings;
 import static java.util.Optional.empty;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
@@ -22,12 +23,18 @@ public class PojoSettings {
   Optional<Name> builderName;
   Optional<Name> builderSetMethodPrefix;
   ClassAccessLevelModifier builderAccessLevel;
+  boolean standardBuilderEnabled;
+  boolean fullBuilderEnabled;
+  FullBuilderFieldOrder fullBuilderFieldOrder;
 
   public static PojoSettings defaultSettings() {
     return PojoSettingsBuilder.create()
         .optionalDetections(
             PList.of(OptionalDetection.OPTIONAL_CLASS, OptionalDetection.NULLABLE_ANNOTATION))
         .builderAccessLevel(ClassAccessLevelModifier.PUBLIC)
+        .standardBuilderEnabled(true)
+        .fullBuilderEnabled(true)
+        .fullBuilderFieldOrder(FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST)
         .andAllOptionals()
         .builderName(Optional.of(CLASS_NAME_PLACEHOLDER.append(BUILDER_CLASS_POSTFIX)))
         .builderSetMethodPrefix(empty())

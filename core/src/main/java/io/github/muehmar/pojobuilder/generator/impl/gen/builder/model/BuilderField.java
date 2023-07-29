@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.builder.model;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
@@ -46,6 +47,21 @@ public class BuilderField {
     return indexedField.getField().isOptional();
   }
 
+  public static PList<BuilderField> allFromPojo(Pojo pojo, FullBuilderFieldOrder fieldOrder) {
+    switch (fieldOrder) {
+      case REQUIRED_FIELDS_FIRST:
+        {
+          final PList<PojoField> fields = pojo.getFields();
+          final PList<PojoField> requiredFields = fields.filter(PojoField::isRequired);
+          final PList<PojoField> optionalFields = fields.filter(PojoField::isOptional);
+          return fromPojoAndFields(pojo, requiredFields.concat(optionalFields), ignore -> true);
+        }
+      case DECLARATION_ORDER:
+      default:
+        return fromPojo(pojo, ignore -> true);
+    }
+  }
+
   public static PList<BuilderField> requiredFromPojo(Pojo pojo) {
     return fromPojo(pojo, PojoField::isRequired);
   }
@@ -55,7 +71,12 @@ public class BuilderField {
   }
 
   private static PList<BuilderField> fromPojo(Pojo pojo, Predicate<PojoField> filter) {
-    return pojo.getFields()
+    return fromPojoAndFields(pojo, pojo.getFields(), filter);
+  }
+
+  private static PList<BuilderField> fromPojoAndFields(
+      Pojo pojo, PList<PojoField> fields, Predicate<PojoField> filter) {
+    return fields
         .filter(filter)
         .zipWithIndex()
         .map(

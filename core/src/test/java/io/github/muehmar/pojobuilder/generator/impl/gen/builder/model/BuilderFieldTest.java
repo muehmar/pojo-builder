@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.bluecare.commons.data.NonEmptyList;
+import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.FieldBuilderMethods;
+import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.generator.BuilderFields;
 import io.github.muehmar.pojobuilder.generator.PojoFields;
 import io.github.muehmar.pojobuilder.generator.Pojos;
@@ -91,5 +93,23 @@ class BuilderFieldTest {
         BuilderFields.of(Pojos.sample(), PojoFields.optionalName(), 0).withFieldBuilder(empty());
 
     assertTrue(builderField.isFieldOptional());
+  }
+
+  @Test
+  void allFromPojo_when_requiredFieldsFirst_then_correctOrder() {
+    final PList<BuilderField> builderFields =
+        BuilderField.allFromPojo(Pojos.sample2(), FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST);
+    assertEquals(
+        PList.of("id", "username", "zip", "nickname"),
+        builderFields.map(bf -> bf.getField().getName().asString()));
+  }
+
+  @Test
+  void allFromPojo_when_declarationOrder_then_correctOrder() {
+    final PList<BuilderField> builderFields =
+        BuilderField.allFromPojo(Pojos.sample2(), FullBuilderFieldOrder.DECLARATION_ORDER);
+    assertEquals(
+        PList.of("id", "zip", "username", "nickname"),
+        builderFields.map(bf -> bf.getField().getName().asString()));
   }
 }

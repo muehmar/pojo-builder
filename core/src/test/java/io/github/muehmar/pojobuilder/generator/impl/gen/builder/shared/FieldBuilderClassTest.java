@@ -1,16 +1,17 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_INTEGER;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_MAP;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FieldBuilderClass.builderClassContent;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FieldBuilderClass.constructor;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FieldBuilderClass.fieldBuilderClass;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FieldBuilderClass.fieldBuilderMethods;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FieldBuilderClass.setMethod;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FieldBuilderClass.setMethodOptional;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.FieldBuilderClass.builderClassContent;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.FieldBuilderClass.fieldBuilderClass;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.FieldBuilderClass.fieldBuilderMethods;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.FieldBuilderClass.setMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.FieldBuilderClass.setMethodOptional;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_OPTIONAL;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -39,7 +40,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderClass_when_generatorUsedWithRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderClass();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderClass(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
     final String output =
         generator
@@ -63,7 +65,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderClass_when_generatorUsedWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderClass();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderClass(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final String output =
@@ -92,7 +95,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderClass_when_genericSampleWithRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderClass();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderClass(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
@@ -117,7 +121,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderClass_when_genericSampleWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderClass();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderClass(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer =
@@ -147,7 +152,8 @@ class FieldBuilderClassTest {
 
   @Test
   void builderClassContent_when_generatorUsedWithRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = builderClassContent();
+    final Generator<BuilderField, PojoSettings> generator =
+        builderClassContent(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
     final String output =
         generator
@@ -169,7 +175,8 @@ class FieldBuilderClassTest {
 
   @Test
   void builderClassContent_when_genericSampleWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = builderClassContent();
+    final Generator<BuilderField, PojoSettings> generator =
+        builderClassContent(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final String output =
@@ -196,7 +203,8 @@ class FieldBuilderClassTest {
 
   @Test
   void builderClassContent_when_genericSampleWithRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = builderClassContent();
+    final Generator<BuilderField, PojoSettings> generator =
+        builderClassContent(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final String output =
         generator
@@ -218,7 +226,8 @@ class FieldBuilderClassTest {
 
   @Test
   void builderClassContent_when_generatorUsedWithFieldBuilderMethods_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = builderClassContent();
+    final Generator<BuilderField, PojoSettings> generator =
+        builderClassContent(CLASS_NAME_FOR_REQUIRED);
     final FieldBuilderMethod fieldBuilderMethod1 =
         new FieldBuilderMethod(
             Name.fromString("id"),
@@ -266,64 +275,8 @@ class FieldBuilderClassTest {
   }
 
   @Test
-  void constructor_when_generatorUsedWithRequiredField_then_correctClassname() {
-    final Generator<BuilderField, PojoSettings> generator = constructor();
-    final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
-    final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
-
-    assertEquals(
-        "private Builder2(Builder builder) {\n" + "  this.builder = builder;\n" + "}", output);
-  }
-
-  @Test
-  void constructor_when_generatorUsedWithOptionalField_then_correctClassname() {
-    final Generator<BuilderField, PojoSettings> generator = constructor();
-    final BuilderField field =
-        BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
-
-    assertEquals(
-        "private OptBuilder2(Builder builder) {\n" + "  this.builder = builder;\n" + "}", output);
-  }
-
-  @Test
-  void constructor_when_genericSampleWithRequiredField_then_correctClassname() {
-    final Generator<BuilderField, PojoSettings> generator = constructor();
-    final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
-    final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
-
-    assertEquals(
-        "private Builder2(Builder<T, S> builder) {\n" + "  this.builder = builder;\n" + "}",
-        output);
-  }
-
-  @Test
-  void constructor_when_genericSampleWithOptionalField_then_correctClassname() {
-    final Generator<BuilderField, PojoSettings> generator = constructor();
-    final BuilderField field =
-        BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
-
-    assertEquals(
-        "private OptBuilder2(Builder<T, S> builder) {\n" + "  this.builder = builder;\n" + "}",
-        output);
-  }
-
-  @Test
   void setMethod_when_generatorUsedWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer =
@@ -340,7 +293,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_generatorUsedWithRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
@@ -354,7 +307,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_genericSampleWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer =
@@ -371,7 +324,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_genericSampleWithRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final Writer writer =
         generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
@@ -387,7 +340,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_builderSetMethodPrefix_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final PojoSettings settings =
         PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
@@ -405,7 +358,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_generatorUsedWithGenericType_then_correctRefs() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final PojoField field = PojoFields.requiredMap();
     final BuilderField builderField = BuilderFields.of(Pojos.sample(), field, 2);
     final Writer writer =
@@ -418,7 +371,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_defaultMethodsDisabled_then_noOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final PojoField field = PojoFields.requiredMap();
     final FieldBuilder fieldBuilder =
         new FieldBuilder(
@@ -438,7 +391,7 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethod_when_defaultMethodsEnabled_then_outputNonEmpty() {
-    final Generator<BuilderField, PojoSettings> generator = setMethod();
+    final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final PojoField field = PojoFields.requiredMap();
     final FieldBuilder fieldBuilder =
         new FieldBuilder(
@@ -458,7 +411,8 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethodOptional_when_generatorUsedWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethodOptional();
+    final Generator<BuilderField, PojoSettings> generator =
+        setMethodOptional(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer =
@@ -475,7 +429,8 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethodOptional_when_builderSetMethodPrefix_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethodOptional();
+    final Generator<BuilderField, PojoSettings> generator =
+        setMethodOptional(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final PojoSettings settings =
@@ -494,7 +449,8 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethodOptional_when_genericSampleWithOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethodOptional();
+    final Generator<BuilderField, PojoSettings> generator =
+        setMethodOptional(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer =
@@ -512,7 +468,8 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethodOptional_when_generatorUsedWithGenericType_then_correctRefs() {
-    final Generator<BuilderField, PojoSettings> generator = setMethodOptional();
+    final Generator<BuilderField, PojoSettings> generator =
+        setMethodOptional(CLASS_NAME_FOR_REQUIRED);
     final PojoField field = PojoFields.requiredMap();
     final BuilderField builderField = BuilderFields.of(Pojos.sample(), field, 2);
     final Writer writer =
@@ -526,7 +483,8 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethodOptional_when_defaultMethodsDisabled_then_noOutput() {
-    final Generator<BuilderField, PojoSettings> generator = setMethodOptional();
+    final Generator<BuilderField, PojoSettings> generator =
+        setMethodOptional(CLASS_NAME_FOR_REQUIRED);
     final PojoField field = PojoFields.optionalName();
     final FieldBuilder fieldBuilder =
         new FieldBuilder(
@@ -546,7 +504,8 @@ class FieldBuilderClassTest {
 
   @Test
   void setMethodOptional_when_defaultMethodsEnabled_then_outputNonEmpty() {
-    final Generator<BuilderField, PojoSettings> generator = setMethodOptional();
+    final Generator<BuilderField, PojoSettings> generator =
+        setMethodOptional(CLASS_NAME_FOR_REQUIRED);
     final PojoField field = PojoFields.optionalName();
     final FieldBuilder fieldBuilder =
         new FieldBuilder(
@@ -566,7 +525,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderMethods_when_noMethods_then_noOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderMethods();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderMethods(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
 
     final Writer writer =
@@ -578,7 +538,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderMethods_when_singleMethodForRequiredField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderMethods();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderMethods(CLASS_NAME_FOR_REQUIRED);
 
     final FieldBuilderMethod fieldBuilderMethod =
         FieldBuilderMethods.forField(
@@ -605,7 +566,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderMethods_when_singleMethodForOptionalField_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderMethods();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderMethods(CLASS_NAME_FOR_OPTIONAL);
 
     final FieldBuilderMethod fieldBuilderMethod =
         FieldBuilderMethods.forField(
@@ -632,7 +594,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderMethods_when_singleMethodForGenericPojo_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderMethods();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderMethods(CLASS_NAME_FOR_REQUIRED);
 
     final FieldBuilderMethod fieldBuilderMethod =
         FieldBuilderMethods.forField(
@@ -659,7 +622,8 @@ class FieldBuilderClassTest {
 
   @Test
   void fieldBuilderMethods_when_singleMethodWithInnerClass_then_correctOutput() {
-    final Generator<BuilderField, PojoSettings> generator = fieldBuilderMethods();
+    final Generator<BuilderField, PojoSettings> generator =
+        fieldBuilderMethods(CLASS_NAME_FOR_OPTIONAL);
 
     final FieldBuilderMethod fieldBuilderMethod =
         FieldBuilderMethods.forField(

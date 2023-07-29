@@ -12,9 +12,9 @@ import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import org.junit.jupiter.api.Test;
 
-class CompletePojoBuilderGensTest {
+class StandardPojoBuilderGeneratorTest {
   @Test
-  void completeSafeBuilder_when_generatorUsedWithSamplePojo_then_correctOutput() {
+  void standardBuilderGenerator_when_generatorUsedWithSamplePojo_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator =
         StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
@@ -100,7 +100,7 @@ class CompletePojoBuilderGensTest {
   }
 
   @Test
-  void completeSafeBuilder_when_samplePojoAndBuilderSetMethodPrefix_then_correctOutput() {
+  void standardBuilderGenerator_when_samplePojoAndBuilderSetMethodPrefix_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator =
         StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
@@ -189,7 +189,7 @@ class CompletePojoBuilderGensTest {
   }
 
   @Test
-  void completeSafeBuilder_when_genericPojo_then_correctOutput() {
+  void standardBuilderGenerator_when_genericPojo_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator =
         StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
@@ -273,5 +273,18 @@ class CompletePojoBuilderGensTest {
     assertTrue(writer.getRefs().exists(Refs.JAVA_UTIL_LIST::equals));
     assertTrue(writer.getRefs().exists(Refs.JAVA_LANG_STRING::equals));
     assertTrue(writer.getRefs().exists(Refs.JAVA_UTIL_OPTIONAL::equals));
+  }
+
+  @Test
+  void standardBuilderGenerator_when_disabledStandardBuilder_then_noOutput() {
+    final Generator<Pojo, PojoSettings> generator =
+        StandardBuilderGenerator.standardBuilderGenerator();
+    final Writer writer =
+        generator.generate(
+            Pojos.sample(),
+            PojoSettings.defaultSettings().withStandardBuilderEnabled(false),
+            Writer.createDefault());
+
+    assertEquals("", writer.asString());
   }
 }

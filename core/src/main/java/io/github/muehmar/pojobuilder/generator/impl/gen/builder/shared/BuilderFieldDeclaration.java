@@ -1,9 +1,9 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 
-class BuilderFieldDeclaration {
+public class BuilderFieldDeclaration {
   private BuilderFieldDeclaration() {}
 
   public static <A> Generator<Pojo, A> builderFieldDeclaration() {
