@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.example.safebuilder;
+package io.github.muehmar.pojobuilder.example.standardbuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

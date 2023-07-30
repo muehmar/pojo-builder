@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.example.safebuilder;
+package io.github.muehmar.pojobuilder.example.standardbuilder;
 
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import lombok.Value;
