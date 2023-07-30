@@ -18,6 +18,8 @@ dependencies {
     annotationProcessor libs.google.autoservice
 
     testImplementation libs.bundles.junit
+    testImplementation libs.snapshotTesting
+    testRuntimeOnly libs.slf4j
 
     testImplementation libs.joor
 }

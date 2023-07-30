@@ -14,7 +14,7 @@ import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.annotations.Nullable;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
-import io.github.muehmar.pojobuilder.generator.impl.gen.safebuilder.SafeBuilderClassGens;
+import io.github.muehmar.pojobuilder.generator.impl.gen.builder.PojoBuilderGenerator;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
@@ -214,7 +214,12 @@ public class PojoBuilderProcessor extends AbstractProcessor {
                 .map(Name::fromString))
         .overrideBuilderAccessLevel(
             AnnotationMemberExtractor.getPackagePrivateBuilder(annotation)
-                .map(this::classAccessLevelModifierFromIsPackagePrivateFlag));
+                .map(this::classAccessLevelModifierFromIsPackagePrivateFlag))
+        .overrideEnableStandardBuilder(
+            AnnotationMemberExtractor.getEnableStandardBuilder(annotation))
+        .overrideEnableFullBuilder(AnnotationMemberExtractor.getEnableFullBuilder(annotation))
+        .overrideFullBuilderFieldOrder(
+            AnnotationMemberExtractor.getFullBuilderFieldOrder(annotation));
   }
 
   private ClassAccessLevelModifier classAccessLevelModifierFromIsPackagePrivateFlag(
@@ -234,7 +239,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
   private void writeExtensionClass(Pojo pojo, PojoSettings settings) {
     writeJavaFile(
         settings.qualifiedBuilderName(pojo),
-        SafeBuilderClassGens.safeBuilderClass(),
+        PojoBuilderGenerator.pojoBuilderGenerator(),
         pojo,
         settings);
   }

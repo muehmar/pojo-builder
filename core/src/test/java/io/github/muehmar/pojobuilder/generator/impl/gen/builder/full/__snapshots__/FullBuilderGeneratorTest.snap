@@ -1,0 +1,163 @@
+declarationOrder=[
+public static final class FullBuilder0 {
+  private final Builder builder;
+
+  private FullBuilder0(Builder builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder1 id(Integer id) {
+    return new FullBuilder1(builder.id(id));
+  }
+}
+
+public static final class FullBuilder1 {
+  private final Builder builder;
+
+  private FullBuilder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder2 name(String name) {
+    return new FullBuilder2(builder.name(name));
+  }
+
+  public FullBuilder2 name(Optional<String> name) {
+    return new FullBuilder2(builder.name(name));
+  }
+}
+
+public static final class FullBuilder2 {
+  private final Builder builder;
+
+  private FullBuilder2(Builder builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder3 someMap(Map<String,List<String>> someMap) {
+    return new FullBuilder3(builder.someMap(someMap));
+  }
+}
+
+public static final class FullBuilder3 {
+  private final Builder builder;
+
+  private FullBuilder3(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Customer build() {
+    return builder.build();
+  }
+}
+]
+
+
+genericPojo=[
+public static final class FullBuilder0<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private FullBuilder0(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder1<T, S> id(String id) {
+    return new FullBuilder1<>(builder.id(id));
+  }
+}
+
+public static final class FullBuilder1<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private FullBuilder1(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder2<T, S> data(T data) {
+    return new FullBuilder2<>(builder.data(data));
+  }
+}
+
+public static final class FullBuilder2<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private FullBuilder2(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder3<T, S> additionalData(S additionalData) {
+    return new FullBuilder3<>(builder.additionalData(additionalData));
+  }
+
+  public FullBuilder3<T, S> additionalData(Optional<S> additionalData) {
+    return new FullBuilder3<>(builder.additionalData(additionalData));
+  }
+}
+
+public static final class FullBuilder3<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private FullBuilder3(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public Customer<T, S> build() {
+    return builder.build();
+  }
+}
+]
+
+
+requiredFirstOrder=[
+public static final class FullBuilder0 {
+  private final Builder builder;
+
+  private FullBuilder0(Builder builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder1 id(Integer id) {
+    return new FullBuilder1(builder.id(id));
+  }
+}
+
+public static final class FullBuilder1 {
+  private final Builder builder;
+
+  private FullBuilder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder2 someMap(Map<String,List<String>> someMap) {
+    return new FullBuilder2(builder.someMap(someMap));
+  }
+}
+
+public static final class FullBuilder2 {
+  private final Builder builder;
+
+  private FullBuilder2(Builder builder) {
+    this.builder = builder;
+  }
+
+  public FullBuilder3 name(String name) {
+    return new FullBuilder3(builder.name(name));
+  }
+
+  public FullBuilder3 name(Optional<String> name) {
+    return new FullBuilder3(builder.name(name));
+  }
+}
+
+public static final class FullBuilder3 {
+  private final Builder builder;
+
+  private FullBuilder3(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Customer build() {
+    return builder.build();
+  }
+}
+]

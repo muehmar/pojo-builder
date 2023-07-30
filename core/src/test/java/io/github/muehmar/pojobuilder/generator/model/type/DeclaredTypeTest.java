@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Name;

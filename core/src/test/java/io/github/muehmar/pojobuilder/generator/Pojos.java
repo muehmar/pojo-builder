@@ -41,6 +41,28 @@ public class Pojos {
     return pojo.withConstructors(PList.single(deviateStandardConstructor(pojo)));
   }
 
+  public static Pojo sample2() {
+    final PList<PojoField> fields =
+        PList.of(
+            new PojoField(Names.id(), Types.integer(), REQUIRED),
+            new PojoField(Names.zip(), Types.integer(), OPTIONAL),
+            new PojoField(Name.fromString("username"), Types.string(), REQUIRED),
+            new PojoField(Name.fromString("nickname"), Types.string(), OPTIONAL));
+
+    final Pojo pojo =
+        PojoBuilder.create()
+            .name(Name.fromString("Customer"))
+            .pkg(PACKAGE_NAME)
+            .fields(fields)
+            .constructors(PList.empty())
+            .generics(PList.empty())
+            .fieldBuilders(PList.empty())
+            .andAllOptionals()
+            .buildMethod(Optional.empty())
+            .build();
+    return pojo.withConstructors(PList.single(deviateStandardConstructor(pojo)));
+  }
+
   public static Pojo sampleWithConstructorWithOptionalArgument() {
     final Pojo pojo = sample();
     final PList<Argument> arguments =
@@ -78,6 +100,21 @@ public class Pojos {
             .fields(fields)
             .constructors(PList.empty())
             .generics(generics)
+            .fieldBuilders(PList.empty())
+            .andAllOptionals()
+            .buildMethod(Optional.empty())
+            .build();
+    return pojo.withConstructors(PList.single(deviateStandardConstructor(pojo)));
+  }
+
+  public static Pojo fromFields(PojoField... fields) {
+    final Pojo pojo =
+        PojoBuilder.create()
+            .name(Name.fromString("Customer"))
+            .pkg(PACKAGE_NAME)
+            .fields(PList.of(fields))
+            .constructors(PList.empty())
+            .generics(PList.empty())
             .fieldBuilders(PList.empty())
             .andAllOptionals()
             .buildMethod(Optional.empty())

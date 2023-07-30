@@ -16,6 +16,10 @@ public class PojoFields {
     return new PojoField(Names.id(), Types.integer(), REQUIRED);
   }
 
+  public static PojoField optionalId() {
+    return new PojoField(Names.id(), Types.integer(), OPTIONAL);
+  }
+
   public static PojoField optionalName() {
     return new PojoField(Name.fromString("name"), Types.string(), OPTIONAL);
   }
@@ -23,6 +27,11 @@ public class PojoFields {
   public static PojoField requiredMap() {
     return new PojoField(
         Name.fromString("someMap"), Types.map(string(), Types.list(string())), REQUIRED);
+  }
+
+  public static PojoField optionalMap() {
+    return new PojoField(
+        Name.fromString("someMap"), Types.map(string(), Types.list(string())), OPTIONAL);
   }
 
   public static Argument toArgument(PojoField f) {
