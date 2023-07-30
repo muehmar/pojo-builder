@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.1.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.1.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.2.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.2.0"
 }
 ```
 
@@ -64,7 +64,7 @@ public records Customer(
 ## Features
 
 ### Compile-Time safety
-The builder is implemented by creating a single builder class for each required property, with a single method setting
+The builder is implemented by creating a single builder class for each property, with a single method setting
 the corresponding property and returning the next builder for the next property. The `build`
 method will only be present after each required property is set.
 
@@ -152,6 +152,23 @@ or alternatively using the `customerBuilder()` method in `CustomerBuilder` which
 ```
 
 The first character of the field name is automatically converted to uppercase if a prefix is used.
+
+### Full builder
+The generator creates additionally to the described standard builder also a full builder, i.e. a builder which enforces 
+to set every property of a class. The generated builder class provides static factory methods (prefix with `full`) to 
+create a full builder, with the `Customer` class this would look like:
+```
+  fullCustomerBuilder()
+    .setName("Dexter")
+    .setEmail("dexter@miami-metro.us")
+    .setNickname("Dex")
+    .build();
+```
+There is no `andAllOptionals` method call after the last required field `email`.
+
+There are two options to choose the order of the fields used by the builder:
+* Declaration order: In this case, the builder uses the properties in the order they are declared in the class
+* Required fields first: This is the same order used in the standard builder, where required fields are used first.
 
 ### Custom methods for fields in SafeBuilder
 
@@ -324,11 +341,16 @@ The following annotations exists:
 
 The `@PojoBuilder` annotation contains the following parameters.
 
-| Parameter                 | Default value                         | Description                                                                                                                                                    |
-|---------------------------|---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `optionalDetection`       | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next section for details.                                                     |
-| `builderName`             | "{CLASSNAME}Builder"                  | Allows to override the default name of the discrete builder. `{CLASSNAME}` gets replaced by the name of the data class. Ignored if `discreteBuilder` is false. |
-| `builderSetMethodPrefix`  | ""                                    | Prefix which is used for the setter methods of the builder.                                                                                                    |
+| Parameter                | Default value                         | Description                                                                                                                                                    |
+|--------------------------|---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `optionalDetection`      | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next section for details.                                                     |
+| `builderName`            | "{CLASSNAME}Builder"                  | Allows to override the default name of the discrete builder. `{CLASSNAME}` gets replaced by the name of the data class. Ignored if `discreteBuilder` is false. |
+| `builderSetMethodPrefix` | ""                                    | Prefix which is used for the setter methods of the builder.                                                                                                    |
+| `packagePrivateBuilder`  | false                                 | Generates a package-private builder which is only accessible from within the same package.                                                                     |
+| `enableStandardBuilder`  | true                                  | Allows to disable the generation of the standard builder.                                                                                                      |
+| `enableFullBuilder`      | true                                  | Allows to disable the generation of the full builder.                                                                                                          |
+| `fullBuilderFieldOrder`  | REQUIRED_FIELDS_FIRST                 | Defines the order of the fields in the full builder.                                                                                                           |
+
 
 #### Parameter `optionalDetection`
 
@@ -343,6 +365,15 @@ necessary:
 | OptionalDetection.NONE                | All fields are treated as required. This setting gets ignored in case it is used in combination with one of the others.                                                                                                              |
 
 Both options are active as default.
+
+#### Parameter `fullBuilderFieldOrder`
+
+The following orders exist:
+
+| FullBuilderFieldOrder                       | Description                                                                                                                        |
+|---------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST | Required fields are used before the optional fields. This corresponds to the order of the standard builder and is used as default. |
+| FullBuilderFieldOrder.DECLARATION_ORDER     | Fields are used in the same order they are declared in the pojo                                                                    |
 
 ## Custom Annotation / Meta Annotation
 
@@ -374,6 +405,7 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.2.0 - Add full builder (issue `#2`)
 * 1.1.0 - Add second factory method with the pojo name for static imports (issue `#7`)
 * 1.0.0 - Fork and Release of PojoBuilder 
     * Remove the pojo extension generation
