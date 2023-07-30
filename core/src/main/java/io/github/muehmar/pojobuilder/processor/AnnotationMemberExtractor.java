@@ -15,14 +15,9 @@ import javax.lang.model.element.ExecutableElement;
 public class AnnotationMemberExtractor {
 
   public static final String OPTIONAL_DETECTION = "optionalDetection";
-  public static final String EXTENSION_NAME = "extensionName";
-  public static final String ENABLE_SAFE_BUILDER = "enableSafeBuilder";
   public static final String PACKAGE_PRIVATE_BUILDER = "packagePrivateBuilder";
   public static final String BUILDER_NAME = "builderName";
   public static final String BUILDER_SET_METHOD_PREFIX = "builderSetMethodPrefix";
-  public static final String ENABLE_WITHERS = "enableWithers";
-  public static final String ENABLE_OPTIONAL_GETTERS = "enableOptionalGetters";
-  public static final String ENABLE_MAPPERS = "enableMappers";
 
   private AnnotationMemberExtractor() {}
 
@@ -43,15 +38,6 @@ public class AnnotationMemberExtractor {
                         })));
   }
 
-  public static Optional<String> getExtensionName(AnnotationMirror annotationMirror) {
-    return getMember(annotationMirror, new ExtensionMember<>(EXTENSION_NAME, String.class::cast));
-  }
-
-  public static Optional<Boolean> getEnableSafeBuilder(AnnotationMirror annotationMirror) {
-    return getMember(
-        annotationMirror, new ExtensionMember<>(ENABLE_SAFE_BUILDER, Boolean.class::cast));
-  }
-
   public static Optional<Boolean> getPackagePrivateBuilder(AnnotationMirror annotationMirror) {
     return getMember(
         annotationMirror, new ExtensionMember<>(PACKAGE_PRIVATE_BUILDER, Boolean.class::cast));
@@ -64,19 +50,6 @@ public class AnnotationMemberExtractor {
   public static Optional<String> getBuilderSetMethodPrefix(AnnotationMirror annotationMirror) {
     return getMember(
         annotationMirror, new ExtensionMember<>(BUILDER_SET_METHOD_PREFIX, String.class::cast));
-  }
-
-  public static Optional<Boolean> getEnableWithers(AnnotationMirror annotationMirror) {
-    return getMember(annotationMirror, new ExtensionMember<>(ENABLE_WITHERS, Boolean.class::cast));
-  }
-
-  public static Optional<Boolean> getEnableOptionalGetters(AnnotationMirror annotationMirror) {
-    return getMember(
-        annotationMirror, new ExtensionMember<>(ENABLE_OPTIONAL_GETTERS, Boolean.class::cast));
-  }
-
-  public static Optional<Boolean> getEnableMappers(AnnotationMirror annotationMirror) {
-    return getMember(annotationMirror, new ExtensionMember<>(ENABLE_MAPPERS, Boolean.class::cast));
   }
 
   private static <T> Optional<T> getMember(
