@@ -214,7 +214,12 @@ public class PojoBuilderProcessor extends AbstractProcessor {
                 .map(Name::fromString))
         .overrideBuilderAccessLevel(
             AnnotationMemberExtractor.getPackagePrivateBuilder(annotation)
-                .map(this::classAccessLevelModifierFromIsPackagePrivateFlag));
+                .map(this::classAccessLevelModifierFromIsPackagePrivateFlag))
+        .overrideEnableStandardBuilder(
+            AnnotationMemberExtractor.getEnableStandardBuilder(annotation))
+        .overrideEnableFullBuilder(AnnotationMemberExtractor.getEnableFullBuilder(annotation))
+        .overrideFullBuilderFieldOrder(
+            AnnotationMemberExtractor.getFullBuilderFieldOrder(annotation));
   }
 
   private ClassAccessLevelModifier classAccessLevelModifierFromIsPackagePrivateFlag(

@@ -85,4 +85,17 @@ public class PojoSettings {
       Optional<ClassAccessLevelModifier> classAccessLevelModifier) {
     return classAccessLevelModifier.map(this::withBuilderAccessLevel).orElse(this);
   }
+
+  public PojoSettings overrideEnableStandardBuilder(Optional<Boolean> enableStandardBuilder) {
+    return enableStandardBuilder.map(this::withStandardBuilderEnabled).orElse(this);
+  }
+
+  public PojoSettings overrideEnableFullBuilder(Optional<Boolean> enableFullBuilder) {
+    return enableFullBuilder.map(this::withFullBuilderEnabled).orElse(this);
+  }
+
+  public PojoSettings overrideFullBuilderFieldOrder(
+      Optional<FullBuilderFieldOrder> fullBuilderFieldOrder) {
+    return fullBuilderFieldOrder.map(this::withFullBuilderFieldOrder).orElse(this);
+  }
 }

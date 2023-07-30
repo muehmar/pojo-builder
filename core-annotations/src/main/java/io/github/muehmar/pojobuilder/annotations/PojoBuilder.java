@@ -24,4 +24,13 @@ public @interface PojoBuilder {
 
   /** Generates a package-private builder which is only accessible from within the same package. */
   boolean packagePrivateBuilder() default false;
+
+  /** Enables the generation of the standard builder pattern. */
+  boolean enableStandardBuilder() default true;
+
+  /** Enables the generation of the full builder pattern, where every field must be set. */
+  boolean enableFullBuilder() default true;
+
+  /** Defines the order of fields used in the full builder. */
+  FullBuilderFieldOrder fullBuilderFieldOrder() default FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST;
 }

@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.processor;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Optionals;
+import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,9 @@ public class AnnotationMemberExtractor {
   public static final String PACKAGE_PRIVATE_BUILDER = "packagePrivateBuilder";
   public static final String BUILDER_NAME = "builderName";
   public static final String BUILDER_SET_METHOD_PREFIX = "builderSetMethodPrefix";
+  public static final String FULL_BUILDER_FIELD_ORDER = "fullBuilderFieldOrder";
+  public static final String ENABLE_FULL_BUILDER = "enableFullBuilder";
+  public static final String ENABLE_STANDARD_BUILDER = "enableStandardBuilder";
 
   private AnnotationMemberExtractor() {}
 
@@ -50,6 +54,27 @@ public class AnnotationMemberExtractor {
   public static Optional<String> getBuilderSetMethodPrefix(AnnotationMirror annotationMirror) {
     return getMember(
         annotationMirror, new ExtensionMember<>(BUILDER_SET_METHOD_PREFIX, String.class::cast));
+  }
+
+  public static Optional<Boolean> getEnableStandardBuilder(AnnotationMirror annotationMirror) {
+    return getMember(
+        annotationMirror, new ExtensionMember<>(ENABLE_STANDARD_BUILDER, Boolean.class::cast));
+  }
+
+  public static Optional<Boolean> getEnableFullBuilder(AnnotationMirror annotationMirror) {
+    return getMember(
+        annotationMirror, new ExtensionMember<>(ENABLE_FULL_BUILDER, Boolean.class::cast));
+  }
+
+  public static Optional<FullBuilderFieldOrder> getFullBuilderFieldOrder(
+      AnnotationMirror annotationMirror) {
+    return getMember(
+        annotationMirror,
+        new ExtensionMember<>(
+            FULL_BUILDER_FIELD_ORDER,
+            o ->
+                FullBuilderFieldOrder.fromString(o.toString())
+                    .orElseThrow(IllegalArgumentException::new)));
   }
 
   private static <T> Optional<T> getMember(

@@ -3,6 +3,7 @@ package io.github.muehmar.pojobuilder.processor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
-  void run_when_safeBuilderAnnotation_then_correctSettings() {
+  void run_when_pojoBuilderAnnotation_then_correctDefaultSettings() {
     final Name className = randomClassName();
 
     final String classString =
@@ -92,13 +93,13 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
   }
 
   @Test
-  void run_when_safeBuilderAnnotationWithCustomBuilderName_then_correctSettings() {
+  void run_when_pojoBuilderAnnotationWithCustomBuilderName_then_correctSettings() {
     final Name className = randomClassName();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
-            .annotationStringParam(PojoBuilder.class, "builderName", "SafeBuilder")
+            .annotationStringParam(PojoBuilder.class, "builderName", "PojoBuilder")
             .className(className)
             .create();
 
@@ -106,7 +107,69 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
         runAnnotationProcessor(qualifiedClassName(className), classString);
 
     assertEquals(
-        PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("SafeBuilder")),
+        PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("PojoBuilder")),
+        pojoAndSettings.getSettings());
+  }
+
+  @Test
+  void run_when_pojoBuilderAnnotationWithDisabledStandardBuilder_then_correctSettings() {
+    final Name className = randomClassName();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotationBooleanParam(PojoBuilder.class, "enableStandardBuilder", false)
+            .className(className)
+            .create();
+
+    final PojoAndSettings pojoAndSettings =
+        runAnnotationProcessor(qualifiedClassName(className), classString);
+
+    assertEquals(
+        PojoSettings.defaultSettings().withStandardBuilderEnabled(false),
+        pojoAndSettings.getSettings());
+  }
+
+  @Test
+  void run_when_pojoBuilderAnnotationWithDisabledFullBuilder_then_correctSettings() {
+    final Name className = randomClassName();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotationBooleanParam(PojoBuilder.class, "enableFullBuilder", false)
+            .className(className)
+            .create();
+
+    final PojoAndSettings pojoAndSettings =
+        runAnnotationProcessor(qualifiedClassName(className), classString);
+
+    assertEquals(
+        PojoSettings.defaultSettings().withFullBuilderEnabled(false),
+        pojoAndSettings.getSettings());
+  }
+
+  @Test
+  void run_when_pojoBuilderAnnotationWithFullBuilderFieldOrderDeclaration_then_correctSettings() {
+    final Name className = randomClassName();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotationEnumParam(
+                PojoBuilder.class,
+                "fullBuilderFieldOrder",
+                FullBuilderFieldOrder.class,
+                FullBuilderFieldOrder.DECLARATION_ORDER)
+            .className(className)
+            .create();
+
+    final PojoAndSettings pojoAndSettings =
+        runAnnotationProcessor(qualifiedClassName(className), classString);
+
+    assertEquals(
+        PojoSettings.defaultSettings()
+            .withFullBuilderFieldOrder(FullBuilderFieldOrder.DECLARATION_ORDER),
         pojoAndSettings.getSettings());
   }
 }
