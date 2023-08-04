@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.2.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.2.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.3.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.3.0"
 }
 ```
 
@@ -341,16 +341,16 @@ The following annotations exists:
 
 The `@PojoBuilder` annotation contains the following parameters.
 
-| Parameter                | Default value                         | Description                                                                                                                                                    |
-|--------------------------|---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `optionalDetection`      | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next section for details.                                                     |
-| `builderName`            | "{CLASSNAME}Builder"                  | Allows to override the default name of the discrete builder. `{CLASSNAME}` gets replaced by the name of the data class. Ignored if `discreteBuilder` is false. |
-| `builderSetMethodPrefix` | ""                                    | Prefix which is used for the setter methods of the builder.                                                                                                    |
-| `packagePrivateBuilder`  | false                                 | Generates a package-private builder which is only accessible from within the same package.                                                                     |
-| `enableStandardBuilder`  | true                                  | Allows to disable the generation of the standard builder.                                                                                                      |
-| `enableFullBuilder`      | true                                  | Allows to disable the generation of the full builder.                                                                                                          |
-| `fullBuilderFieldOrder`  | REQUIRED_FIELDS_FIRST                 | Defines the order of the fields in the full builder.                                                                                                           |
-
+| Parameter                | Default value                         | Description                                                                                                                                                                                          |
+|--------------------------|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `optionalDetection`      | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next section for details.                                                                                           |
+| `builderName`            | "{CLASSNAME}Builder"                  | Allows to override the default name of the discrete builder. `{CLASSNAME}` gets replaced by the name of the data class. Ignored if `discreteBuilder` is false.                                       |
+| `builderSetMethodPrefix` | ""                                    | Prefix which is used for the setter methods of the builder.                                                                                                                                          |
+| `packagePrivateBuilder`  | false                                 | Generates a package-private builder which is only accessible from within the same package.                                                                                                           |
+| `enableStandardBuilder`  | true                                  | Allows to disable the generation of the standard builder.                                                                                                                                            |
+| `enableFullBuilder`      | true                                  | Allows to disable the generation of the full builder.                                                                                                                                                |
+| `fullBuilderFieldOrder`  | REQUIRED_FIELDS_FIRST                 | Defines the order of the fields in the full builder.                                                                                                                                                 |
+| `includeOuterClassName`  | true                                  | Uses the outer class name to create the builder name. E.g. a class `OuterClass.InnerClass` would create a builder `OuterClassInnerClassBuilder`. If disabled this would only be `InnerClassBuilder`. |
 
 #### Parameter `optionalDetection`
 
@@ -405,6 +405,7 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.3.0 - Add annotation element to use only the inner class name for the builder (issue `#12`)
 * 1.2.0 - Add full builder (issue `#2`)
 * 1.1.0 - Add second factory method with the pojo name for static imports (issue `#7`)
 * 1.0.0 - Fork and Release of PojoBuilder 
