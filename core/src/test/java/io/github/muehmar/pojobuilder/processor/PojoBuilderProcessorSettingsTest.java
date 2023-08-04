@@ -172,4 +172,23 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
             .withFullBuilderFieldOrder(FullBuilderFieldOrder.DECLARATION_ORDER),
         pojoAndSettings.getSettings());
   }
+
+  @Test
+  void run_when_pojoBuilderAnnotationWithNotIncludeOuterClassName_then_correctSettings() {
+    final Name className = randomClassName();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotationBooleanParam(PojoBuilder.class, "includeOuterClassName", false)
+            .className(className)
+            .create();
+
+    final PojoAndSettings pojoAndSettings =
+        runAnnotationProcessor(qualifiedClassName(className), classString);
+
+    assertEquals(
+        PojoSettings.defaultSettings().withIncludeOuterClassName(false),
+        pojoAndSettings.getSettings());
+  }
 }

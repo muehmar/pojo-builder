@@ -3,6 +3,14 @@ package io.github.muehmar.pojobuilder.processor;
 import static io.github.muehmar.pojobuilder.Booleans.not;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getBuilderName;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getBuilderSetMethodPrefix;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getEnableFullBuilder;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getEnableStandardBuilder;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getFullBuilderFieldOrder;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getIncludeOuterClassName;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getOptionalDetection;
+import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getPackagePrivateBuilder;
 
 import ch.bluecare.commons.data.PList;
 import com.google.auto.service.AutoService;
@@ -201,25 +209,24 @@ public class PojoBuilderProcessor extends AbstractProcessor {
   private PojoSettings overrideWithAnnotationValues(
       AnnotationMirror annotation, PojoSettings currentSettings) {
     return currentSettings
-        .overrideOptionalDetection(AnnotationMemberExtractor.getOptionalDetection(annotation))
+        .overrideOptionalDetection(getOptionalDetection(annotation))
         .overrideBuilderName(
-            AnnotationMemberExtractor.getBuilderName(annotation)
+            getBuilderName(annotation)
                 .map(String::trim)
                 .filter(Strings::nonEmpty)
                 .map(Name::fromString))
         .overrideBuilderSetMethodPrefix(
-            AnnotationMemberExtractor.getBuilderSetMethodPrefix(annotation)
+            getBuilderSetMethodPrefix(annotation)
                 .map(String::trim)
                 .filter(Strings::nonEmpty)
                 .map(Name::fromString))
         .overrideBuilderAccessLevel(
-            AnnotationMemberExtractor.getPackagePrivateBuilder(annotation)
+            getPackagePrivateBuilder(annotation)
                 .map(this::classAccessLevelModifierFromIsPackagePrivateFlag))
-        .overrideEnableStandardBuilder(
-            AnnotationMemberExtractor.getEnableStandardBuilder(annotation))
-        .overrideEnableFullBuilder(AnnotationMemberExtractor.getEnableFullBuilder(annotation))
-        .overrideFullBuilderFieldOrder(
-            AnnotationMemberExtractor.getFullBuilderFieldOrder(annotation));
+        .overrideEnableStandardBuilder(getEnableStandardBuilder(annotation))
+        .overrideEnableFullBuilder(getEnableFullBuilder(annotation))
+        .overrideFullBuilderFieldOrder(getFullBuilderFieldOrder(annotation))
+        .overrideIncludeOuterClassName(getIncludeOuterClassName(annotation));
   }
 
   private ClassAccessLevelModifier classAccessLevelModifierFromIsPackagePrivateFlag(

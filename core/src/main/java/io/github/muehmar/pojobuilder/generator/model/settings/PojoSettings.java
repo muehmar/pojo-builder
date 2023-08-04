@@ -26,6 +26,7 @@ public class PojoSettings {
   boolean standardBuilderEnabled;
   boolean fullBuilderEnabled;
   FullBuilderFieldOrder fullBuilderFieldOrder;
+  boolean includeOuterClassName;
 
   public static PojoSettings defaultSettings() {
     return PojoSettingsBuilder.create()
@@ -35,6 +36,7 @@ public class PojoSettings {
         .standardBuilderEnabled(true)
         .fullBuilderEnabled(true)
         .fullBuilderFieldOrder(FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST)
+        .includeOuterClassName(true)
         .andAllOptionals()
         .builderName(Optional.of(CLASS_NAME_PLACEHOLDER.append(BUILDER_CLASS_POSTFIX)))
         .builderSetMethodPrefix(empty())
@@ -55,7 +57,20 @@ public class PojoSettings {
   }
 
   private Name getClassName(Pojo pojo) {
-    return pojo.getName().map(n -> n.replace(".", ""));
+    if (includeOuterClassName) {
+      return pojo.getName().map(n -> n.replace(".", ""));
+    } else {
+      return pojo.getName()
+          .map(
+              n -> {
+                final int i = n.lastIndexOf(".");
+                if (i >= 0) {
+                  return n.substring(i + 1);
+                } else {
+                  return n;
+                }
+              });
+    }
   }
 
   public PojoSettings withBuilderNameOpt(Name builderName) {
@@ -97,5 +112,9 @@ public class PojoSettings {
   public PojoSettings overrideFullBuilderFieldOrder(
       Optional<FullBuilderFieldOrder> fullBuilderFieldOrder) {
     return fullBuilderFieldOrder.map(this::withFullBuilderFieldOrder).orElse(this);
+  }
+
+  public PojoSettings overrideIncludeOuterClassName(Optional<Boolean> includeOuterClassName) {
+    return includeOuterClassName.map(this::withIncludeOuterClassName).orElse(this);
   }
 }

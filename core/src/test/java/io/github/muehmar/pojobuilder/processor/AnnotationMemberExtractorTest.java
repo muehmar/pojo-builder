@@ -19,6 +19,7 @@ class AnnotationMemberExtractorTest {
     assertTrue(hasMethod(clazz, AnnotationMemberExtractor.ENABLE_STANDARD_BUILDER));
     assertTrue(hasMethod(clazz, AnnotationMemberExtractor.ENABLE_FULL_BUILDER));
     assertTrue(hasMethod(clazz, AnnotationMemberExtractor.FULL_BUILDER_FIELD_ORDER));
+    assertTrue(hasMethod(clazz, AnnotationMemberExtractor.INCLUDE_OUTER_CLASS_NAME));
   }
 
   private static boolean hasMethod(Class<?> clazz, String methodName) {

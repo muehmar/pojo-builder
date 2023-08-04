@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.example;
 
+import static io.github.muehmar.pojobuilder.example.ProfessionBuilder.fullProfessionBuilder;
 import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,5 +45,13 @@ class CustomerTest {
 
     assertEquals("Waldweg 10", address.getStreet());
     assertEquals("Winterthur", address.getCity());
+  }
+
+  @Test
+  void newBuilder_when_professionClass_then_noOuterClassIncluded() {
+    final Customer.Profession profession =
+        fullProfessionBuilder().name("Software developer").build();
+
+    assertEquals("Software developer", profession.getName());
   }
 }
