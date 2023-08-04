@@ -33,4 +33,10 @@ public @interface PojoBuilder {
 
   /** Defines the order of fields used in the full builder. */
   FullBuilderFieldOrder fullBuilderFieldOrder() default FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST;
+
+  /**
+   * Use outer class names for inner classes to create the builder name. If disabled, only the inner
+   * class name is used as name, i.e. it behaves the same as a top level class.
+   */
+  boolean includeOuterClassName() default true;
 }

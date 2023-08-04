@@ -26,4 +26,10 @@ public class Customer {
     String street;
     String city;
   }
+
+  @Value
+  @PojoBuilder(includeOuterClassName = false)
+  public static class Profession {
+    String name;
+  }
 }

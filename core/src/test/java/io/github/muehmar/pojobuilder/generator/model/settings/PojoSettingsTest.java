@@ -22,6 +22,28 @@ class PojoSettingsTest {
   }
 
   @Test
+  void
+      builderName_when_calledWithInnerClassNameButDoesNotIncludeOuterClassName_then_correctBuilderName() {
+    final PojoSettings pojoSettings =
+        PojoSettings.defaultSettings().withIncludeOuterClassName(false);
+    final Name name =
+        pojoSettings.builderName(Pojos.sample().withName(Name.fromString("Customer.Address")));
+    assertEquals("AddressBuilder", name.asString());
+  }
+
+  @Test
+  void
+      builderName_when_doesNotIncludeOuterClassNameAndCustomPatternForInnerClass_then_correctBuilderName() {
+    final PojoSettings pojoSettings =
+        PojoSettings.defaultSettings()
+            .withIncludeOuterClassName(false)
+            .withBuilderNameOpt(Name.fromString("{CLASSNAME}SafeBuilder"));
+    final Name name =
+        pojoSettings.builderName(Pojos.sample().withName(Name.fromString("Customer.Address")));
+    assertEquals("AddressSafeBuilder", name.asString());
+  }
+
+  @Test
   void builderName_when_overriddenBuilderName_then_useCustomBuilderName() {
     final Name name =
         PojoSettings.defaultSettings()

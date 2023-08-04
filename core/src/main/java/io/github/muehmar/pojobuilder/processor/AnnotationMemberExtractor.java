@@ -22,6 +22,7 @@ public class AnnotationMemberExtractor {
   public static final String FULL_BUILDER_FIELD_ORDER = "fullBuilderFieldOrder";
   public static final String ENABLE_FULL_BUILDER = "enableFullBuilder";
   public static final String ENABLE_STANDARD_BUILDER = "enableStandardBuilder";
+  public static final String INCLUDE_OUTER_CLASS_NAME = "includeOuterClassName";
 
   private AnnotationMemberExtractor() {}
 
@@ -75,6 +76,11 @@ public class AnnotationMemberExtractor {
             o ->
                 FullBuilderFieldOrder.fromString(o.toString())
                     .orElseThrow(IllegalArgumentException::new)));
+  }
+
+  public static Optional<Boolean> getIncludeOuterClassName(AnnotationMirror annotationMirror) {
+    return getMember(
+        annotationMirror, new ExtensionMember<>(INCLUDE_OUTER_CLASS_NAME, Boolean.class::cast));
   }
 
   private static <T> Optional<T> getMember(
