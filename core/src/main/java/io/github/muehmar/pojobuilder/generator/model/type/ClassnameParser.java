@@ -32,7 +32,7 @@ public class ClassnameParser {
   public static Optional<NameAndPackage> parse(String classname) {
     final Matcher matcher = QUALIFIED_CLASS_NAME_PATTERN.matcher(classname);
     if (matcher.find()) {
-      final Classname name = Classname.fromFullClassName(matcher.group(2));
+      final Classname name = Classname.fromString(matcher.group(2));
       final Optional<PackageName> packageName =
           Optional.ofNullable(matcher.group(1)).map(PackageName::fromString);
       return Optional.of(new NameAndPackage(name, packageName));

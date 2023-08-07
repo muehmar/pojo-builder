@@ -12,6 +12,7 @@ import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
+import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class Pojos {
 
     final Pojo pojo =
         PojoBuilder.create()
-            .name(Name.fromString("Customer"))
+            .pojoName(PojoName.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
@@ -51,7 +52,7 @@ public class Pojos {
 
     final Pojo pojo =
         PojoBuilder.create()
-            .name(Name.fromString("Customer"))
+            .pojoName(PojoName.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
@@ -95,7 +96,7 @@ public class Pojos {
 
     final Pojo pojo =
         PojoBuilder.create()
-            .name(Name.fromString("Customer"))
+            .pojoName(PojoName.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
@@ -110,7 +111,7 @@ public class Pojos {
   public static Pojo fromFields(PojoField... fields) {
     final Pojo pojo =
         PojoBuilder.create()
-            .name(Name.fromString("Customer"))
+            .pojoName(PojoName.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(PList.of(fields))
             .constructors(PList.empty())
@@ -124,6 +125,7 @@ public class Pojos {
 
   public static Constructor deviateStandardConstructor(Pojo pojo) {
     return new Constructor(
-        pojo.getName(), pojo.getFields().map(f -> new Argument(f.getName(), f.getType())));
+        pojo.getPojoName().getSimpleName(),
+        pojo.getFields().map(f -> new Argument(f.getName(), f.getType())));
   }
 }

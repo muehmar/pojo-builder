@@ -68,7 +68,7 @@ public class ConstructorCallGens {
           .println(
               "%snew %s%s(%s);",
               prefix,
-              constructorCall.getPojo().getName(),
+              constructorCall.getPojo().getPojoName(),
               constructorCall.getPojo().getDiamond(),
               constructorParameters.mkString(", "));
     };

@@ -42,20 +42,19 @@ public class Types {
 
   public static Type voidType() {
     return new Type(
-        DeclaredType.fromNameAndPackage(
-            Classname.fromFullClassName("Void"), PackageName.javaLang()));
+        DeclaredType.fromNameAndPackage(Classname.fromString("Void"), PackageName.javaLang()));
   }
 
   public static Type string() {
-    return declaredType(Classname.fromFullClassName("String"), PackageName.javaLang());
+    return declaredType(Classname.fromString("String"), PackageName.javaLang());
   }
 
   public static Type integer() {
-    return declaredType(Classname.fromFullClassName("Integer"), PackageName.javaLang());
+    return declaredType(Classname.fromString("Integer"), PackageName.javaLang());
   }
 
   public static Type booleanClass() {
-    return declaredType(Classname.fromFullClassName("Boolean"), PackageName.javaLang());
+    return declaredType(Classname.fromString("Boolean"), PackageName.javaLang());
   }
 
   public static Type optional(Type value) {
@@ -64,14 +63,12 @@ public class Types {
 
   public static Type map(Type key, Type value) {
     return new Type(
-        DeclaredType.of(
-            Classname.fromFullClassName("Map"), PackageName.javaUtil(), PList.of(key, value)));
+        DeclaredType.of(Classname.fromString("Map"), PackageName.javaUtil(), PList.of(key, value)));
   }
 
   public static Type list(Type value) {
     return new Type(
-        DeclaredType.of(
-            Classname.fromFullClassName("List"), PackageName.javaUtil(), PList.single(value)));
+        DeclaredType.of(Classname.fromString("List"), PackageName.javaUtil(), PList.single(value)));
   }
 
   public static Type array(Type itemType) {
@@ -84,8 +81,7 @@ public class Types {
 
   public static Type comparable(Type objType) {
     return new Type(
-        DeclaredType.of(
-            Classname.fromFullClassName("Comparable"), PackageName.javaLang(), objType));
+        DeclaredType.of(Classname.fromString("Comparable"), PackageName.javaLang(), objType));
   }
 
   public static Type typeVariable(Name name) {

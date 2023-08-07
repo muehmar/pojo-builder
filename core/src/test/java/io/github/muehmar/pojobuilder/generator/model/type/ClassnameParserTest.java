@@ -17,7 +17,7 @@ class ClassnameParserTest {
     final Optional<ClassnameParser.NameAndPackage> parse =
         ClassnameParser.parse("java.lang.String");
     assertTrue(parse.isPresent());
-    assertEquals(Classname.fromFullClassName("String"), parse.get().getClassname());
+    assertEquals(Classname.fromString("String"), parse.get().getClassname());
     assertEquals(Optional.of(PackageName.javaLang()), parse.get().getPkg());
   }
 
@@ -26,7 +26,7 @@ class ClassnameParserTest {
     final Optional<ClassnameParser.NameAndPackage> parse =
         ClassnameParser.parse("java.util.Optional<java.lang.String>");
     assertTrue(parse.isPresent());
-    assertEquals(Classname.fromFullClassName("Optional"), parse.get().getClassname());
+    assertEquals(Classname.fromString("Optional"), parse.get().getClassname());
     assertEquals(Optional.of(PackageName.javaUtil()), parse.get().getPkg());
   }
 
@@ -35,7 +35,7 @@ class ClassnameParserTest {
     final Optional<ClassnameParser.NameAndPackage> parse =
         ClassnameParser.parse("io.github.muehmar.Customer.Address");
     assertTrue(parse.isPresent());
-    assertEquals(Classname.fromFullClassName("Customer.Address"), parse.get().getClassname());
+    assertEquals(Classname.fromString("Customer.Address"), parse.get().getClassname());
     assertEquals(Optional.of(PackageName.fromString("io.github.muehmar")), parse.get().getPkg());
   }
 

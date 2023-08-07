@@ -32,6 +32,7 @@ import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
+import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.ClassnameParser;
 import io.github.muehmar.pojobuilder.generator.model.type.DeclaredType;
@@ -109,6 +110,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
 
     final ClassnameParser.NameAndPackage nameAndPackage =
         ClassnameParser.parseThrowing(fullClassName);
+    final PojoName pojoName = PojoName.fromClassname(nameAndPackage.getClassname());
 
     final PackageName classPackage =
         nameAndPackage
@@ -118,9 +120,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
                     new IllegalArgumentException(
                         "Class " + fullClassName + " does not have a package."));
 
-    final Pojo pojo =
-        extractPojo(
-            classElement, pojoSettings, nameAndPackage.getClassname().asName(), classPackage);
+    final Pojo pojo = extractPojo(classElement, pojoSettings, pojoName, classPackage);
 
     outputPojo(pojo, pojoSettings);
   }
@@ -163,7 +163,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
   }
 
   private Pojo extractPojo(
-      TypeElement element, PojoSettings settings, Name className, PackageName classPackage) {
+      TypeElement element, PojoSettings settings, PojoName className, PackageName classPackage) {
     final DetectionSettings detectionSettings =
         new DetectionSettings(settings.getOptionalDetections());
 
@@ -180,7 +180,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
             .map(e -> convertToPojoField(e, detectionSettings));
 
     return io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
-        .name(className)
+        .pojoName(className)
         .pkg(classPackage)
         .fields(fields)
         .constructors(constructors)

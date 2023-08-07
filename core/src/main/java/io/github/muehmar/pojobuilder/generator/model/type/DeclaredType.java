@@ -33,7 +33,7 @@ public class DeclaredType implements SpecificType {
   }
 
   public static DeclaredType optional(Type value) {
-    return of(Classname.fromFullClassName("Optional"), PackageName.javaUtil(), value);
+    return of(Classname.fromString("Optional"), PackageName.javaUtil(), value);
   }
 
   @Override
@@ -53,7 +53,7 @@ public class DeclaredType implements SpecificType {
 
   @Override
   public PList<Name> getImports() {
-    return PList.fromOptional(pkg.map(p -> classname.getOuterClassname().prefix(p + ".")))
+    return PList.fromOptional(pkg.map(p -> classname.getTopLevelClass().prefix(p + ".")))
         .concat(typeParameters.flatMap(Type::getImports));
   }
 

@@ -34,7 +34,7 @@ class BuildMethod {
     final Generator<Pojo, PojoSettings> returnGenerator =
         (p, s, w) ->
             p.getBuildMethod()
-                .map(bm -> w.println("return %s.%s(instance);", p.getName(), bm.getName()))
+                .map(bm -> w.println("return %s.%s(instance);", p.getPojoName(), bm.getName()))
                 .orElse(w.println("return instance;"));
     return Generator.<Pojo, PojoSettings>emptyGen()
         .append((p, s, w) -> w.println("final %s instance =", p.getNameWithTypeVariables()))

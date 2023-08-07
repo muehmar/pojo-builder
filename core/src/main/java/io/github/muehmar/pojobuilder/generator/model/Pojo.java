@@ -18,7 +18,7 @@ public class Pojo {
   private static final PList<Name> LETTERS_AZ =
       PList.range(65, 91).map(n -> Character.toString((char) n.intValue())).map(Name::fromString);
 
-  Name name;
+  PojoName pojoName;
   PackageName pkg;
   PList<PojoField> fields;
   PList<Constructor> constructors;
@@ -56,7 +56,7 @@ public class Pojo {
   }
 
   public Name getNameWithTypeVariables() {
-    return name.append(getTypeVariablesSection());
+    return pojoName.getName().append(getTypeVariablesSection());
   }
 
   public String getTypeVariablesWildcardSection() {
@@ -81,7 +81,7 @@ public class Pojo {
             + " where the actual type of a non-required field can be wrapped into an java.util.Optional. Furthermore"
             + "it should be accessible from within the same package, i.e. at least package-private. If a field is"
             + "instantiated in the constructor and not part of the arguments, you can annotate it with @Ignore.",
-        getName());
+        getPojoName());
   }
 
   public Name findUnusedTypeVariableName() {
@@ -93,7 +93,7 @@ public class Pojo {
             () ->
                 new IllegalStateException(
                     "All single-letter type variables already used for generic class "
-                        + getName()
+                        + getPojoName()
                         + "! If this is really a use case and should be supported, please contact the maintainer."));
   }
 
@@ -107,7 +107,7 @@ public class Pojo {
             () ->
                 new IllegalStateException(
                     "All single-letter type variables already used for generic class "
-                        + getName()
+                        + getPojoName()
                         + "! If this is really a use case and should be supported, please contact the maintainer."));
   }
 }

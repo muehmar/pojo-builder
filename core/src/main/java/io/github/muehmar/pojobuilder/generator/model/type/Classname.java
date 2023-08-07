@@ -1,43 +1,52 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
+import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import lombok.EqualsAndHashCode;
 
 /**
- * Name of a class. Could also be an inner class, where the name would be including the outer
- * classname, like OuterClass.InnerClass.
+ * Name of a class. Could also be an inner class (or static nested class) where it is referenced via
+ * its enclosing class(es) like OuterClass.InnerClass.
  */
 @EqualsAndHashCode
 public class Classname {
-  private final Name fullName;
+  private final PList<Name> outerClassNames;
+  private final Name simpleName;
 
-  private Classname(Name fullName) {
-    this.fullName = fullName;
+  private Classname(PList<Name> outerClassNames, Name simpleName) {
+    this.outerClassNames = outerClassNames;
+    this.simpleName = simpleName;
   }
 
-  public static Classname fromFullClassName(String fullClassName) {
-    return new Classname(Name.fromString(fullClassName));
+  public static Classname fromString(String fullClassName) {
+    final PList<Name> classesReversed =
+        PList.fromArray(fullClassName.split("\\.")).map(Name::fromString).reverse();
+    if (classesReversed.isEmpty()) {
+      throw new IllegalArgumentException("Invalid class name " + fullClassName);
+    }
+
+    final Name className = classesReversed.head();
+    return new Classname(classesReversed.drop(1).reverse(), className);
   }
 
   /**
-   * Returns the outer class in case of an inner class or the classname of the class itself in case
-   * the class is a top level class.
+   * Returns the top level class for this class name. This is either the class itself if it's a top
+   * level class or the outermost class for an inner class.
    */
-  public Name getOuterClassname() {
-    final String name = fullName.asString();
-    final int i = name.indexOf(".");
-    if (i >= 0) {
-      return Name.fromString(name.substring(0, i));
-    }
-    return fullName;
+  public Name getTopLevelClass() {
+    return outerClassNames.headOption().orElse(simpleName);
+  }
+
+  public Name getSimpleName() {
+    return simpleName;
   }
 
   public Name asName() {
-    return fullName;
+    return Name.fromString(asString());
   }
 
   public String asString() {
-    return fullName.asString();
+    return String.format("%s%s", outerClassNames.map(n -> n.append(".")).mkString(""), simpleName);
   }
 
   @Override

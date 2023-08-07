@@ -58,18 +58,9 @@ public class PojoSettings {
 
   private Name getClassName(Pojo pojo) {
     if (includeOuterClassName) {
-      return pojo.getName().map(n -> n.replace(".", ""));
+      return pojo.getPojoName().getName().map(n -> n.replace(".", ""));
     } else {
-      return pojo.getName()
-          .map(
-              n -> {
-                final int i = n.lastIndexOf(".");
-                if (i >= 0) {
-                  return n.substring(i + 1);
-                } else {
-                  return n;
-                }
-              });
+      return pojo.getPojoName().getSimpleName();
     }
   }
 

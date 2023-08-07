@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import org.junit.jupiter.api.Test;
 
 class PojoSettingsTest {
@@ -17,7 +18,7 @@ class PojoSettingsTest {
   void builderName_when_calledWithInnerClassName_then_correctBuilderName() {
     final Name name =
         PojoSettings.defaultSettings()
-            .builderName(Pojos.sample().withName(Name.fromString("Customer.Address")));
+            .builderName(Pojos.sample().withPojoName(PojoName.fromString("Customer.Address")));
     assertEquals("CustomerAddressBuilder", name.asString());
   }
 
@@ -27,7 +28,8 @@ class PojoSettingsTest {
     final PojoSettings pojoSettings =
         PojoSettings.defaultSettings().withIncludeOuterClassName(false);
     final Name name =
-        pojoSettings.builderName(Pojos.sample().withName(Name.fromString("Customer.Address")));
+        pojoSettings.builderName(
+            Pojos.sample().withPojoName(PojoName.fromString("Customer.Address")));
     assertEquals("AddressBuilder", name.asString());
   }
 
@@ -39,7 +41,8 @@ class PojoSettingsTest {
             .withIncludeOuterClassName(false)
             .withBuilderNameOpt(Name.fromString("{CLASSNAME}SafeBuilder"));
     final Name name =
-        pojoSettings.builderName(Pojos.sample().withName(Name.fromString("Customer.Address")));
+        pojoSettings.builderName(
+            Pojos.sample().withPojoName(PojoName.fromString("Customer.Address")));
     assertEquals("AddressSafeBuilder", name.asString());
   }
 
@@ -71,7 +74,8 @@ class PojoSettingsTest {
   void qualifiedBuilderName_when_calledWithInnerClassName_then_correctBuilderName() {
     final Name name =
         PojoSettings.defaultSettings()
-            .qualifiedBuilderName(Pojos.sample().withName(Name.fromString("Customer.Address")));
+            .qualifiedBuilderName(
+                Pojos.sample().withPojoName(PojoName.fromString("Customer.Address")));
     assertEquals("io.github.muehmar.CustomerAddressBuilder", name.asString());
   }
 }

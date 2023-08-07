@@ -136,7 +136,7 @@ public class FieldBuilderClass {
                 "return new %s(builder.%s(%s%s.%s(%s)));",
                 nextClassDiamond(rawClassNameGenerator, f.getIndexedField()),
                 f.getField().builderSetMethodName(s),
-                f.getPojo().getName(),
+                f.getPojo().getPojoName(),
                 f.getFieldBuilderMethod()
                     .getInnerClassName()
                     .map(name -> name.prefix(".").asString())

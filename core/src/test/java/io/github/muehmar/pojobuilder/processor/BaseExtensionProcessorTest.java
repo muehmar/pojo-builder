@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
+import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
+import io.github.muehmar.pojobuilder.generator.model.type.Classname;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import org.joor.CompileOptions;
@@ -15,13 +17,16 @@ import org.junit.jupiter.api.Assertions;
 public abstract class BaseExtensionProcessorTest {
   protected static final PackageName PACKAGE = PackageName.fromString("io.github.muehmar");
 
-  protected static Name randomClassName() {
-    return Name.fromString("Customer")
-        .append(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10));
+  protected static PojoName randomPojoName() {
+    return PojoName.fromClassname(
+        Classname.fromString(
+            Name.fromString("Customer")
+                .append(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10))
+                .asString()));
   }
 
-  protected static Name qualifiedClassName(Name className) {
-    return className.prefix(".").prefix(PACKAGE.asString());
+  protected static Name qualifiedPojoName(PojoName pojoName) {
+    return pojoName.getName().prefix(".").prefix(PACKAGE.asString());
   }
 
   protected static PojoAndSettings runAnnotationProcessor(Name name, String content) {
