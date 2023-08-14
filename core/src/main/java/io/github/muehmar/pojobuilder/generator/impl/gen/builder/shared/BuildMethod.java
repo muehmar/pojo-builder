@@ -18,7 +18,7 @@ public class BuildMethod {
             p.getBuildMethod()
                 .map(io.github.muehmar.pojobuilder.generator.model.BuildMethod::getReturnType)
                 .map(Type::getTypeDeclaration)
-                .orElseGet(p::getNameWithTypeVariables)
+                .orElseGet(p::getPojoNameWithTypeVariables)
                 .asString();
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)

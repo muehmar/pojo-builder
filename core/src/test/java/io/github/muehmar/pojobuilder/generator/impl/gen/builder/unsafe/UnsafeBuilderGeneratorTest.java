@@ -96,7 +96,7 @@ class UnsafeBuilderGeneratorTest {
             + "\n"
             + "  public Customer<T, S> build() {\n"
             + "    final Customer<T, S> instance =\n"
-            + "        new Customer<>(id, data, additionalData);\n"
+            + "        new Customer<T, S>(id, data, additionalData);\n"
             + "    return instance;\n"
             + "  }\n"
             + "}",

@@ -1,8 +1,10 @@
 package io.github.muehmar.pojobuilder.processor;
 
 import static io.github.muehmar.pojobuilder.Booleans.not;
+import static io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder.factoryMethodBuilder;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
+import static io.github.muehmar.pojobuilder.generator.model.PojoBuilder.pojoBuilder;
 import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getBuilderName;
 import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getBuilderSetMethodPrefix;
 import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getEnableFullBuilder;
@@ -12,6 +14,7 @@ import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.
 import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getOptionalDetection;
 import static io.github.muehmar.pojobuilder.processor.AnnotationMemberExtractor.getPackagePrivateBuilder;
 
+import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
 import com.google.auto.service.AutoService;
 import io.github.muehmar.codegenerator.Generator;
@@ -22,10 +25,13 @@ import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.annotations.Nullable;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
+import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.PojoBuilderGenerator;
+import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
+import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -53,9 +59,11 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
+import lombok.Value;
 
 @SupportedAnnotationTypes("*")
 @AutoService(Processor.class)
@@ -87,25 +95,138 @@ public class PojoBuilderProcessor extends AbstractProcessor {
 
   @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-    PList.fromIter(annotations)
-        .flatMap(roundEnv::getElementsAnnotatedWith)
+    final PList<? extends Element> annotatedElements =
+        PList.fromIter(annotations).flatMap(roundEnv::getElementsAnnotatedWith);
+
+    processClassOrRecord(annotatedElements);
+    processStaticMethod(annotatedElements);
+
+    return false;
+  }
+
+  private void processClassOrRecord(PList<? extends Element> annotatedElements) {
+    annotatedElements
         .filter(this::isClassOrRecord)
         .filter(TypeElement.class::isInstance)
         .map(TypeElement.class::cast)
         .distinct(Object::toString)
         .flatMapOptional(this::findAnnotationPath)
-        .forEach(this::processElementAndPath);
+        .forEach(this::processTypeElementAndPath);
+  }
 
-    return false;
+  private void processStaticMethod(PList<? extends Element> annotatedElements) {
+    annotatedElements
+        .filter(this::isMethod)
+        .filter(ExecutableElement.class::isInstance)
+        .map(ExecutableElement.class::cast)
+        .filter(this::isStaticMethod)
+        .distinct(Object::toString)
+        .flatMapOptional(this::findAnnotationPath)
+        .forEach(this::processExecutableElementAndPath);
   }
 
   private boolean isClassOrRecord(Element e) {
     return e.getKind().equals(ElementKind.CLASS) || e.getKind().name().equalsIgnoreCase("Record");
   }
 
-  private void processElementAndPath(ElementAndAnnotationPath elementAndPath) {
+  private boolean isMethod(Element element) {
+    return element.getKind().equals(ElementKind.METHOD);
+  }
+
+  private boolean isStaticMethod(ExecutableElement executableElement) {
+    return executableElement.getModifiers().contains(Modifier.STATIC);
+  }
+
+  private void processExecutableElementAndPath(
+      ElementAndAnnotationPath<ExecutableElement> elementAndPath) {
     final PojoSettings pojoSettings = extractSettingsFromAnnotationPath(elementAndPath.getPath());
-    final TypeElement classElement = elementAndPath.getClassElement();
+    final ExecutableElement executableElement = elementAndPath.getElement();
+
+    if (not(executableElement.getThrownTypes().isEmpty())) {
+      throw new PojoBuilderException(
+          "Annotating a throwing factory method is currently not supported, method '"
+              + executableElement.getEnclosingElement()
+              + "."
+              + executableElement.getSimpleName()
+              + "'");
+    }
+
+    final ClassnameParser.NameAndPackage factoryMethodOwner =
+        ClassnameParser.parseThrowing(executableElement.getEnclosingElement().toString());
+
+    final DetectionSettings detectionSettings =
+        new DetectionSettings(pojoSettings.getOptionalDetections());
+
+    final Type factoryMethodReturnType = TypeMirrorMapper.map(executableElement.getReturnType());
+    final ClassnameParser.NameAndPackage pojoClassName =
+        ClassnameParser.parseThrowing(executableElement.getReturnType().toString());
+
+    final PackageName pojoPackage =
+        factoryMethodOwner
+            .getPkg()
+            .orElseThrow(
+                () ->
+                    new PojoBuilderException(
+                        "Class "
+                            + factoryMethodReturnType.getName().asString()
+                            + " does not have a package."));
+
+    final Pojo pojo =
+        extractPojoFromFactoryMethod(
+            pojoClassName,
+            executableElement,
+            detectionSettings,
+            factoryMethodOwner,
+            pojoPackage,
+            factoryMethodReturnType);
+
+    outputPojo(pojo, pojoSettings);
+  }
+
+  private Pojo extractPojoFromFactoryMethod(
+      ClassnameParser.NameAndPackage pojoClassName,
+      ExecutableElement executableElement,
+      DetectionSettings detectionSettings,
+      ClassnameParser.NameAndPackage factoryMethodOwner,
+      PackageName pojoPackage,
+      Type returnType) {
+    final PojoName pojoName = PojoName.fromClassname(pojoClassName.getClassname());
+
+    final PList<PojoField> fields =
+        PList.fromIter(executableElement.getParameters())
+            .map(e -> convertToPojoField(e, detectionSettings));
+
+    final PList<Argument> factoryMethodArguments =
+        PList.fromIter(executableElement.getParameters()).map(ArgumentMapper::toArgument);
+
+    final PList<Generic> buildGenerics =
+        TypeParameterProcessor.processTypeParameters(executableElement.getTypeParameters());
+
+    final FactoryMethod factoryMethod =
+        factoryMethodBuilder()
+            .ownerClassname(factoryMethodOwner.getClassname())
+            .pkg(pojoPackage)
+            .methodName(Name.fromString(executableElement.getSimpleName().toString()))
+            .arguments(factoryMethodArguments)
+            .build();
+
+    return pojoBuilder()
+        .pojoName(pojoName)
+        .pojoNameWithTypeVariables(returnType.getTypeDeclaration())
+        .pkg(pojoPackage)
+        .fields(fields)
+        .constructors(PList.empty())
+        .generics(buildGenerics)
+        .fieldBuilders(PList.empty())
+        .andAllOptionals()
+        .factoryMethod(factoryMethod)
+        .buildMethod(Optional.empty())
+        .build();
+  }
+
+  private void processTypeElementAndPath(ElementAndAnnotationPath<TypeElement> elementAndPath) {
+    final PojoSettings pojoSettings = extractSettingsFromAnnotationPath(elementAndPath.getPath());
+    final TypeElement classElement = elementAndPath.getElement();
     final String fullClassName = classElement.toString();
 
     final ClassnameParser.NameAndPackage nameAndPackage =
@@ -117,7 +238,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
             .getPkg()
             .orElseThrow(
                 () ->
-                    new IllegalArgumentException(
+                    new PojoBuilderException(
                         "Class " + fullClassName + " does not have a package."));
 
     final Pojo pojo = extractPojo(classElement, pojoSettings, pojoName, classPackage);
@@ -125,14 +246,45 @@ public class PojoBuilderProcessor extends AbstractProcessor {
     outputPojo(pojo, pojoSettings);
   }
 
-  private Optional<ElementAndAnnotationPath> findAnnotationPath(TypeElement element) {
-    return Optional.of(findAnnotationPath(element, PList.empty()))
-        .filter(PList::nonEmpty)
-        .map(path -> new ElementAndAnnotationPath(element, path));
+  private Pojo extractPojo(
+      TypeElement element, PojoSettings settings, PojoName className, PackageName classPackage) {
+    final DetectionSettings detectionSettings =
+        new DetectionSettings(settings.getOptionalDetections());
+
+    final PList<Constructor> constructors = ConstructorProcessor.process(element);
+    final PList<Generic> generics =
+        TypeParameterProcessor.processTypeParameters(element.getTypeParameters());
+    final PList<FieldBuilder> fieldBuilders = FieldBuilderProcessor.process(element);
+    final Optional<BuildMethod> buildMethod = BuildMethodProcessor.process(element);
+
+    final PList<PojoField> fields =
+        PList.fromIter(element.getEnclosedElements())
+            .filter(e -> e.getKind().equals(ElementKind.FIELD))
+            .filter(this::isNonConstantField)
+            .filter(this::isNotIgnoredField)
+            .map(e -> convertToPojoField(e, detectionSettings));
+
+    return pojoBuilder()
+        .pojoName(className)
+        .pojoNameWithTypeVariables(className.getName())
+        .pkg(classPackage)
+        .fields(fields)
+        .constructors(constructors)
+        .generics(generics)
+        .fieldBuilders(fieldBuilders)
+        .andAllOptionals()
+        .factoryMethod(Optional.empty())
+        .buildMethod(buildMethod)
+        .build();
   }
 
-  private PList<AnnotationMirror> findAnnotationPath(
-      Element currentElement, PList<AnnotationMirror> currentPath) {
+  private <T extends Element> Optional<ElementAndAnnotationPath<T>> findAnnotationPath(T element) {
+    return NonEmptyList.fromIter(findAnnotationPath(element, PList.empty()))
+        .map(path -> new ElementAndAnnotationPath<>(element, path));
+  }
+
+  private <T extends Element> PList<AnnotationMirror> findAnnotationPath(
+      T currentElement, PList<AnnotationMirror> currentPath) {
     if (currentPath.size() >= MAX_ANNOTATION_PATH_DEPTH) {
       return PList.empty();
     }
@@ -162,37 +314,9 @@ public class PojoBuilderProcessor extends AbstractProcessor {
                     .orElse(PList.empty()));
   }
 
-  private Pojo extractPojo(
-      TypeElement element, PojoSettings settings, PojoName className, PackageName classPackage) {
-    final DetectionSettings detectionSettings =
-        new DetectionSettings(settings.getOptionalDetections());
-
-    final PList<Constructor> constructors = ConstructorProcessor.process(element);
-    final PList<Generic> generics = ClassTypeVariableProcessor.processGenerics(element);
-    final PList<FieldBuilder> fieldBuilders = FieldBuilderProcessor.process(element);
-    final Optional<BuildMethod> buildMethod = BuildMethodProcessor.process(element);
-
-    final PList<PojoField> fields =
-        PList.fromIter(element.getEnclosedElements())
-            .filter(e -> e.getKind().equals(ElementKind.FIELD))
-            .filter(this::isNonConstantField)
-            .filter(this::isNotIgnoredField)
-            .map(e -> convertToPojoField(e, detectionSettings));
-
-    return io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
-        .pojoName(className)
-        .pkg(classPackage)
-        .fields(fields)
-        .constructors(constructors)
-        .generics(generics)
-        .fieldBuilders(fieldBuilders)
-        .andAllOptionals()
-        .buildMethod(buildMethod)
-        .build();
-  }
-
-  private PojoSettings extractSettingsFromAnnotationPath(PList<AnnotationMirror> annotations) {
-    return extractSettingsFromAnnotationPath(annotations, PojoSettings.defaultSettings());
+  private PojoSettings extractSettingsFromAnnotationPath(
+      NonEmptyList<AnnotationMirror> annotations) {
+    return extractSettingsFromAnnotationPath(annotations.toPList(), PojoSettings.defaultSettings());
   }
 
   private PojoSettings extractSettingsFromAnnotationPath(
@@ -240,10 +364,10 @@ public class PojoBuilderProcessor extends AbstractProcessor {
     Optionals.ifPresentOrElse(
         redirectPojo,
         output -> output.accept(pojo, pojoSettings),
-        () -> writeExtensionClass(pojo, pojoSettings));
+        () -> writeBuilder(pojo, pojoSettings));
   }
 
-  private void writeExtensionClass(Pojo pojo, PojoSettings settings) {
+  private void writeBuilder(Pojo pojo, PojoSettings settings) {
     writeJavaFile(
         settings.qualifiedBuilderName(pojo),
         PojoBuilderGenerator.pojoBuilderGenerator(),
@@ -346,25 +470,9 @@ public class PojoBuilderProcessor extends AbstractProcessor {
     }
   }
 
-  private static class ElementAndAnnotationPath {
-    private final TypeElement classElement;
-    private final PList<AnnotationMirror> path;
-
-    public ElementAndAnnotationPath(TypeElement classElement, PList<AnnotationMirror> path) {
-      this.classElement = classElement;
-      this.path = path;
-    }
-
-    public static ElementAndAnnotationPath of(TypeElement element, PList<AnnotationMirror> path) {
-      return new ElementAndAnnotationPath(element, path);
-    }
-
-    public TypeElement getClassElement() {
-      return classElement;
-    }
-
-    public PList<AnnotationMirror> getPath() {
-      return path;
-    }
+  @Value
+  private static class ElementAndAnnotationPath<T extends Element> {
+    T element;
+    NonEmptyList<AnnotationMirror> path;
   }
 }

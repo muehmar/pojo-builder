@@ -39,7 +39,7 @@ public class FinalBuilderClass {
                 String.format(
                     "%s%s",
                     rawClassNameGenerator.forFieldIndex(builderNumber.applyAsInt(p)),
-                    p.getGenericTypeDeclarationSection()))
+                    p.getBoundedTypeVariablesFormatted()))
         .noSuperClass()
         .noInterfaces()
         .content(content)

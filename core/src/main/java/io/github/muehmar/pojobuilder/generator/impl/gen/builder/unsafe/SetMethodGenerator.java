@@ -37,7 +37,7 @@ class SetMethodGenerator {
                 JavaModifiers.of(
                     paf.getField().isRequired() ? JavaModifier.PRIVATE : JavaModifier.PUBLIC))
         .noGenericTypes()
-        .returnType(paf -> BUILDER_CLASSNAME + paf.getPojo().getTypeVariablesSection())
+        .returnType(paf -> BUILDER_CLASSNAME + paf.getPojo().getTypeVariablesFormatted())
         .methodName((paf, s) -> paf.getField().builderSetMethodName(s).asString())
         .singleArgument(
             paf ->
@@ -61,7 +61,7 @@ class SetMethodGenerator {
     return JavaGenerators.<PojoAndField, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
-        .returnType(paf -> BUILDER_CLASSNAME + paf.getPojo().getTypeVariablesSection())
+        .returnType(paf -> BUILDER_CLASSNAME + paf.getPojo().getTypeVariablesFormatted())
         .methodName((paf, s) -> paf.getField().builderSetMethodName(s).asString())
         .singleArgument(
             paf ->

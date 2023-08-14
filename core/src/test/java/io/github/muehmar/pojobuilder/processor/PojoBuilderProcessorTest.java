@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.processor;
 
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
+import static io.github.muehmar.pojobuilder.generator.model.PojoBuilder.pojoBuilder;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.integer;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.string;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,6 +16,8 @@ import io.github.muehmar.pojobuilder.generator.Names;
 import io.github.muehmar.pojobuilder.generator.PojoFields;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
+import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
+import io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Necessity;
@@ -55,6 +58,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -89,6 +93,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -123,6 +128,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -163,6 +169,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PackageName.fromString("io.github.muehmar"))
             .fields(fields)
             .constructors(
@@ -205,6 +212,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -240,6 +248,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(PList.single(new Constructor(pojoName.getSimpleName(), PList.empty())))
@@ -285,6 +294,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -324,6 +334,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -358,6 +369,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -412,6 +424,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -461,6 +474,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         io.github.muehmar.pojobuilder.generator.model.PojoBuilder.create()
             .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName())
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
@@ -468,6 +482,68 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                     new Constructor(pojoName.getSimpleName(), fields.map(PojoFields::toArgument))))
             .generics(PList.empty())
             .fieldBuilders(PList.empty())
+            .build();
+
+    assertEquals(expected, pojoAndSettings.getPojo());
+  }
+
+  @Test
+  void run_when_staticFactoryMethod_then_correctPojo() {
+    final PojoName pojoName = randomPojoName();
+    final String classString =
+        "package "
+            + PACKAGE
+            + ";\n"
+            + "import io.github.muehmar.pojobuilder.annotations.PojoBuilder;\n"
+            + "public class "
+            + pojoName
+            + "<T extends String, S>"
+            + " {\n"
+            + "@PojoBuilder\n"
+            + "  public static <T extends String, S, U> "
+            + pojoName
+            + "<T, S>create(T t, S s, U u, String other) {\n"
+            + "    return new "
+            + pojoName
+            + "<>();\n"
+            + "  }\n"
+            + "}";
+
+    final PojoAndSettings pojoAndSettings =
+        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+
+    final PojoField f1 =
+        new PojoField(Name.fromString("t"), Types.typeVariable(Name.fromString("T")), REQUIRED);
+    final PojoField f2 =
+        new PojoField(Name.fromString("s"), Types.typeVariable(Name.fromString("S")), REQUIRED);
+    final PojoField f3 =
+        new PojoField(Name.fromString("u"), Types.typeVariable(Name.fromString("U")), REQUIRED);
+    final PojoField f4 = new PojoField(Name.fromString("other"), Types.string(), REQUIRED);
+    final PList<PojoField> fields = PList.of(f1, f2, f3, f4);
+
+    final FactoryMethod factoryMethod =
+        FactoryMethodBuilder.factoryMethodBuilder()
+            .ownerClassname(Classname.fromString(pojoName.toString()))
+            .pkg(PACKAGE)
+            .methodName(Name.fromString("create"))
+            .arguments(fields.map(f -> new Argument(f.getName(), f.getType())))
+            .andAllOptionals()
+            .build();
+    final Pojo expected =
+        pojoBuilder()
+            .pojoName(pojoName)
+            .pojoNameWithTypeVariables(pojoName.getName().append("<T,S>"))
+            .pkg(PACKAGE)
+            .fields(fields)
+            .constructors(PList.empty())
+            .generics(
+                PList.of(
+                    new Generic(Name.fromString("T"), PList.single(Types.string())),
+                    new Generic(Name.fromString("S"), PList.single(Types.object())),
+                    new Generic(Name.fromString("U"), PList.single(Types.object()))))
+            .fieldBuilders(PList.empty())
+            .andOptionals()
+            .factoryMethod(factoryMethod)
             .build();
 
     assertEquals(expected, pojoAndSettings.getPojo());

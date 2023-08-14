@@ -4,14 +4,15 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import javax.lang.model.element.TypeElement;
+import java.util.List;
+import javax.lang.model.element.TypeParameterElement;
 
 /** Processes type variables of classes, this means only upper bounds are considered. */
-public class ClassTypeVariableProcessor {
-  private ClassTypeVariableProcessor() {}
+public class TypeParameterProcessor {
+  private TypeParameterProcessor() {}
 
-  static PList<Generic> processGenerics(TypeElement element) {
-    return PList.fromIter(element.getTypeParameters())
+  static PList<Generic> processTypeParameters(List<? extends TypeParameterElement> typeParameters) {
+    return PList.fromIter(typeParameters)
         .map(
             typeParameterElement -> {
               final PList<Type> upperBounds =

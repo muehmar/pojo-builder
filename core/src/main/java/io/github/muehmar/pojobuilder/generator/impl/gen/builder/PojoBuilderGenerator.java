@@ -80,12 +80,12 @@ public class PojoBuilderGenerator {
 
   private static Generator<Pojo, PojoSettings> standardBuilderFactoryMethod(
       BiFunction<Pojo, PojoSettings, String> methodName) {
-    final Function<Pojo, String> returnType = p -> "Builder0" + p.getTypeVariablesSection();
+    final Function<Pojo, String> returnType = p -> "Builder0" + p.getTypeVariablesFormatted();
     final Function<Pojo, String> content =
         p ->
             String.format(
                 "return new Builder0%s(new Builder%s());",
-                p.getDiamond(), p.getTypeVariablesSection());
+                p.getDiamond(), p.getTypeVariablesFormatted());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
         .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))
@@ -100,12 +100,12 @@ public class PojoBuilderGenerator {
 
   private static Generator<Pojo, PojoSettings> fullBuilderFactoryMethod(
       BiFunction<Pojo, PojoSettings, String> methodName) {
-    final Function<Pojo, String> returnType = p -> "FullBuilder0" + p.getTypeVariablesSection();
+    final Function<Pojo, String> returnType = p -> "FullBuilder0" + p.getTypeVariablesFormatted();
     final Function<Pojo, String> content =
         p ->
             String.format(
                 "return new FullBuilder0%s(new Builder%s());",
-                p.getDiamond(), p.getTypeVariablesSection());
+                p.getDiamond(), p.getTypeVariablesFormatted());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
         .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))

@@ -1,7 +1,5 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
-import static io.github.muehmar.pojobuilder.Booleans.not;
-
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Strings;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
@@ -15,14 +13,15 @@ import lombok.With;
 @With
 @PojoBuilder
 public class Pojo {
-  private static final PList<Name> LETTERS_AZ =
-      PList.range(65, 91).map(n -> Character.toString((char) n.intValue())).map(Name::fromString);
-
   PojoName pojoName;
+  Name pojoNameWithTypeVariables;
   PackageName pkg;
   PList<PojoField> fields;
   PList<Constructor> constructors;
+  Optional<FactoryMethod> factoryMethod;
+  /** These are the generics */
   PList<Generic> generics;
+
   PList<FieldBuilder> fieldBuilders;
   Optional<BuildMethod> buildMethod;
 
@@ -42,36 +41,48 @@ public class Pojo {
     return generics.nonEmpty() ? "<>" : "";
   }
 
-  public PList<String> getGenericTypeDeclarations() {
-    return generics.map(Generic::getTypeDeclaration).map(Name::asString);
+  public String getBoundedTypeVariablesFormatted() {
+    final String typeVariableDeclaration =
+        generics.map(Generic::getTypeDeclaration).map(Name::asString).mkString(", ");
+    return Strings.surroundIfNotEmpty("<", typeVariableDeclaration, ">");
   }
 
-  public String getGenericTypeDeclarationSection() {
-    return Strings.surroundIfNotEmpty("<", getGenericTypeDeclarations().mkString(", "), ">");
-  }
-
-  public String getTypeVariablesSection() {
+  public String getTypeVariablesFormatted() {
     return Strings.surroundIfNotEmpty(
         "<", generics.map(Generic::getTypeVariable).mkString(", "), ">");
   }
 
-  public Name getNameWithTypeVariables() {
-    return pojoName.getName().append(getTypeVariablesSection());
-  }
-
-  public String getTypeVariablesWildcardSection() {
-    return Strings.surroundIfNotEmpty("<", generics.map(ignore -> "?").mkString(", "), ">");
+  public Name getPojoNameWithTypeVariables() {
+    return pojoNameWithTypeVariables;
   }
 
   public Optional<MatchingConstructor> findMatchingConstructor() {
     return constructors
-        .flatMapOptional(c -> c.matchFields(fields).map(f -> new MatchingConstructor(c, f)))
+        .flatMapOptional(
+            c -> matchArguments(c.getArguments()).map(f -> new MatchingConstructor(c, f)))
         .headOption();
   }
 
   public MatchingConstructor getMatchingConstructorOrThrow() {
     return findMatchingConstructor()
         .orElseThrow(() -> new PojoBuilderException(noMatchingConstructorMessage()));
+  }
+
+  /**
+   * Matches a list of arguments against the fields and returns the matched {@link FieldArgument}'s
+   * if they match completely.
+   */
+  public Optional<PList<FieldArgument>> matchArguments(PList<Argument> arguments) {
+    if (fields.size() != arguments.size()) {
+      return Optional.empty();
+    }
+
+    final PList<FieldArgument> fieldArguments =
+        fields
+            .zip(arguments)
+            .flatMapOptional(p -> FieldArgument.fromFieldAndArgument(p.first(), p.second()));
+
+    return Optional.of(fieldArguments).filter(f -> f.size() == arguments.size());
   }
 
   private String noMatchingConstructorMessage() {
@@ -82,32 +93,5 @@ public class Pojo {
             + "it should be accessible from within the same package, i.e. at least package-private. If a field is"
             + "instantiated in the constructor and not part of the arguments, you can annotate it with @Ignore.",
         getPojoName());
-  }
-
-  public Name findUnusedTypeVariableName() {
-    final PList<Name> typeVariableNames = generics.map(Generic::getTypeVariable);
-    return LETTERS_AZ
-        .filter(n -> not(typeVariableNames.exists(n::equals)))
-        .headOption()
-        .orElseThrow(
-            () ->
-                new IllegalStateException(
-                    "All single-letter type variables already used for generic class "
-                        + getPojoName()
-                        + "! If this is really a use case and should be supported, please contact the maintainer."));
-  }
-
-  public Name findUnusedTypeVariableName(Name preferred) {
-    final PList<Name> typeVariableNames = generics.map(Generic::getTypeVariable);
-    return LETTERS_AZ
-        .cons(preferred)
-        .filter(n -> not(typeVariableNames.exists(n::equals)))
-        .headOption()
-        .orElseThrow(
-            () ->
-                new IllegalStateException(
-                    "All single-letter type variables already used for generic class "
-                        + getPojoName()
-                        + "! If this is really a use case and should be supported, please contact the maintainer."));
   }
 }

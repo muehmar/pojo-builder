@@ -1,10 +1,12 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
+import static io.github.muehmar.pojobuilder.Booleans.not;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.ConstructorCallGenerator.constructorCallGenerator;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
-import io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.ConstructorCallGens;
+import io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.FactoryMethodCallGenerator;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
@@ -19,7 +21,7 @@ class BuildMethod {
             p.getBuildMethod()
                 .map(io.github.muehmar.pojobuilder.generator.model.BuildMethod::getReturnType)
                 .map(Type::getTypeDeclaration)
-                .orElseGet(p::getNameWithTypeVariables);
+                .orElseGet(p::getPojoNameWithTypeVariables);
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
@@ -31,14 +33,26 @@ class BuildMethod {
   }
 
   private static Generator<Pojo, PojoSettings> buildMethodContent() {
+    return constructorCall().append(factoryMethodCall());
+  }
+
+  private static Generator<Pojo, PojoSettings> factoryMethodCall() {
+    return Generator.<Pojo, PojoSettings>emptyGen()
+        .append((p, s, w) -> w.print("return "))
+        .append(FactoryMethodCallGenerator.factoryMethodCallGenerator())
+        .filter(pojo -> pojo.getFactoryMethod().isPresent());
+  }
+
+  private static Generator<Pojo, PojoSettings> constructorCall() {
     final Generator<Pojo, PojoSettings> returnGenerator =
         (p, s, w) ->
             p.getBuildMethod()
                 .map(bm -> w.println("return %s.%s(instance);", p.getPojoName(), bm.getName()))
                 .orElse(w.println("return instance;"));
     return Generator.<Pojo, PojoSettings>emptyGen()
-        .append((p, s, w) -> w.println("final %s instance =", p.getNameWithTypeVariables()))
-        .append(ConstructorCallGens.callWithAllLocalVariables(""), 2)
-        .append(returnGenerator);
+        .append((p, s, w) -> w.println("final %s instance =", p.getPojoNameWithTypeVariables()))
+        .append(constructorCallGenerator(), 2)
+        .append(returnGenerator)
+        .filter(pojo -> not(pojo.getFactoryMethod().isPresent()));
   }
 }

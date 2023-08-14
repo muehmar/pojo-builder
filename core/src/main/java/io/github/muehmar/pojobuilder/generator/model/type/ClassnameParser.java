@@ -45,10 +45,5 @@ public class ClassnameParser {
   public static class NameAndPackage {
     Classname classname;
     Optional<PackageName> pkg;
-
-    public NameAndPackage(Classname classname, Optional<PackageName> pkg) {
-      this.classname = classname;
-      this.pkg = pkg;
-    }
   }
 }

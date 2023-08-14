@@ -45,6 +45,10 @@ public class Types {
         DeclaredType.fromNameAndPackage(Classname.fromString("Void"), PackageName.javaLang()));
   }
 
+  public static Type object() {
+    return declaredType(Classname.fromString("Object"), PackageName.javaLang());
+  }
+
   public static Type string() {
     return declaredType(Classname.fromString("String"), PackageName.javaLang());
   }

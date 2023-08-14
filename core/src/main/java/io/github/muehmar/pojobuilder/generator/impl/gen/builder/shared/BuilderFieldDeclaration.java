@@ -7,6 +7,7 @@ public class BuilderFieldDeclaration {
   private BuilderFieldDeclaration() {}
 
   public static <A> Generator<Pojo, A> builderFieldDeclaration() {
-    return (p, s, w) -> w.println("private final Builder%s builder;", p.getTypeVariablesSection());
+    return (p, s, w) ->
+        w.println("private final Builder%s builder;", p.getTypeVariablesFormatted());
   }
 }
