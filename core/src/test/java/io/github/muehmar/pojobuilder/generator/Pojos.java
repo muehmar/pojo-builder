@@ -14,8 +14,8 @@ import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
-import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import io.github.muehmar.pojobuilder.generator.model.type.Classname;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ public class Pojos {
 
     final Pojo pojo =
         PojoBuilder.create()
-            .pojoName(PojoName.fromString("Customer"))
+            .pojoClassname(new QualifiedClassname(Classname.fromString("Customer"), PACKAGE_NAME))
             .pojoNameWithTypeVariables(Name.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
@@ -57,7 +57,7 @@ public class Pojos {
 
     final Pojo pojo =
         PojoBuilder.create()
-            .pojoName(PojoName.fromString("Customer"))
+            .pojoClassname(new QualifiedClassname(Classname.fromString("Customer"), PACKAGE_NAME))
             .pojoNameWithTypeVariables(Name.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
@@ -78,10 +78,12 @@ public class Pojos {
             new PojoField(Name.fromString("username"), Types.string(), REQUIRED),
             new PojoField(Name.fromString("nickname"), Types.string(), OPTIONAL));
 
+    final PackageName factoryMethodClassPackage =
+        PackageName.fromString("io.github.muehmar.factory");
     final FactoryMethod factoryMethod =
         FactoryMethodBuilder.factoryMethodBuilder()
             .ownerClassname(Classname.fromString("Pojos.Customer"))
-            .pkg(PackageName.fromString("io.github.muehmar"))
+            .pkg(factoryMethodClassPackage)
             .methodName(Name.fromString("create"))
             .arguments(
                 fields
@@ -93,9 +95,9 @@ public class Pojos {
                             .map(f -> new Argument(f.getName(), Types.optional(f.getType())))))
             .build();
     return PojoBuilder.create()
-        .pojoName(PojoName.fromString("Customer"))
+        .pojoClassname(new QualifiedClassname(Classname.fromString("Customer"), PACKAGE_NAME))
         .pojoNameWithTypeVariables(Name.fromString("Customer"))
-        .pkg(PACKAGE_NAME)
+        .pkg(factoryMethodClassPackage)
         .fields(fields)
         .constructors(PList.empty())
         .generics(PList.empty())
@@ -138,7 +140,7 @@ public class Pojos {
 
     final Pojo pojo =
         PojoBuilder.create()
-            .pojoName(PojoName.fromString("Customer"))
+            .pojoClassname(new QualifiedClassname(Classname.fromString("Customer"), PACKAGE_NAME))
             .pojoNameWithTypeVariables(Name.fromString("Customer<T, S>"))
             .pkg(PACKAGE_NAME)
             .fields(fields)
@@ -155,7 +157,7 @@ public class Pojos {
   public static Pojo fromFields(PojoField... fields) {
     final Pojo pojo =
         PojoBuilder.create()
-            .pojoName(PojoName.fromString("Customer"))
+            .pojoClassname(new QualifiedClassname(Classname.fromString("Customer"), PACKAGE_NAME))
             .pojoNameWithTypeVariables(Name.fromString("Customer"))
             .pkg(PACKAGE_NAME)
             .fields(PList.of(fields))
@@ -171,7 +173,7 @@ public class Pojos {
 
   public static Constructor deviateStandardConstructor(Pojo pojo) {
     return new Constructor(
-        pojo.getPojoName().getSimpleName(),
+        pojo.getPojoClassname().getSimpleName(),
         pojo.getFields().map(f -> new Argument(f.getName(), f.getType())));
   }
 }

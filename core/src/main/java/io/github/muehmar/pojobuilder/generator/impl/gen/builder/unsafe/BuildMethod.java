@@ -7,6 +7,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.Con
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
 import io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.FactoryMethodCallGenerator;
+import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
@@ -21,7 +22,14 @@ class BuildMethod {
             p.getBuildMethod()
                 .map(io.github.muehmar.pojobuilder.generator.model.BuildMethod::getReturnType)
                 .map(Type::getTypeDeclaration)
-                .orElseGet(p::getPojoNameWithTypeVariables);
+                .map(Name::asString)
+                .orElse(
+                    String.format(
+                        "%s%s",
+                        p.getPkg().equals(p.getPojoClassname().getPkg())
+                            ? ""
+                            : p.getPojoClassname().getPkg() + ".",
+                        p.getPojoNameWithTypeVariables()));
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
@@ -47,7 +55,11 @@ class BuildMethod {
     final Generator<Pojo, PojoSettings> returnGenerator =
         (p, s, w) ->
             p.getBuildMethod()
-                .map(bm -> w.println("return %s.%s(instance);", p.getPojoName(), bm.getName()))
+                .map(
+                    bm ->
+                        w.println(
+                            "return %s.%s(instance);",
+                            p.getPojoClassname().getName(), bm.getName()))
                 .orElse(w.println("return instance;"));
     return Generator.<Pojo, PojoSettings>emptyGen()
         .append((p, s, w) -> w.println("final %s instance =", p.getPojoNameWithTypeVariables()))

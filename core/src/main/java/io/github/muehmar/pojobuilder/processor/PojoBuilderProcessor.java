@@ -38,10 +38,10 @@ import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
-import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.ClassnameParser;
 import io.github.muehmar.pojobuilder.generator.model.type.DeclaredType;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -151,25 +151,17 @@ public class PojoBuilderProcessor extends AbstractProcessor {
               + "'");
     }
 
-    final ClassnameParser.NameAndPackage factoryMethodOwner =
+    final QualifiedClassname factoryMethodOwner =
         ClassnameParser.parseThrowing(executableElement.getEnclosingElement().toString());
 
     final DetectionSettings detectionSettings =
         new DetectionSettings(pojoSettings.getOptionalDetections());
 
     final Type factoryMethodReturnType = TypeMirrorMapper.map(executableElement.getReturnType());
-    final ClassnameParser.NameAndPackage pojoClassName =
+    final QualifiedClassname pojoClassName =
         ClassnameParser.parseThrowing(executableElement.getReturnType().toString());
 
-    final PackageName pojoPackage =
-        factoryMethodOwner
-            .getPkg()
-            .orElseThrow(
-                () ->
-                    new PojoBuilderException(
-                        "Class "
-                            + factoryMethodReturnType.getName().asString()
-                            + " does not have a package."));
+    final PackageName pojoPackage = factoryMethodOwner.getPkg();
 
     final Pojo pojo =
         extractPojoFromFactoryMethod(
@@ -184,14 +176,12 @@ public class PojoBuilderProcessor extends AbstractProcessor {
   }
 
   private Pojo extractPojoFromFactoryMethod(
-      ClassnameParser.NameAndPackage pojoClassName,
+      QualifiedClassname pojoClassName,
       ExecutableElement executableElement,
       DetectionSettings detectionSettings,
-      ClassnameParser.NameAndPackage factoryMethodOwner,
+      QualifiedClassname factoryMethodOwner,
       PackageName pojoPackage,
       Type returnType) {
-    final PojoName pojoName = PojoName.fromClassname(pojoClassName.getClassname());
-
     final PList<PojoField> fields =
         PList.fromIter(executableElement.getParameters())
             .map(e -> convertToPojoField(e, detectionSettings));
@@ -211,7 +201,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
             .build();
 
     return pojoBuilder()
-        .pojoName(pojoName)
+        .pojoClassname(pojoClassName)
         .pojoNameWithTypeVariables(returnType.getTypeDeclaration())
         .pkg(pojoPackage)
         .fields(fields)
@@ -229,25 +219,15 @@ public class PojoBuilderProcessor extends AbstractProcessor {
     final TypeElement classElement = elementAndPath.getElement();
     final String fullClassName = classElement.toString();
 
-    final ClassnameParser.NameAndPackage nameAndPackage =
-        ClassnameParser.parseThrowing(fullClassName);
-    final PojoName pojoName = PojoName.fromClassname(nameAndPackage.getClassname());
+    final QualifiedClassname pojoClassname = ClassnameParser.parseThrowing(fullClassName);
 
-    final PackageName classPackage =
-        nameAndPackage
-            .getPkg()
-            .orElseThrow(
-                () ->
-                    new PojoBuilderException(
-                        "Class " + fullClassName + " does not have a package."));
-
-    final Pojo pojo = extractPojo(classElement, pojoSettings, pojoName, classPackage);
+    final Pojo pojo = extractPojo(classElement, pojoSettings, pojoClassname);
 
     outputPojo(pojo, pojoSettings);
   }
 
   private Pojo extractPojo(
-      TypeElement element, PojoSettings settings, PojoName className, PackageName classPackage) {
+      TypeElement element, PojoSettings settings, QualifiedClassname pojoClassname) {
     final DetectionSettings detectionSettings =
         new DetectionSettings(settings.getOptionalDetections());
 
@@ -265,9 +245,9 @@ public class PojoBuilderProcessor extends AbstractProcessor {
             .map(e -> convertToPojoField(e, detectionSettings));
 
     return pojoBuilder()
-        .pojoName(className)
-        .pojoNameWithTypeVariables(className.getName())
-        .pkg(classPackage)
+        .pojoClassname(pojoClassname)
+        .pojoNameWithTypeVariables(pojoClassname.getName())
+        .pkg(pojoClassname.getPkg())
         .fields(fields)
         .constructors(constructors)
         .generics(generics)

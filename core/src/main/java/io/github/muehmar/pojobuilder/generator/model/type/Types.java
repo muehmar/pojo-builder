@@ -3,7 +3,6 @@ package io.github.muehmar.pojobuilder.generator.model.type;
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
-import java.util.Optional;
 
 public class Types {
   private Types() {}
@@ -96,8 +95,7 @@ public class Types {
     return new Type(DeclaredType.fromNameAndPackage(name, pkg));
   }
 
-  public static Type declaredType(
-      Classname name, Optional<PackageName> pkg, PList<Type> typeParameters) {
+  public static Type declaredType(Classname name, PackageName pkg, PList<Type> typeParameters) {
     return new Type(DeclaredType.of(name, pkg, typeParameters));
   }
 }

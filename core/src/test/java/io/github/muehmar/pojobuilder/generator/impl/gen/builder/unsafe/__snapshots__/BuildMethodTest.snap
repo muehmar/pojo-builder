@@ -26,6 +26,8 @@ public Customer build() {
 
 
 sampleAndConstructorWithOptionalArgument=[
+java.util.Optional
+
 public Customer build() {
   final Customer instance =
       new Customer(id, username, Optional.ofNullable(nickname));
@@ -35,7 +37,9 @@ public Customer build() {
 
 
 sampleWithFactoryMethod=[
-public Customer build() {
-  return io.github.muehmar.Pojos.Customer.create(id, username, Optional.ofNullable(nickname));
+java.util.Optional
+
+public io.github.muehmar.Customer build() {
+  return Pojos.Customer.create(id, username, Optional.ofNullable(nickname));
 }
 ]

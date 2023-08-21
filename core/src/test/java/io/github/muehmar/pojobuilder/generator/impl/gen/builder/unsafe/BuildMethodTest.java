@@ -1,8 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
-import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethod;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.github.muehmar.pojobuilder.snapshottesting.SnapshotUtil.writerSnapshot;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
@@ -71,10 +70,8 @@ class BuildMethodTest {
             Pojos.sampleWithConstructorWithOptionalArgument(),
             PojoSettings.defaultSettings(),
             Writer.createDefault());
-    final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    expect.toMatchSnapshot(output);
+    expect.toMatchSnapshot(writerSnapshot(writer));
   }
 
   @Test
@@ -84,8 +81,7 @@ class BuildMethodTest {
     final Writer writer =
         generator.generate(
             Pojos.factoryMethodSample(), PojoSettings.defaultSettings(), Writer.createDefault());
-    final String output = writer.asString();
 
-    expect.toMatchSnapshot(output);
+    expect.toMatchSnapshot(writerSnapshot(writer));
   }
 }

@@ -8,42 +8,40 @@ import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Name;
-import io.github.muehmar.pojobuilder.generator.model.PojoName;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import org.junit.jupiter.api.Test;
 
 class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_pojoBuilderAnnotation_then_correctDefaultSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotation(PojoBuilder.class)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(PojoSettings.defaultSettings(), pojoAndSettings.getSettings());
   }
 
   @Test
   void run_when_overrideBuilderName_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotationStringParam(PojoBuilder.class, "builderName", "CustomBuilderName")
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("CustomBuilderName")),
@@ -52,17 +50,16 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_overridePackagePrivateBuilder_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotationBooleanParam(PojoBuilder.class, "packagePrivateBuilder", true)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings()
@@ -72,7 +69,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_overrideOptionalDetection_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
@@ -82,11 +79,10 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
                 "optionalDetection",
                 OptionalDetection.class,
                 OptionalDetection.NONE)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings().withOptionalDetections(PList.single(OptionalDetection.NONE)),
@@ -95,17 +91,16 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_pojoBuilderAnnotationWithCustomBuilderName_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotationStringParam(PojoBuilder.class, "builderName", "PojoBuilder")
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("PojoBuilder")),
@@ -114,17 +109,16 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_pojoBuilderAnnotationWithDisabledStandardBuilder_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotationBooleanParam(PojoBuilder.class, "enableStandardBuilder", false)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings().withStandardBuilderEnabled(false),
@@ -133,17 +127,16 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_pojoBuilderAnnotationWithDisabledFullBuilder_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotationBooleanParam(PojoBuilder.class, "enableFullBuilder", false)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings().withFullBuilderEnabled(false),
@@ -152,7 +145,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_pojoBuilderAnnotationWithFullBuilderFieldOrderDeclaration_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
@@ -162,11 +155,10 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
                 "fullBuilderFieldOrder",
                 FullBuilderFieldOrder.class,
                 FullBuilderFieldOrder.DECLARATION_ORDER)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings()
@@ -176,17 +168,16 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_pojoBuilderAnnotationWithNotIncludeOuterClassName_then_correctSettings() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .annotationBooleanParam(PojoBuilder.class, "includeOuterClassName", false)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .create();
 
-    final PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
         PojoSettings.defaultSettings().withIncludeOuterClassName(false),

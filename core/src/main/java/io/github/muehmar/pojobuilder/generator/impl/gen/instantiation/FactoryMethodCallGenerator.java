@@ -17,7 +17,7 @@ public class FactoryMethodCallGenerator {
   public static Generator<Pojo, PojoSettings> factoryMethodCallGenerator() {
     return Generator.<Pojo, PojoSettings>emptyGen()
         .appendOptional(
-            constructorCallForFields(), FactoryMethodCallGenerator::createFactoryMethodCall);
+            factoryCallForFields(), FactoryMethodCallGenerator::createFactoryMethodCall);
   }
 
   private static Optional<FactoryMethodCall> createFactoryMethodCall(Pojo pojo) {
@@ -30,20 +30,14 @@ public class FactoryMethodCallGenerator {
                             new FactoryMethodCall(pojo, factoryMethod, fieldArguments)));
   }
 
-  private static Generator<FactoryMethodCall, PojoSettings> constructorCallForFields() {
+  private static Generator<FactoryMethodCall, PojoSettings> factoryCallForFields() {
     return Generator.<FactoryMethodCall, PojoSettings>emptyGen()
-        .append(
-            (fmc, s, w) ->
-                w.print(
-                    "%s.%s.%s(",
-                    fmc.getFactoryMethod().getPkg(),
-                    fmc.getFactoryMethod().getOwnerClassname(),
-                    fmc.getFactoryMethod().getMethodName()))
+        .append((fmc, s, w) -> w.print("%s(", fmc.scopedMethodName()))
         .appendList(
             singleFieldSameType().append(singleFieldWrapIntoOptional()),
             FactoryMethodCall::getFields,
             (a, s, w) -> w.print(", "))
-        .append((cc, s, w) -> w.println(");"));
+        .append(Generator.constant(");"));
   }
 
   private static Generator<FieldArgument, PojoSettings> singleFieldSameType() {
@@ -64,5 +58,10 @@ public class FactoryMethodCallGenerator {
     Pojo pojo;
     FactoryMethod factoryMethod;
     PList<FieldArgument> fields;
+
+    public String scopedMethodName() {
+      return String.format(
+          "%s.%s", factoryMethod.getOwnerClassname().asName(), factoryMethod.getMethodName());
+    }
   }
 }

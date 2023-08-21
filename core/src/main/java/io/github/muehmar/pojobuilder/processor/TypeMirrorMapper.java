@@ -15,6 +15,7 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.ClassnameParser;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import io.github.muehmar.pojobuilder.generator.model.type.WildcardType;
@@ -65,12 +66,12 @@ public class TypeMirrorMapper {
         TypeKind.DECLARED,
         DeclaredType.class,
         declaredType -> {
-          final ClassnameParser.NameAndPackage nameAndPackage =
+          final QualifiedClassname qualifiedClassname =
               ClassnameParser.parseThrowing(declaredType.toString());
           final PList<Type> typeParameters =
               PList.fromIter(declaredType.getTypeArguments()).map(TypeMirrorMapper::map);
           return Types.declaredType(
-              nameAndPackage.getClassname(), nameAndPackage.getPkg(), typeParameters);
+              qualifiedClassname.getClassname(), qualifiedClassname.getPkg(), typeParameters);
         });
   }
 

@@ -4,6 +4,7 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Strings;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import java.util.Optional;
 import lombok.Value;
@@ -13,13 +14,18 @@ import lombok.With;
 @With
 @PojoBuilder
 public class Pojo {
-  PojoName pojoName;
+  QualifiedClassname pojoClassname;
   Name pojoNameWithTypeVariables;
+  /** Package name where the annotation was placed and the builder will get created. */
   PackageName pkg;
+
   PList<PojoField> fields;
   PList<Constructor> constructors;
   Optional<FactoryMethod> factoryMethod;
-  /** These are the generics */
+  /**
+   * These are the generics used to create an instance of the pojo, may be different to the generics
+   * of the pojo itself.
+   */
   PList<Generic> generics;
 
   PList<FieldBuilder> fieldBuilders;
@@ -92,6 +98,6 @@ public class Pojo {
             + " where the actual type of a non-required field can be wrapped into an java.util.Optional. Furthermore"
             + "it should be accessible from within the same package, i.e. at least package-private. If a field is"
             + "instantiated in the constructor and not part of the arguments, you can annotate it with @Ignore.",
-        getPojoName());
+        getPojoClassname());
   }
 }
