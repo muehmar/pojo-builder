@@ -1,10 +1,10 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
+import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.Value;
 
 public class ClassnameParser {
   private static final String PACKAGE_NAME_PATTERN = "[a-z][A-Za-z0-9_$]*";
@@ -13,42 +13,30 @@ public class ClassnameParser {
   private static final Pattern QUALIFIED_CLASS_NAME_PATTERN =
       Pattern.compile(
           String.format(
-              "^(?:(%s(?:\\.%s)*)\\.)?(%s(?:\\.%s)*)",
+              "^(?:(%s(?:\\.%s)*)\\.)(%s(?:\\.%s)*)",
               PACKAGE_NAME_PATTERN, PACKAGE_NAME_PATTERN, IDENTIFIER_PATTERN, IDENTIFIER_PATTERN));
 
   private ClassnameParser() {}
 
-  public static NameAndPackage parseThrowing(String classname) {
+  public static QualifiedClassname parseThrowing(String classname) {
     return parse(classname)
         .orElseThrow(
             () ->
-                new IllegalArgumentException(
+                new PojoBuilderException(
                     "Class "
                         + classname
-                        + " cannot be parsed. It must match "
+                        + " cannot be parsed. It does not match the pattern "
                         + QUALIFIED_CLASS_NAME_PATTERN.pattern()));
   }
 
-  public static Optional<NameAndPackage> parse(String classname) {
+  public static Optional<QualifiedClassname> parse(String classname) {
     final Matcher matcher = QUALIFIED_CLASS_NAME_PATTERN.matcher(classname);
     if (matcher.find()) {
       final Classname name = Classname.fromString(matcher.group(2));
-      final Optional<PackageName> packageName =
-          Optional.ofNullable(matcher.group(1)).map(PackageName::fromString);
-      return Optional.of(new NameAndPackage(name, packageName));
+      final PackageName packageName = PackageName.fromString(matcher.group(1));
+      return Optional.of(new QualifiedClassname(name, packageName));
     }
 
     return Optional.empty();
-  }
-
-  @Value
-  public static class NameAndPackage {
-    Classname classname;
-    Optional<PackageName> pkg;
-
-    public NameAndPackage(Classname classname, Optional<PackageName> pkg) {
-      this.classname = classname;
-      this.pkg = pkg;
-    }
   }
 }

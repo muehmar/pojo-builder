@@ -6,8 +6,7 @@ import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
-import java.util.Optional;
-import java.util.function.Predicate;
+import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import lombok.Value;
 import lombok.With;
 
@@ -69,14 +68,9 @@ public class PojoField {
   }
 
   private boolean assertOptionalType(Name pojoName, FieldBuilderMethod method) {
-    final Optional<OptionalFieldRelation> typeRelation = method.getReturnType().getRelation(type);
-
-    final Predicate<OptionalFieldRelation> sameTypeOrUnwrapOptional =
-        r ->
-            r.equals(OptionalFieldRelation.SAME_TYPE)
-                || r.equals(OptionalFieldRelation.UNWRAP_OPTIONAL);
-
-    final boolean optionalTypeMatches = typeRelation.filter(sameTypeOrUnwrapOptional).isPresent();
+    final Type returnType = method.getReturnType();
+    final boolean optionalTypeMatches =
+        returnType.equals(type) || returnType.equals(Types.optional(type));
 
     if (not(optionalTypeMatches)) {
       final String message =

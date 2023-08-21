@@ -36,7 +36,7 @@ public class BuilderMethodConstructor {
         .className(
             p -> String.format("%s", rawClassNameGenerator.forFieldIndex(p.getBuilderNumber())))
         .singleArgument(
-            p -> String.format("Builder%s builder", p.getPojo().getTypeVariablesSection()))
+            p -> String.format("Builder%s builder", p.getPojo().getTypeVariablesFormatted()))
         .content("this.builder = builder;")
         .build();
   }

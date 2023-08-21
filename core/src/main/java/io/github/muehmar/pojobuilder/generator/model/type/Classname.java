@@ -46,7 +46,7 @@ public class Classname {
   }
 
   public String asString() {
-    return String.format("%s%s", outerClassNames.map(n -> n.append(".")).mkString(""), simpleName);
+    return outerClassNames.add(simpleName).mkString(".");
   }
 
   @Override

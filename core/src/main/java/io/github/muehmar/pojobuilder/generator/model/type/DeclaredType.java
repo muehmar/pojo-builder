@@ -11,24 +11,19 @@ import lombok.Value;
 @PojoBuilder
 public class DeclaredType implements SpecificType {
   Classname classname;
-  Optional<PackageName> pkg;
+  PackageName pkg;
   PList<Type> typeParameters;
 
   public static DeclaredType fromNameAndPackage(Classname name, PackageName packageName) {
-    return new DeclaredType(name, Optional.of(packageName), PList.empty());
+    return new DeclaredType(name, packageName, PList.empty());
   }
 
   public static DeclaredType of(Classname name, PackageName packageName, Type singeTypeParameter) {
-    return new DeclaredType(name, Optional.of(packageName), PList.single(singeTypeParameter));
+    return new DeclaredType(name, packageName, PList.single(singeTypeParameter));
   }
 
   public static DeclaredType of(
       Classname name, PackageName packageName, PList<Type> typeParameters) {
-    return new DeclaredType(name, Optional.of(packageName), typeParameters);
-  }
-
-  public static DeclaredType of(
-      Classname name, Optional<PackageName> packageName, PList<Type> typeParameters) {
     return new DeclaredType(name, packageName, typeParameters);
   }
 
@@ -53,7 +48,7 @@ public class DeclaredType implements SpecificType {
 
   @Override
   public PList<Name> getImports() {
-    return PList.fromOptional(pkg.map(p -> classname.getTopLevelClass().prefix(p + ".")))
+    return PList.single(classname.getTopLevelClass().prefix(pkg + "."))
         .concat(typeParameters.flatMap(Type::getImports));
   }
 

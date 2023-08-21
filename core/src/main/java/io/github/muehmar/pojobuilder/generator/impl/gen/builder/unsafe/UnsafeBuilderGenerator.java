@@ -49,7 +49,7 @@ public class UnsafeBuilderGenerator {
         .noJavaDoc()
         .noAnnotations()
         .modifiers(PUBLIC, STATIC, FINAL)
-        .className(p -> BUILDER_CLASSNAME + p.getGenericTypeDeclarationSection())
+        .className(p -> BUILDER_CLASSNAME + p.getBoundedTypeVariablesFormatted())
         .noSuperClass()
         .noInterfaces()
         .content(content)

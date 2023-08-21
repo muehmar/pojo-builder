@@ -55,7 +55,7 @@ public final class CustomerBuilder {
 
     public Customer<T, S> build() {
       final Customer<T, S> instance =
-          new Customer<>(id, data, additionalData);
+          new Customer<T, S>(id, data, additionalData);
       return instance;
     }
   }
@@ -236,7 +236,7 @@ public final class CustomerBuilder {
 
     public Customer<T, S> build() {
       final Customer<T, S> instance =
-          new Customer<>(id, data, additionalData);
+          new Customer<T, S>(id, data, additionalData);
       return instance;
     }
   }
@@ -366,7 +366,7 @@ public final class CustomerBuilder {
 
     public Customer<T, S> build() {
       final Customer<T, S> instance =
-          new Customer<>(id, data, additionalData);
+          new Customer<T, S>(id, data, additionalData);
       return instance;
     }
   }

@@ -1,0 +1,45 @@
+genericSample=[
+public Customer<T, S> build() {
+  final Customer<T, S> instance =
+      new Customer<T, S>(id, data, additionalData);
+  return instance;
+}
+]
+
+
+genericSampleAndBuildMethod=[
+public String build() {
+  final Customer<T, S> instance =
+      new Customer<T, S>(id, data, additionalData);
+  return Customer.customBuildMethod(instance);
+}
+]
+
+
+sample=[
+public Customer build() {
+  final Customer instance =
+      new Customer(id, username, nickname);
+  return instance;
+}
+]
+
+
+sampleAndConstructorWithOptionalArgument=[
+java.util.Optional
+
+public Customer build() {
+  final Customer instance =
+      new Customer(id, username, Optional.ofNullable(nickname));
+  return instance;
+}
+]
+
+
+sampleWithFactoryMethod=[
+java.util.Optional
+
+public io.github.muehmar.Customer build() {
+  return Pojos.Customer.create(id, username, Optional.ofNullable(nickname));
+}
+]

@@ -6,6 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /** Specifies which field of a pojo is optional. */
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.CLASS)
 public @interface Nullable {}

@@ -18,10 +18,11 @@ import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
+import io.github.muehmar.pojobuilder.snapshottesting.IntellijDiffSnapshotTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(SnapshotExtension.class)
+@ExtendWith({SnapshotExtension.class, IntellijDiffSnapshotTestExtension.class})
 class SetMethodGeneratorTest {
   private Expect expect;
 

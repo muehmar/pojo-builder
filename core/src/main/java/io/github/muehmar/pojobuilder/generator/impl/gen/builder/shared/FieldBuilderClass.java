@@ -41,13 +41,13 @@ public class FieldBuilderClass {
   private static String classDeclaration(
       RawClassNameGenerator rawClassNameGenerator, IndexedField field) {
     return rawClassNameGenerator.forField(field)
-        + field.getPojo().getGenericTypeDeclarationSection();
+        + field.getPojo().getBoundedTypeVariablesFormatted();
   }
 
   private static String nextClassTypeVariables(
       RawClassNameGenerator rawClassNameGenerator, IndexedField field) {
     return nextRawClassName(rawClassNameGenerator, field)
-        + field.getPojo().getTypeVariablesSection();
+        + field.getPojo().getTypeVariablesFormatted();
   }
 
   private static String nextClassDiamond(
@@ -136,7 +136,7 @@ public class FieldBuilderClass {
                 "return new %s(builder.%s(%s%s.%s(%s)));",
                 nextClassDiamond(rawClassNameGenerator, f.getIndexedField()),
                 f.getField().builderSetMethodName(s),
-                f.getPojo().getPojoName(),
+                f.getPojo().getPojoClassname().getName(),
                 f.getFieldBuilderMethod()
                     .getInnerClassName()
                     .map(name -> name.prefix(".").asString())

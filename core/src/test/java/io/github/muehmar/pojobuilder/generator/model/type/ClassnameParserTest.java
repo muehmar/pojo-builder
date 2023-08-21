@@ -14,35 +14,34 @@ class ClassnameParserTest {
 
   @Test
   void parse_when_javaLangString_then_parsedCorrectly() {
-    final Optional<ClassnameParser.NameAndPackage> parse =
-        ClassnameParser.parse("java.lang.String");
+    final Optional<QualifiedClassname> parse = ClassnameParser.parse("java.lang.String");
     assertTrue(parse.isPresent());
     assertEquals(Classname.fromString("String"), parse.get().getClassname());
-    assertEquals(Optional.of(PackageName.javaLang()), parse.get().getPkg());
+    assertEquals(PackageName.javaLang(), parse.get().getPkg());
   }
 
   @Test
   void parse_when_genericClass_then_parsedCorrectlyWithoutTypeParameter() {
-    final Optional<ClassnameParser.NameAndPackage> parse =
+    final Optional<QualifiedClassname> parse =
         ClassnameParser.parse("java.util.Optional<java.lang.String>");
     assertTrue(parse.isPresent());
     assertEquals(Classname.fromString("Optional"), parse.get().getClassname());
-    assertEquals(Optional.of(PackageName.javaUtil()), parse.get().getPkg());
+    assertEquals(PackageName.javaUtil(), parse.get().getPkg());
   }
 
   @Test
   void parse_when_innerClassName_then_parsedCorrectly() {
-    final Optional<ClassnameParser.NameAndPackage> parse =
+    final Optional<QualifiedClassname> parse =
         ClassnameParser.parse("io.github.muehmar.Customer.Address");
     assertTrue(parse.isPresent());
     assertEquals(Classname.fromString("Customer.Address"), parse.get().getClassname());
-    assertEquals(Optional.of(PackageName.fromString("io.github.muehmar")), parse.get().getPkg());
+    assertEquals(PackageName.fromString("io.github.muehmar"), parse.get().getPkg());
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"1Invalid", "org.123.Customer"})
+  @ValueSource(strings = {"1Invalid", "org.123.Customer", "Customer"})
   void parse_when_invalidClassName_then_returnEmpty(String input) {
-    final Optional<ClassnameParser.NameAndPackage> result = ClassnameParser.parse(input);
+    final Optional<QualifiedClassname> result = ClassnameParser.parse(input);
     assertFalse(result.isPresent(), "Parsed to " + result);
   }
 }

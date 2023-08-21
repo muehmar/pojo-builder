@@ -46,7 +46,7 @@ class FinalRequiredBuilder {
             (p, s) ->
                 String.format(
                     "Builder%d%s",
-                    builderNumber.applyAsInt(p), p.getGenericTypeDeclarationSection()))
+                    builderNumber.applyAsInt(p), p.getBoundedTypeVariablesFormatted()))
         .noSuperClass()
         .noInterfaces()
         .content(content)
@@ -58,7 +58,7 @@ class FinalRequiredBuilder {
     return JavaGenerators.<Pojo, A>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
-        .returnType(p -> "OptBuilder0" + p.getTypeVariablesSection())
+        .returnType(p -> "OptBuilder0" + p.getTypeVariablesFormatted())
         .methodName("andAllOptionals")
         .noArguments()
         .content(p -> String.format("return new OptBuilder0%s(builder);", p.getDiamond()))
@@ -69,7 +69,7 @@ class FinalRequiredBuilder {
     return JavaGenerators.<Pojo, A>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
-        .returnType(p -> "Builder" + p.getTypeVariablesSection())
+        .returnType(p -> "Builder" + p.getTypeVariablesFormatted())
         .methodName("andOptionals")
         .noArguments()
         .content("return builder;")

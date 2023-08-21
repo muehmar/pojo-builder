@@ -83,13 +83,6 @@ class TypeTest {
   }
 
   @Test
-  void getRelation_when_optionalStringAndString_then_relationIsUnwrapOptional() {
-    final Optional<OptionalFieldRelation> relation =
-        Types.optional(Types.string()).getRelation(Types.string());
-    assertEquals(Optional.of(OptionalFieldRelation.UNWRAP_OPTIONAL), relation);
-  }
-
-  @Test
   void getRelation_when_bothAreStrings_then_relationIsSameType() {
     final Optional<OptionalFieldRelation> relation = Types.string().getRelation(Types.string());
     assertEquals(Optional.of(OptionalFieldRelation.SAME_TYPE), relation);

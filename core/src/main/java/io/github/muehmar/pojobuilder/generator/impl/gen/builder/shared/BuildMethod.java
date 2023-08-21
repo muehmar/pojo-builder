@@ -4,6 +4,7 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
+import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
@@ -18,8 +19,14 @@ public class BuildMethod {
             p.getBuildMethod()
                 .map(io.github.muehmar.pojobuilder.generator.model.BuildMethod::getReturnType)
                 .map(Type::getTypeDeclaration)
-                .orElseGet(p::getNameWithTypeVariables)
-                .asString();
+                .map(Name::asString)
+                .orElse(
+                    String.format(
+                        "%s%s",
+                        p.getPkg().equals(p.getPojoClassname().getPkg())
+                            ? ""
+                            : p.getPojoClassname().getPkg() + ".",
+                        p.getPojoNameWithTypeVariables()));
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()

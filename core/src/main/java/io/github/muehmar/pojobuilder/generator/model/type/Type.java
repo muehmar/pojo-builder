@@ -89,8 +89,6 @@ public class Type {
   public Optional<OptionalFieldRelation> getRelation(Type other) {
     if (this.equals(other)) {
       return Optional.of(OptionalFieldRelation.SAME_TYPE);
-    } else if (isOptional() && this.equals(Types.optional(other))) {
-      return Optional.of(OptionalFieldRelation.UNWRAP_OPTIONAL);
     } else if (other.isOptional() && other.equals(Types.optional(this))) {
       return Optional.of(OptionalFieldRelation.WRAP_INTO_OPTIONAL);
     } else {

@@ -2,13 +2,18 @@ package io.github.muehmar.pojobuilder.generator.model;
 
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
+import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
+import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.SAME_TYPE;
+import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.WRAP_INTO_OPTIONAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.generator.Names;
 import io.github.muehmar.pojobuilder.generator.Pojos;
+import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -74,55 +79,48 @@ class PojoTest {
 
   @Test
   void getTypeVariablesSection_when_calledForNonGenericSample_then_empty() {
-    assertEquals("", Pojos.sample().getTypeVariablesSection());
+    assertEquals("", Pojos.sample().getTypeVariablesFormatted());
   }
 
   @Test
   void getTypeVariablesSection_when_calledForGenericSample_then_empty() {
-    assertEquals("<T, S>", Pojos.genericSample().getTypeVariablesSection());
+    assertEquals("<T, S>", Pojos.genericSample().getTypeVariablesFormatted());
   }
 
   @Test
   void getNameWithTypeVariables_when_calledForNonGenericSample_then_onlyName() {
-    assertEquals("Customer", Pojos.sample().getNameWithTypeVariables().asString());
+    assertEquals("Customer", Pojos.sample().getPojoNameWithTypeVariables().asString());
   }
 
   @Test
   void getNameWithTypeVariables_when_calledForGenericSample_then_nameWithTypeVariables() {
-    assertEquals("Customer<T, S>", Pojos.genericSample().getNameWithTypeVariables().asString());
-  }
-
-  @Test
-  void getTypeVariablesWildcardSection_when_calledForNonGenericSample_then_empty() {
-    assertEquals("", Pojos.sample().getTypeVariablesWildcardSection());
-  }
-
-  @Test
-  void getTypeVariablesWildcardSection_when_calledForGenericSample_then_empty() {
-    assertEquals("<?, ?>", Pojos.genericSample().getTypeVariablesWildcardSection());
+    assertEquals("Customer<T, S>", Pojos.genericSample().getPojoNameWithTypeVariables().asString());
   }
 
   @Test
   void getGenericTypeDeclarations_when_calledForNonGenericSample_then_empty() {
-    assertEquals(PList.empty(), Pojos.sample().getGenericTypeDeclarations());
+    Pojo pojo = Pojos.sample();
+    assertEquals(
+        PList.empty(), pojo.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString));
   }
 
   @Test
   void getGenericTypeDeclarations_when_calledForGenericSample_then_empty() {
+    Pojo pojo = Pojos.genericSample();
     assertEquals(
         PList.of("T extends List<String>", "S"),
-        Pojos.genericSample().getGenericTypeDeclarations());
+        pojo.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString));
   }
 
   @Test
-  void getGenericTypeDeclarationSection_when_calledForNonGenericSample_then_empty() {
-    assertEquals("", Pojos.sample().getGenericTypeDeclarationSection());
+  void getBoundedTypeVariablesSection_when_calledForNonGenericSample_then_empty() {
+    assertEquals("", Pojos.sample().getBoundedTypeVariablesFormatted());
   }
 
   @Test
-  void getGenericTypeDeclarationSection_when_calledForGenericSample_then_empty() {
+  void getBoundedTypeVariablesSection_when_calledForGenericSample_then_empty() {
     assertEquals(
-        "<T extends List<String>, S>", Pojos.genericSample().getGenericTypeDeclarationSection());
+        "<T extends List<String>, S>", Pojos.genericSample().getBoundedTypeVariablesFormatted());
   }
 
   @Test
@@ -139,35 +137,111 @@ class PojoTest {
   }
 
   @Test
-  void findUnusedTypeVariableName_when_nonGenericSample_then_firstUppercaseLetterReturned() {
-    final Name unusedTypeVariableName = Pojos.sample().findUnusedTypeVariableName();
-    assertEquals("A", unusedTypeVariableName.asString());
+  void matchFields_when_sameOrderAndSameTypes_then_doesMatchAndReturnSameFields() {
+    final PList<Argument> arguments =
+        PList.of(
+            new Argument(Names.id(), Types.string()), new Argument(Names.zip(), Types.integer()));
+
+    final PList<PojoField> fields =
+        PList.of(
+            new PojoField(Names.id(), Types.string(), REQUIRED),
+            new PojoField(Names.zip(), Types.integer(), OPTIONAL));
+
+    final Pojo pojo = Pojos.sample().withFields(fields);
+
+    // method call
+    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+
+    final PList<FieldArgument> expected =
+        fields.zip(arguments).map(p -> new FieldArgument(p.first(), p.second(), SAME_TYPE));
+
+    assertEquals(Optional.of(expected), result);
   }
 
   @Test
-  void findUnusedTypeVariableName_when_genericSample_then_nextFreeUppercaseLetterReturned() {
-    final Name unusedTypeVariableName =
-        Pojos.sample()
-            .withGenerics(PList.single(new Generic(Name.fromString("A"), PList.empty())))
-            .findUnusedTypeVariableName();
-    assertEquals("B", unusedTypeVariableName.asString());
+  void matchFields_when_sameTypesInWrongOrder_then_doesNotMatch() {
+    final PList<Argument> arguments =
+        PList.of(
+            new Argument(Names.id(), Types.string()), new Argument(Names.zip(), Types.integer()));
+
+    final PList<PojoField> fields =
+        PList.of(
+            new PojoField(Names.zip(), Types.integer(), REQUIRED),
+            new PojoField(Names.id(), Types.string(), OPTIONAL));
+
+    final Pojo pojo = Pojos.sample().withFields(fields);
+
+    // method call
+    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+
+    assertEquals(Optional.empty(), result);
   }
 
   @Test
   void
-      findUnusedTypeVariableName_when_genericSampleWithPresentPreferredValue_then_returnNextFree() {
-    final Name unusedTypeVariableName =
-        Pojos.genericSample().findUnusedTypeVariableName(Name.fromString("T"));
-    assertEquals("A", unusedTypeVariableName.asString());
+      matchFields_when_sameTypesButOptionalFieldIsWrappedInOptional_then_doesMatchAndReturnSameFields() {
+    final PList<Argument> arguments =
+        PList.of(
+            new Argument(Names.id(), Types.string()),
+            new Argument(Names.zip(), Types.optional(Types.integer())));
+
+    final PList<PojoField> fields =
+        PList.of(
+            new PojoField(Names.id(), Types.string(), REQUIRED),
+            new PojoField(Names.zip(), Types.integer(), OPTIONAL));
+
+    final Pojo pojo = Pojos.sample().withFields(fields);
+
+    // method call
+    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+
+    final PList<FieldArgument> expected =
+        fields
+            .zip(arguments)
+            .map(
+                p ->
+                    new FieldArgument(
+                        p.first(),
+                        p.second(),
+                        p.first().isRequired() ? SAME_TYPE : WRAP_INTO_OPTIONAL));
+
+    assertEquals(Optional.of(expected), result);
   }
 
   @Test
-  void
-      findUnusedTypeVariableName_when_genericSampleWithAbsentPreferredValue_then_returnPreferred() {
-    final Name unusedTypeVariableName =
-        Pojos.sample()
-            .withGenerics(PList.single(new Generic(Name.fromString("A"), PList.empty())))
-            .findUnusedTypeVariableName(Name.fromString("T"));
-    assertEquals("T", unusedTypeVariableName.asString());
+  void matchFields_when_sameTypesButRequiredFieldIsWrappedInOptional_then_doesNotMatch() {
+    final PList<Argument> arguments =
+        PList.of(
+            new Argument(Names.id(), Types.optional(Types.string())),
+            new Argument(Names.zip(), Types.integer()));
+
+    final PList<PojoField> fields =
+        PList.of(
+            new PojoField(Names.id(), Types.string(), REQUIRED),
+            new PojoField(Names.zip(), Types.integer(), OPTIONAL));
+
+    final Pojo pojo = Pojos.sample().withFields(fields);
+
+    // method call
+    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+
+    assertEquals(Optional.empty(), result);
+  }
+
+  @Test
+  void matchFields_when_fieldsAndArgumentsHaveNotTheSameSize_then_doesNotMatch() {
+    final PList<Argument> arguments =
+        PList.of(
+            new Argument(Names.id(), Types.string()),
+            new Argument(Names.zip(), Types.optional(Types.integer())));
+
+    final PList<PojoField> fields = PList.of(new PojoField(Names.id(), Types.string(), REQUIRED));
+
+    final Pojo pojo = Pojos.sample().withFields(fields);
+
+    // method call
+    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+
+    assertEquals(Optional.empty(), result);
   }
 }

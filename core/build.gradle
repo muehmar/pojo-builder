@@ -17,6 +17,9 @@ dependencies {
     implementation libs.google.autoservice
     annotationProcessor libs.google.autoservice
 
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
+
     testImplementation libs.bundles.junit
     testImplementation libs.snapshotTesting
     testRuntimeOnly libs.slf4j
@@ -25,7 +28,8 @@ dependencies {
 }
 
 test {
-    doFirst {
-        systemProperties.put("extension.test.updateTemplates", project.properties["updateTemplates"])
+    def updateSnapshot = project.properties["updateSnapshot"]
+    if (updateSnapshot != null) {
+        systemProperties.put("updateSnapshot", updateSnapshot)
     }
 }

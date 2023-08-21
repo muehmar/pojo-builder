@@ -10,7 +10,7 @@ import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilderMethod;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilderMethodBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Name;
-import io.github.muehmar.pojobuilder.generator.model.PojoName;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -21,14 +21,14 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_fieldBuilderAnnotationOnMethod_then_extractFieldBuilderMethod() {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .withImport(io.github.muehmar.pojobuilder.annotations.FieldBuilder.class)
             .annotation(PojoBuilder.class)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .withField("Integer", "key")
             .constructor()
             .getter("Integer", "key")
@@ -41,7 +41,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
             .create();
 
     final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+        runAnnotationProcessor(pojoClassname, classString);
 
     final NonEmptyList<FieldBuilderMethod> methods =
         NonEmptyList.of(
@@ -64,8 +64,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
   @Test
   void run_when_fieldBuilderAnnotationOnClass_then_extractFieldBuilderMethod() {
-
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         "package "
@@ -75,11 +74,11 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
             + "import io.github.muehmar.pojobuilder.annotations.FieldBuilder;\n"
             + "@PojoBuilder\n"
             + "public class "
-            + pojoName
+            + pojoClassname.getSimpleName()
             + " {\n"
             + "  private final String id;\n"
             + "  public "
-            + pojoName
+            + pojoClassname.getSimpleName()
             + "(String id) {\n"
             + "    this.id = id;\n"
             + "  }\n"
@@ -99,7 +98,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
             + "}";
 
     final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+        runAnnotationProcessor(pojoClassname, classString);
 
     final PList<FieldBuilderMethod> methods =
         PList.of(
@@ -140,14 +139,14 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
   @ValueSource(booleans = {true, false})
   void run_when_fieldBuilderAnnotationOnMethod_then_extractTheDisableMethodsFlagCorrectly(
       boolean disableDefaultMethods) {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         TestPojoComposer.ofPackage(PACKAGE)
             .withImport(PojoBuilder.class)
             .withImport(io.github.muehmar.pojobuilder.annotations.FieldBuilder.class)
             .annotation(PojoBuilder.class)
-            .className(pojoName.getName())
+            .className(pojoClassname.getName())
             .withField("Integer", "key")
             .constructor()
             .getter("Integer", "key")
@@ -162,7 +161,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
             .create();
 
     final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+        runAnnotationProcessor(pojoClassname, classString);
 
     final PList<FieldBuilder> fieldBuilders = pojoAndSettings.getPojo().getFieldBuilders();
 
@@ -176,7 +175,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
   @ValueSource(booleans = {true, false})
   void run_when_fieldBuilderAnnotationOnClass_then_extractTheDisableMethodsFlagCorrectly(
       boolean disableDefaultMethods) {
-    final PojoName pojoName = randomPojoName();
+    final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
         "package "
@@ -186,11 +185,11 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
             + "import io.github.muehmar.pojobuilder.annotations.FieldBuilder;\n"
             + "@PojoBuilder\n"
             + "public class "
-            + pojoName
+            + pojoClassname.getSimpleName()
             + " {\n"
             + "  private final String id;\n"
             + "  public "
-            + pojoName
+            + pojoClassname.getSimpleName()
             + "(String id) {\n"
             + "    this.id = id;\n"
             + "  }\n"
@@ -212,7 +211,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
             + "}";
 
     final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
-        runAnnotationProcessor(qualifiedPojoName(pojoName), classString);
+        runAnnotationProcessor(pojoClassname, classString);
 
     final PList<FieldBuilder> fieldBuilders = pojoAndSettings.getPojo().getFieldBuilders();
 
