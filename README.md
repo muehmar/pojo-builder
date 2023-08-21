@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.3.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.3.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.4.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.4.0"
 }
 ```
 
@@ -60,6 +60,22 @@ public records Customer(
 
 }
 ```
+
+### Factory method annotation
+In case a class is not part of the source code (e.g. library or JDK) or a factory method contains a lot of arguments, 
+one could also annotate a factory method:
+```
+public class Factories {
+
+  @PojoBuilder
+  public static File file(String pathname) {
+    return new File(pathname);
+  }
+}
+```
+The generator will create a builder with arguments in the same order of declaration and the argument name.
+
+Currently, the generator does not support static methods throwing checked exceptions.
 
 ## Features
 
@@ -333,7 +349,7 @@ The following annotations exists:
   which the custom method should be used.
 * `@Ignore` Used to mark a field which should get ignored by the processor. Used particularly for fields which are
   instantiated withing the constructor and not present as argument in the constructor.
-* `@Nullable` Used to denote optional fields which can be nullable in case of absence
+* `@Nullable` Used to denote optional fields which can be nullable in case of absence. Can also be used in factory methods.
 * `@BuildMethod` Used to mark a method which is used to map the actual instance to another object used by the generated
   build method.
 
@@ -405,6 +421,7 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.4.0 - Support annotation of factory methods (issue `#4`)
 * 1.3.0 - Add annotation element to use only the inner class name for the builder (issue `#12`)
 * 1.2.0 - Add full builder (issue `#2`)
 * 1.1.0 - Add second factory method with the pojo name for static imports (issue `#7`)
