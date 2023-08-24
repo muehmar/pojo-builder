@@ -88,7 +88,8 @@ public class PojoBuilderGenerator {
                 p.getDiamond(), p.getTypeVariablesFormatted());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
-        .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))
+        .genericTypes(
+            p -> p.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
         .returnType(returnType)
         .methodName(methodName)
         .noArguments()
@@ -108,7 +109,8 @@ public class PojoBuilderGenerator {
                 p.getDiamond(), p.getTypeVariablesFormatted());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
-        .genericTypes(p -> p.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString))
+        .genericTypes(
+            p -> p.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
         .returnType(returnType)
         .methodName(methodName)
         .noArguments()

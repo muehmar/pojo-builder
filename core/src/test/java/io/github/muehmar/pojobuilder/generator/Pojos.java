@@ -9,6 +9,7 @@ import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
+import io.github.muehmar.pojobuilder.generator.model.Generics;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
@@ -38,7 +39,7 @@ public class Pojos {
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .andAllOptionals()
             .factoryMethod(Optional.empty())
@@ -62,7 +63,7 @@ public class Pojos {
             .pkg(PACKAGE_NAME)
             .fields(fields)
             .constructors(PList.empty())
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .andAllOptionals()
             .factoryMethod(Optional.empty())
@@ -100,7 +101,7 @@ public class Pojos {
         .pkg(factoryMethodClassPackage)
         .fields(fields)
         .constructors(PList.empty())
-        .generics(PList.empty())
+        .generics(Generics.empty())
         .fieldBuilders(PList.empty())
         .andAllOptionals()
         .factoryMethod(factoryMethod)
@@ -133,8 +134,8 @@ public class Pojos {
                 Types.typeVariable(Name.fromString("S")),
                 OPTIONAL));
 
-    final PList<Generic> generics =
-        PList.of(
+    final Generics generics =
+        Generics.of(
             new Generic(Name.fromString("T"), PList.single(Types.list(Types.string()))),
             new Generic(Name.fromString("S"), PList.empty()));
 
@@ -162,7 +163,7 @@ public class Pojos {
             .pkg(PACKAGE_NAME)
             .fields(PList.of(fields))
             .constructors(PList.empty())
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .andAllOptionals()
             .factoryMethod(Optional.empty())

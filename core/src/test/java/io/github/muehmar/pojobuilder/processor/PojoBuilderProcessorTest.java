@@ -19,6 +19,7 @@ import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
+import io.github.muehmar.pojobuilder.generator.model.Generics;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Necessity;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
@@ -64,7 +65,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -99,7 +100,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -134,7 +135,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -175,7 +176,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -219,7 +220,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                     new Constructor(
                         pojoClassname.getSimpleName(),
                         PList.single(new Argument(Names.id(), Types.string())))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -251,7 +252,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(
                 PList.single(new Constructor(pojoClassname.getSimpleName(), PList.empty())))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -299,7 +300,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -339,7 +340,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -374,7 +375,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -422,14 +423,14 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final Pojo expected =
         pojoBuilder()
             .pojoClassname(pojoClassname)
-            .pojoNameWithTypeVariables(pojoClassname.getSimpleName())
+            .pojoNameWithTypeVariables(pojoClassname.getSimpleName().append("<T>"))
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.single(generic))
+            .generics(Generics.of(generic))
             .fieldBuilders(PList.empty())
             .build();
 
@@ -479,7 +480,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
-            .generics(PList.empty())
+            .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
 
@@ -535,7 +536,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fields(fields)
             .constructors(PList.empty())
             .generics(
-                PList.of(
+                Generics.of(
                     new Generic(Name.fromString("T"), PList.single(Types.string())),
                     new Generic(Name.fromString("S"), PList.single(Types.object())),
                     new Generic(Name.fromString("U"), PList.single(Types.object()))))

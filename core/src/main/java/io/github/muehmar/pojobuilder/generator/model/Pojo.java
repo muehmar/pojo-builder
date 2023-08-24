@@ -1,11 +1,9 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojobuilder.Strings;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
-import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import java.util.Optional;
 import lombok.Value;
 import lombok.With;
@@ -26,7 +24,7 @@ public class Pojo {
    * These are the generics used to create an instance of the pojo, may be different to the generics
    * of the pojo itself.
    */
-  PList<Generic> generics;
+  Generics generics;
 
   PList<FieldBuilder> fieldBuilders;
   Optional<BuildMethod> buildMethod;
@@ -40,22 +38,19 @@ public class Pojo {
   }
 
   public PList<Name> getGenericImports() {
-    return generics.flatMap(Generic::getUpperBounds).flatMap(Type::getImports);
+    return generics.getImports();
   }
 
   public String getDiamond() {
-    return generics.nonEmpty() ? "<>" : "";
+    return generics.asList().nonEmpty() ? "<>" : "";
   }
 
   public String getBoundedTypeVariablesFormatted() {
-    final String typeVariableDeclaration =
-        generics.map(Generic::getTypeDeclaration).map(Name::asString).mkString(", ");
-    return Strings.surroundIfNotEmpty("<", typeVariableDeclaration, ">");
+    return generics.getBoundedTypeVariablesFormatted();
   }
 
   public String getTypeVariablesFormatted() {
-    return Strings.surroundIfNotEmpty(
-        "<", generics.map(Generic::getTypeVariable).mkString(", "), ">");
+    return generics.getTypeVariablesFormatted();
   }
 
   public Name getPojoNameWithTypeVariables() {

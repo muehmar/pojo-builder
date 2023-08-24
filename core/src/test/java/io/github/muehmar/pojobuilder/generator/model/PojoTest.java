@@ -101,7 +101,8 @@ class PojoTest {
   void getGenericTypeDeclarations_when_calledForNonGenericSample_then_empty() {
     Pojo pojo = Pojos.sample();
     assertEquals(
-        PList.empty(), pojo.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString));
+        PList.empty(),
+        pojo.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString));
   }
 
   @Test
@@ -109,7 +110,7 @@ class PojoTest {
     Pojo pojo = Pojos.genericSample();
     assertEquals(
         PList.of("T extends List<String>", "S"),
-        pojo.getGenerics().map(Generic::getTypeDeclaration).map(Name::asString));
+        pojo.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString));
   }
 
   @Test
