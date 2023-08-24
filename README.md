@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.4.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.4.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.4.1"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.4.1"
 }
 ```
 
@@ -421,6 +421,7 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.4.1 - Fix missing type variables in build method (issue `#17`)
 * 1.4.0 - Support annotation of factory methods (issue `#4`)
 * 1.3.0 - Add annotation element to use only the inner class name for the builder (issue `#12`)
 * 1.2.0 - Add full builder (issue `#2`)
