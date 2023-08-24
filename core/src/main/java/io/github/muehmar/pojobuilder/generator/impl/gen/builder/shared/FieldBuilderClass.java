@@ -69,11 +69,11 @@ public class FieldBuilderClass {
         .append(newLine())
         .append(setMethod(rawClassNameGenerator))
         .appendConditionally(
-            BuilderField::hasFieldBuilder,
-            fieldBuilderMethods(rawClassNameGenerator).prependNewLine())
+            fieldBuilderMethods(rawClassNameGenerator).prependNewLine(),
+            BuilderField::hasFieldBuilder)
         .appendConditionally(
-            BuilderField::isFieldOptional,
-            setMethodOptional(rawClassNameGenerator).prependNewLine());
+            setMethodOptional(rawClassNameGenerator).prependNewLine(),
+            BuilderField::isFieldOptional);
   }
 
   public static Generator<BuilderField, PojoSettings> setMethod(
