@@ -33,7 +33,7 @@ import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
 import io.github.muehmar.pojobuilder.generator.model.FieldBuilder;
-import io.github.muehmar.pojobuilder.generator.model.Generic;
+import io.github.muehmar.pojobuilder.generator.model.Generics;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
@@ -189,7 +189,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
     final PList<Argument> factoryMethodArguments =
         PList.fromIter(executableElement.getParameters()).map(ArgumentMapper::toArgument);
 
-    final PList<Generic> buildGenerics =
+    final Generics buildGenerics =
         TypeParameterProcessor.processTypeParameters(executableElement.getTypeParameters());
 
     final FactoryMethod factoryMethod =
@@ -232,7 +232,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
         new DetectionSettings(settings.getOptionalDetections());
 
     final PList<Constructor> constructors = ConstructorProcessor.process(element);
-    final PList<Generic> generics =
+    final Generics generics =
         TypeParameterProcessor.processTypeParameters(element.getTypeParameters());
     final PList<FieldBuilder> fieldBuilders = FieldBuilderProcessor.process(element);
     final Optional<BuildMethod> buildMethod = BuildMethodProcessor.process(element);
@@ -246,7 +246,8 @@ public class PojoBuilderProcessor extends AbstractProcessor {
 
     return pojoBuilder()
         .pojoClassname(pojoClassname)
-        .pojoNameWithTypeVariables(pojoClassname.getName())
+        .pojoNameWithTypeVariables(
+            pojoClassname.getName().append(generics.getTypeVariablesFormatted()))
         .pkg(pojoClassname.getPkg())
         .fields(fields)
         .constructors(constructors)
