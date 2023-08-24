@@ -10,7 +10,7 @@ enableFeaturePreview('VERSION_CATALOGS')
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            version('pojobuilder', '1.1.0')
+            version('pojobuilder', '1.4.0')
             library('pojobuilder-core', 'io.github.muehmar','pojo-builder').versionRef('pojobuilder')
             library('pojobuilder-annotations', 'io.github.muehmar','pojo-builder-annotations').versionRef('pojobuilder')
 
@@ -23,7 +23,7 @@ dependencyResolutionManagement {
             bundle('junit', ['junit-api', 'junit-engine', 'junit-params'])
 
             library('google-autoservice', 'com.google.auto.service:auto-service:1.1.1')
-            library('joor', 'org.jooq:joor-java-8:0.9.14')
+            library('joor', 'org.jooq:joor-java-8:0.9.15')
 
             library('lombok', 'org.projectlombok:lombok:1.18.28')
 
