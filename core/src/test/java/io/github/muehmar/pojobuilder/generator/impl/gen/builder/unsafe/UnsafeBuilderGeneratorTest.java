@@ -1,9 +1,9 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.muehmar.codegenerator.Generator;
-import io.github.muehmar.codegenerator.writer.Writer;
 import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
@@ -15,9 +15,7 @@ class UnsafeBuilderGeneratorTest {
   void builderClass_when_generatorUsedWithSamplePojo_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator = UnsafeBuilderGenerator.unsafeBuilderGenerator();
     final String output =
-        generator
-            .generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "public static final class Builder {\n"
@@ -62,7 +60,7 @@ class UnsafeBuilderGeneratorTest {
     final Generator<Pojo, PojoSettings> generator = UnsafeBuilderGenerator.unsafeBuilderGenerator();
     final String output =
         generator
-            .generate(Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault())
+            .generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter())
             .asString();
 
     assertEquals(

@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_INTEGER;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
@@ -35,7 +36,7 @@ class SetMethodGeneratorTest {
         generator.generate(
             Pojos.fromFields(PojoFields.requiredId()),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -51,7 +52,7 @@ class SetMethodGeneratorTest {
         generator.generate(
             Pojos.fromFields(PojoFields.optionalId()),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
 
     final String output = writer.asString();
 
@@ -68,7 +69,7 @@ class SetMethodGeneratorTest {
         generator.generate(
             Pojos.fromFields(PojoFields.requiredMap()),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
@@ -84,7 +85,7 @@ class SetMethodGeneratorTest {
         generator.generate(
             Pojos.genericSample().withFields(PList.single(PojoFields.optionalId())),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -100,8 +101,7 @@ class SetMethodGeneratorTest {
         PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
 
     final Writer writer =
-        generator.generate(
-            Pojos.fromFields(PojoFields.optionalId()), settings, Writer.createDefault());
+        generator.generate(Pojos.fromFields(PojoFields.optionalId()), settings, javaWriter());
 
     final String output = writer.asString();
     expect.toMatchSnapshot(output);
@@ -119,7 +119,7 @@ class SetMethodGeneratorTest {
         generator.generate(
             Pojos.genericSample().withFields(PList.single(PojoFields.optionalMap())),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
     assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
@@ -136,7 +136,7 @@ class SetMethodGeneratorTest {
         generator.generate(
             Pojos.genericSample().withFields(PList.single(PojoFields.optionalId())),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
 
     final String output = writer.asString();
     expect.toMatchSnapshot(output);

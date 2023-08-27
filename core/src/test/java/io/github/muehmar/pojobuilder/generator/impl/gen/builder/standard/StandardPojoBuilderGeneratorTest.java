@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,7 +19,7 @@ class StandardPojoBuilderGeneratorTest {
     final Generator<Pojo, PojoSettings> generator =
         StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
-        generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals(
         "public static final class Builder0 {\n"
@@ -107,7 +108,7 @@ class StandardPojoBuilderGeneratorTest {
         generator.generate(
             Pojos.sample(),
             PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set")),
-            Writer.createDefault());
+            javaWriter());
 
     assertEquals(
         "public static final class Builder0 {\n"
@@ -193,8 +194,7 @@ class StandardPojoBuilderGeneratorTest {
     final Generator<Pojo, PojoSettings> generator =
         StandardBuilderGenerator.standardBuilderGenerator();
     final Writer writer =
-        generator.generate(
-            Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals(
         "public static final class Builder0<T extends List<String>, S> {\n"
@@ -283,7 +283,7 @@ class StandardPojoBuilderGeneratorTest {
         generator.generate(
             Pojos.sample(),
             PojoSettings.defaultSettings().withStandardBuilderEnabled(false),
-            Writer.createDefault());
+            javaWriter());
 
     assertEquals("", writer.asString());
   }

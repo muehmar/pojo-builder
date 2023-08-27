@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethod;
 import static io.github.muehmar.pojobuilder.snapshottesting.SnapshotUtil.writerSnapshot;
 
@@ -28,9 +29,7 @@ class BuildMethodTest {
   void buildMethod_when_calledWithSample_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator = buildMethod();
     final String output =
-        generator
-            .generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter()).asString();
 
     expect.toMatchSnapshot(output);
   }
@@ -41,7 +40,7 @@ class BuildMethodTest {
     final Generator<Pojo, PojoSettings> generator = buildMethod();
     final String output =
         generator
-            .generate(Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault())
+            .generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter())
             .asString();
 
     expect.toMatchSnapshot(output);
@@ -55,7 +54,7 @@ class BuildMethodTest {
         new BuildMethod(Name.fromString("customBuildMethod"), Types.string());
     final Pojo pojo = Pojos.genericSample().withBuildMethod(Optional.of(buildMethod));
     final String output =
-        generator.generate(pojo, PojoSettings.defaultSettings(), Writer.createDefault()).asString();
+        generator.generate(pojo, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     expect.toMatchSnapshot(output);
   }
@@ -69,7 +68,7 @@ class BuildMethodTest {
         generator.generate(
             Pojos.sampleWithConstructorWithOptionalArgument(),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
 
     expect.toMatchSnapshot(writerSnapshot(writer));
   }
@@ -80,7 +79,7 @@ class BuildMethodTest {
     final Generator<Pojo, PojoSettings> generator = buildMethod();
     final Writer writer =
         generator.generate(
-            Pojos.factoryMethodSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+            Pojos.factoryMethodSample(), PojoSettings.defaultSettings(), javaWriter());
 
     expect.toMatchSnapshot(writerSnapshot(writer));
   }

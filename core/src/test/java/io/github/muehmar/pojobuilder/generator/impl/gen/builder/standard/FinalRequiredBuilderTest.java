@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.FinalRequiredBuilder.finalRequiredBuilder;
@@ -19,9 +20,7 @@ class FinalRequiredBuilderTest {
   void finalRequiredBuilder_when_samplePojo_then_correctClassOutput() {
     final Generator<Pojo, PojoSettings> generator = finalRequiredBuilder();
     final String output =
-        generator
-            .generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "public static final class Builder2 {\n"
@@ -50,8 +49,7 @@ class FinalRequiredBuilderTest {
   void finalRequiredBuilder_when_genericPojo_then_correctClassOutput() {
     final Generator<Pojo, PojoSettings> generator = finalRequiredBuilder();
     final Writer writer =
-        generator.generate(
-            Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals(
         "public static final class Builder2<T extends List<String>, S> {\n"

@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_INTEGER;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
@@ -28,8 +29,7 @@ class RefsGenTest {
   void fieldRefs_when_genericFieldTypeAsInput_then_writerContainsAllRefs() {
     final Generator<PojoField, PojoSettings> gen = RefsGen.fieldRefs();
     final Writer writer =
-        gen.generate(
-            PojoFields.requiredMap(), PojoSettings.defaultSettings(), Writer.createDefault());
+        gen.generate(PojoFields.requiredMap(), PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
     assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
@@ -40,7 +40,7 @@ class RefsGenTest {
   void genericRefs_when_genericPojo_then_writerContainsAllRefs() {
     final Generator<Pojo, PojoSettings> gen = RefsGen.genericRefs();
     final Writer writer =
-        gen.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        gen.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
     assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
@@ -50,7 +50,7 @@ class RefsGenTest {
   void genericRefs_when_nonGenericPojo_then_noRefs() {
     final Generator<Pojo, PojoSettings> gen = RefsGen.genericRefs();
     final Writer writer =
-        gen.generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        gen.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().isEmpty());
   }
@@ -64,7 +64,7 @@ class RefsGenTest {
             Name.fromString("customMethod"),
             new Argument(Name.fromString("val"), Types.map(Types.string(), Types.integer())));
     final Writer writer =
-        gen.generate(fieldBuilderMethod, PojoSettings.defaultSettings(), Writer.createDefault());
+        gen.generate(fieldBuilderMethod, PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));

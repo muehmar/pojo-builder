@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,8 +20,7 @@ class BuildMethodTest {
   void buildMethod_when_calledWithGenericSample_then_correctOutput() {
     final Generator<Pojo, PojoSettings> generator = buildMethod();
     final Writer writer =
-        generator.generate(
-            Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
     assertEquals(
         "public Customer<T, S> build() {\n" + "  return builder.build();\n" + "}",
         writer.asString());
@@ -36,7 +36,7 @@ class BuildMethodTest {
         generator.generate(
             Pojos.genericSample().withBuildMethod(Optional.of(buildMethod)),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
     assertEquals(
         "public String build() {\n" + "  return builder.build();\n" + "}", writer.asString());
   }

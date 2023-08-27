@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.FinalBuilderClass.finalBuilderClass;
@@ -21,9 +22,7 @@ class FinalBuilderClassTest {
     final Generator<Pojo, PojoSettings> generator =
         finalBuilderClass(CLASS_NAME_FOR_OPTIONAL, ignore -> 1);
     final String output =
-        generator
-            .generate(Pojos.sample(), PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "public static final class OptBuilder1 {\n"
@@ -45,8 +44,7 @@ class FinalBuilderClassTest {
     final Generator<Pojo, PojoSettings> generator =
         finalBuilderClass(CLASS_NAME_FOR_OPTIONAL, ignore -> 1);
     final Writer writer =
-        generator.generate(
-            Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals(
         "public static final class OptBuilder1<T extends List<String>, S> {\n"

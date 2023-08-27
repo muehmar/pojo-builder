@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_INTEGER;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
@@ -44,9 +45,7 @@ class FieldBuilderClassTest {
         fieldBuilderClass(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
     final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "public static final class Builder2 {\n"
@@ -70,9 +69,7 @@ class FieldBuilderClassTest {
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "public static final class OptBuilder2 {\n"
@@ -98,8 +95,7 @@ class FieldBuilderClassTest {
     final Generator<BuilderField, PojoSettings> generator =
         fieldBuilderClass(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals(
         "public static final class Builder2<T extends List<String>, S> {\n"
@@ -125,8 +121,7 @@ class FieldBuilderClassTest {
         fieldBuilderClass(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals(
         "public static final class OptBuilder2<T extends List<String>, S> {\n"
@@ -156,9 +151,7 @@ class FieldBuilderClassTest {
         builderClassContent(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
     final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "private final Builder builder;\n"
@@ -180,9 +173,7 @@ class FieldBuilderClassTest {
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "private final Builder<T, S> builder;\n"
@@ -207,9 +198,7 @@ class FieldBuilderClassTest {
         builderClassContent(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "private final Builder<T, S> builder;\n"
@@ -249,9 +238,7 @@ class FieldBuilderClassTest {
                     new FieldBuilder(
                         false, NonEmptyList.of(fieldBuilderMethod1, fieldBuilderMethod2))));
     final String output =
-        generator
-            .generate(field, PojoSettings.defaultSettings(), Writer.createDefault())
-            .asString();
+        generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
     assertEquals(
         "private final Builder builder;\n"
@@ -279,8 +266,7 @@ class FieldBuilderClassTest {
     final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -295,8 +281,7 @@ class FieldBuilderClassTest {
   void setMethod_when_generatorUsedWithRequiredField_then_correctOutput() {
     final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -310,8 +295,7 @@ class FieldBuilderClassTest {
     final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -326,8 +310,7 @@ class FieldBuilderClassTest {
   void setMethod_when_genericSampleWithRequiredField_then_correctOutput() {
     final Generator<BuilderField, PojoSettings> generator = setMethod(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -345,7 +328,7 @@ class FieldBuilderClassTest {
     final PojoSettings settings =
         PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
 
-    final Writer writer = generator.generate(field, settings, Writer.createDefault());
+    final Writer writer = generator.generate(field, settings, javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -362,7 +345,7 @@ class FieldBuilderClassTest {
     final PojoField field = PojoFields.requiredMap();
     final BuilderField builderField = BuilderFields.of(Pojos.sample(), field, 2);
     final Writer writer =
-        generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
@@ -384,7 +367,7 @@ class FieldBuilderClassTest {
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
-        generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals("", writer.asString());
   }
@@ -404,7 +387,7 @@ class FieldBuilderClassTest {
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
-        generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
     assertFalse(writer.asString().isEmpty());
   }
@@ -415,8 +398,7 @@ class FieldBuilderClassTest {
         setMethodOptional(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -436,7 +418,7 @@ class FieldBuilderClassTest {
     final PojoSettings settings =
         PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
 
-    final Writer writer = generator.generate(field, settings, Writer.createDefault());
+    final Writer writer = generator.generate(field, settings, javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -453,8 +435,7 @@ class FieldBuilderClassTest {
         setMethodOptional(CLASS_NAME_FOR_OPTIONAL);
     final BuilderField field =
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
@@ -473,7 +454,7 @@ class FieldBuilderClassTest {
     final PojoField field = PojoFields.requiredMap();
     final BuilderField builderField = BuilderFields.of(Pojos.sample(), field, 2);
     final Writer writer =
-        generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
     assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
@@ -497,7 +478,7 @@ class FieldBuilderClassTest {
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
-        generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
     assertEquals("", writer.asString());
   }
@@ -518,7 +499,7 @@ class FieldBuilderClassTest {
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), field, 2).withFieldBuilder(Optional.of(fieldBuilder));
     final Writer writer =
-        generator.generate(builderField, PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
     assertFalse(writer.asString().isEmpty());
   }
@@ -529,8 +510,7 @@ class FieldBuilderClassTest {
         fieldBuilderMethods(CLASS_NAME_FOR_REQUIRED);
     final BuilderField field = BuilderFields.of(Pojos.sample(), PojoFields.requiredId(), 2);
 
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertEquals("", output);
@@ -552,8 +532,7 @@ class FieldBuilderClassTest {
             .withFieldBuilder(
                 Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -580,8 +559,7 @@ class FieldBuilderClassTest {
             .withFieldBuilder(
                 Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
@@ -608,8 +586,7 @@ class FieldBuilderClassTest {
             .withFieldBuilder(
                 Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
@@ -637,8 +614,7 @@ class FieldBuilderClassTest {
             .withFieldBuilder(
                 Optional.of(new FieldBuilder(false, NonEmptyList.single(fieldBuilderMethod))));
 
-    final Writer writer =
-        generator.generate(field, PojoSettings.defaultSettings(), Writer.createDefault());
+    final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));

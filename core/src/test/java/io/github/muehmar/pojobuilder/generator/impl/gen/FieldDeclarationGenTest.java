@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_INTEGER;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_MAP;
@@ -34,7 +35,7 @@ class FieldDeclarationGenTest {
         generator.generate(
             new PojoField(Name.fromString("someMap"), Types.map(string(), integer()), REQUIRED),
             PojoSettings.defaultSettings(),
-            Writer.createDefault());
+            javaWriter());
 
     assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
     assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));

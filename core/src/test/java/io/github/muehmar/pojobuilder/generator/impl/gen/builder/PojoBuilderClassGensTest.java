@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings.defaultSettings;
 
 import au.com.origin.snapshots.Expect;
@@ -32,7 +33,7 @@ class PojoBuilderClassGensTest {
         gen.generate(
             Pojos.sample(),
             defaultSettings().withBuilderAccessLevel(accessLevelModifier),
-            Writer.createDefault());
+            javaWriter());
 
     expect.scenario(accessLevelModifier.name()).toMatchSnapshot(writer.asString());
   }
@@ -42,8 +43,7 @@ class PojoBuilderClassGensTest {
   void safeBuilderClass_when_genericPojo_then_correctOutput() {
     final Generator<Pojo, PojoSettings> gen = PojoBuilderGenerator.pojoBuilderGenerator();
 
-    final Writer writer =
-        gen.generate(Pojos.genericSample(), defaultSettings(), Writer.createDefault());
+    final Writer writer = gen.generate(Pojos.genericSample(), defaultSettings(), javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -55,9 +55,7 @@ class PojoBuilderClassGensTest {
 
     final Writer writer =
         gen.generate(
-            Pojos.sample(),
-            defaultSettings().withStandardBuilderEnabled(false),
-            Writer.createDefault());
+            Pojos.sample(), defaultSettings().withStandardBuilderEnabled(false), javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -71,7 +69,7 @@ class PojoBuilderClassGensTest {
         gen.generate(
             Pojos.genericSample(),
             defaultSettings().withStandardBuilderEnabled(false),
-            Writer.createDefault());
+            javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -82,10 +80,7 @@ class PojoBuilderClassGensTest {
     final Generator<Pojo, PojoSettings> gen = PojoBuilderGenerator.pojoBuilderGenerator();
 
     final Writer writer =
-        gen.generate(
-            Pojos.sample(),
-            defaultSettings().withFullBuilderEnabled(false),
-            Writer.createDefault());
+        gen.generate(Pojos.sample(), defaultSettings().withFullBuilderEnabled(false), javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -97,9 +92,7 @@ class PojoBuilderClassGensTest {
 
     final Writer writer =
         gen.generate(
-            Pojos.genericSample(),
-            defaultSettings().withFullBuilderEnabled(false),
-            Writer.createDefault());
+            Pojos.genericSample(), defaultSettings().withFullBuilderEnabled(false), javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }

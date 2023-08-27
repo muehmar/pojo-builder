@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.processor;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.Booleans.not;
 import static io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder.factoryMethodBuilder;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
@@ -18,7 +19,6 @@ import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
 import com.google.auto.service.AutoService;
 import io.github.muehmar.codegenerator.Generator;
-import io.github.muehmar.codegenerator.writer.Writer;
 import io.github.muehmar.pojobuilder.Optionals;
 import io.github.muehmar.pojobuilder.Strings;
 import io.github.muehmar.pojobuilder.annotations.Ignore;
@@ -361,7 +361,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
       Generator<Pojo, PojoSettings> gen,
       Pojo pojo,
       PojoSettings pojoSettings) {
-    final String javaContent = gen.generate(pojo, pojoSettings, Writer.createDefault()).asString();
+    final String javaContent = gen.generate(pojo, pojoSettings, javaWriter()).asString();
     try {
       final JavaFileObject builderFile =
           processingEnv.getFiler().createSourceFile(qualifiedClassName.asString());

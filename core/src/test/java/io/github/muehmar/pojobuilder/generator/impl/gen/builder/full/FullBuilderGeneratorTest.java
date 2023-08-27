@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.full;
 
+import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import au.com.origin.snapshots.Expect;
@@ -33,7 +34,7 @@ class FullBuilderGeneratorTest {
             pojo,
             PojoSettings.defaultSettings()
                 .withFullBuilderFieldOrder(FullBuilderFieldOrder.DECLARATION_ORDER),
-            Writer.createDefault());
+            javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -51,7 +52,7 @@ class FullBuilderGeneratorTest {
             pojo,
             PojoSettings.defaultSettings()
                 .withFullBuilderFieldOrder(FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST),
-            Writer.createDefault());
+            javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -62,8 +63,7 @@ class FullBuilderGeneratorTest {
     final Generator<Pojo, PojoSettings> generator = FullBuilderGenerator.fullBuilderGenerator();
 
     final Writer writer =
-        generator.generate(
-            Pojos.genericSample(), PojoSettings.defaultSettings(), Writer.createDefault());
+        generator.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
   }
@@ -75,7 +75,7 @@ class FullBuilderGeneratorTest {
         generator.generate(
             Pojos.sample(),
             PojoSettings.defaultSettings().withFullBuilderEnabled(false),
-            Writer.createDefault());
+            javaWriter());
 
     assertEquals("", writer.asString());
   }
