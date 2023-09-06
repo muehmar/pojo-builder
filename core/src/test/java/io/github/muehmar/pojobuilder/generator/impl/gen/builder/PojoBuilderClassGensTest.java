@@ -5,20 +5,18 @@ import static io.github.muehmar.pojobuilder.generator.model.settings.PojoSetting
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
-import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.writer.Writer;
 import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
-import io.github.muehmar.pojobuilder.snapshottesting.IntellijDiffSnapshotTestExtension;
+import io.github.muehmar.pojobuilder.snapshottesting.SnapshotTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-@ExtendWith({SnapshotExtension.class, IntellijDiffSnapshotTestExtension.class})
+@SnapshotTest
 class PojoBuilderClassGensTest {
   private Expect expect;
 

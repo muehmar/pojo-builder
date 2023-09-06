@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
-import au.com.origin.snapshots.junit5.SnapshotExtension;
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.writer.Writer;
@@ -19,11 +18,10 @@ import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
-import io.github.muehmar.pojobuilder.snapshottesting.IntellijDiffSnapshotTestExtension;
+import io.github.muehmar.pojobuilder.snapshottesting.SnapshotTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith({SnapshotExtension.class, IntellijDiffSnapshotTestExtension.class})
+@SnapshotTest
 class SetMethodGeneratorTest {
   private Expect expect;
 
