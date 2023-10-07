@@ -37,7 +37,7 @@ public class FieldBuilderProcessor {
         .flatMapOptional(FieldBuilderProcessor::processElementsForSameField);
   }
 
-  public static Optional<io.github.muehmar.pojobuilder.generator.model.FieldBuilder>
+  private static Optional<io.github.muehmar.pojobuilder.generator.model.FieldBuilder>
       processElementsForSameField(NonEmptyList<ElementAndAnnotation> elementAndAnnotations) {
     final PList<FieldBuilderMethod> singleMethodMethods =
         elementAndAnnotations.toPList().flatMapOptional(FieldBuilderProcessor::processMethod);
@@ -133,7 +133,7 @@ public class FieldBuilderProcessor {
                   .onArrayType(arrayType -> arg.withType(Types.varargs(arrayType.getItemType())))
                   .orElse(arg);
 
-      return arguments.reverse().zipWithIndex().map(mapFirst(mapToVarargs));
+      return arguments.reverse().zipWithIndex().map(mapFirst(mapToVarargs)).reverse();
     } else {
       return arguments;
     }

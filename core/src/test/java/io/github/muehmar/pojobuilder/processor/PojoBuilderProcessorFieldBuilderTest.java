@@ -37,7 +37,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
                 "sumKey",
                 "return Integer.parseInt(a) + b",
                 "@FieldBuilder(fieldName=\"key\")",
-                "String a, int b")
+                "String a, int b, String ... more")
             .create();
 
     final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
@@ -52,7 +52,8 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
                 .arguments(
                     PList.of(
                         new Argument(Name.fromString("a"), Types.string()),
-                        new Argument(Name.fromString("b"), Types.primitiveInt())))
+                        new Argument(Name.fromString("b"), Types.primitiveInt()),
+                        new Argument(Name.fromString("more"), Types.varargs(Types.string()))))
                 .andAllOptionals()
                 .innerClassName(Optional.empty())
                 .build());
