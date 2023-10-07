@@ -27,8 +27,8 @@ public class FieldBuilderClass<T> {
       return i.toString();
     }
 
-    static String fromVarargs(String... args) {
-      return String.join("-", args);
+    static String fromVarargs(String first, String... more) {
+      return first.concat("-").concat(String.join("-", more));
     }
   }
 
