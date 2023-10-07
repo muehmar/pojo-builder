@@ -538,8 +538,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .generics(
                 Generics.of(
                     new Generic(Name.fromString("T"), PList.single(Types.string())),
-                    new Generic(Name.fromString("S"), PList.single(Types.object())),
-                    new Generic(Name.fromString("U"), PList.single(Types.object()))))
+                    new Generic(Name.fromString("S"), PList.empty()),
+                    new Generic(Name.fromString("U"), PList.empty())))
             .fieldBuilders(PList.empty())
             .andOptionals()
             .factoryMethod(factoryMethod)
