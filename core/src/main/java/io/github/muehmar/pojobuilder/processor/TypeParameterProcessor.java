@@ -1,10 +1,13 @@
 package io.github.muehmar.pojobuilder.processor;
 
+import static io.github.muehmar.pojobuilder.Booleans.not;
+
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Generics;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
+import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.List;
 import javax.lang.model.element.TypeParameterElement;
 
@@ -18,7 +21,9 @@ public class TypeParameterProcessor {
             .map(
                 typeParameterElement -> {
                   final PList<Type> upperBounds =
-                      PList.fromIter(typeParameterElement.getBounds()).map(TypeMirrorMapper::map);
+                      PList.fromIter(typeParameterElement.getBounds())
+                          .map(TypeMirrorMapper::map)
+                          .filter(type -> not(type.equals(Types.object())));
                   return new Generic(Name.fromString(typeParameterElement.toString()), upperBounds);
                 });
     return Generics.of(generics);
