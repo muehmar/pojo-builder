@@ -14,7 +14,7 @@ public class BuildMethod {
   private BuildMethod() {}
 
   public static Generator<Pojo, PojoSettings> buildMethod() {
-    final Function<Pojo, String> createReturnType =
+    final Function<Pojo, Object> createReturnType =
         p ->
             p.getBuildMethod()
                 .map(io.github.muehmar.pojobuilder.generator.model.BuildMethod::getReturnType)
@@ -33,6 +33,7 @@ public class BuildMethod {
         .returnType(createReturnType)
         .methodName("build")
         .noArguments()
+        .doesNotThrow()
         .content("return builder.build();")
         .build();
   }

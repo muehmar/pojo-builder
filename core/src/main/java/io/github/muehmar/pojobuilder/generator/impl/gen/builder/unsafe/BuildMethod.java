@@ -33,9 +33,10 @@ class BuildMethod {
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
-        .returnTypeName(createReturnType)
+        .returnType(createReturnType)
         .methodName("build")
         .noArguments()
+        .doesNotThrow()
         .content(buildMethodContent())
         .build();
   }

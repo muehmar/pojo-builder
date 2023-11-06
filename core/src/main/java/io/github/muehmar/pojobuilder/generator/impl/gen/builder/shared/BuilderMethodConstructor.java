@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
+import static io.github.muehmar.codegenerator.java.ConstructorGen.Argument.argument;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 
 import io.github.muehmar.codegenerator.Generator;
@@ -36,7 +37,9 @@ public class BuilderMethodConstructor {
         .className(
             p -> String.format("%s", rawClassNameGenerator.forFieldIndex(p.getBuilderNumber())))
         .singleArgument(
-            p -> String.format("Builder%s builder", p.getPojo().getTypeVariablesFormatted()))
+            p ->
+                argument(
+                    String.format("Builder%s", p.getPojo().getTypeVariablesFormatted()), "builder"))
         .content("this.builder = builder;")
         .build();
   }

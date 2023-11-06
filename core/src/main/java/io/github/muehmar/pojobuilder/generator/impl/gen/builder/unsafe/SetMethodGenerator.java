@@ -1,6 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
+import static io.github.muehmar.codegenerator.java.MethodGen.Argument.argument;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGenerator.BUILDER_CLASSNAME;
@@ -41,9 +42,8 @@ class SetMethodGenerator {
         .methodName((paf, s) -> paf.getField().builderSetMethodName(s).asString())
         .singleArgument(
             paf ->
-                String.format(
-                    "%s %s",
-                    paf.getField().getType().getTypeDeclaration(), paf.getField().getName()))
+                argument(paf.getField().getType().getTypeDeclaration(), paf.getField().getName()))
+        .doesNotThrow()
         .content(content)
         .build()
         .append(RefsGen.fieldRefs(), PojoAndField::getField);
@@ -65,9 +65,10 @@ class SetMethodGenerator {
         .methodName((paf, s) -> paf.getField().builderSetMethodName(s).asString())
         .singleArgument(
             paf ->
-                String.format(
-                    "Optional<%s> %s",
-                    paf.getField().getType().getTypeDeclaration(), paf.getField().getName()))
+                argument(
+                    String.format("Optional<%s>", paf.getField().getType().getTypeDeclaration()),
+                    paf.getField().getName()))
+        .doesNotThrow()
         .content(content)
         .build()
         .append(w -> w.ref(JAVA_UTIL_OPTIONAL))
