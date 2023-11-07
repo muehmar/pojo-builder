@@ -94,6 +94,11 @@ public class Pojos {
                         fields
                             .drop(2)
                             .map(f -> new Argument(f.getName(), Types.optional(f.getType())))))
+            .exceptions(
+                PList.single(
+                    new QualifiedClassname(
+                        Classname.fromString("SomeException"),
+                        PackageName.fromString("io.github.muehmar.exception"))))
             .build();
     return PojoBuilder.create()
         .pojoClassname(new QualifiedClassname(Classname.fromString("Customer"), PACKAGE_NAME))

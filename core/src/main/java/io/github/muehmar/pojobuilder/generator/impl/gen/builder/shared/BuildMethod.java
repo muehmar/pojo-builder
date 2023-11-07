@@ -2,8 +2,11 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 
+import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
+import io.github.muehmar.pojobuilder.generator.impl.gen.ThrowsGenerator;
+import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
@@ -33,8 +36,16 @@ public class BuildMethod {
         .returnType(createReturnType)
         .methodName("build")
         .noArguments()
-        .doesNotThrow()
+        .throwsExceptions(throwsGenerator())
         .content("return builder.build();")
         .build();
+  }
+
+  private static Generator<Pojo, PojoSettings> throwsGenerator() {
+    return Generator.<Pojo, PojoSettings>emptyGen()
+        .append(
+            ThrowsGenerator.throwsGenerator(),
+            pojo ->
+                pojo.getFactoryMethod().map(FactoryMethod::getExceptions).orElseGet(PList::empty));
   }
 }

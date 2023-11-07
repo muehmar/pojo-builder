@@ -37,9 +37,10 @@ public Customer build() {
 
 
 sampleWithFactoryMethod=[
+io.github.muehmar.exception.SomeException
 java.util.Optional
 
-public io.github.muehmar.Customer build() {
+public io.github.muehmar.Customer build() throws SomeException {
   return Pojos.Customer.create(id, username, Optional.ofNullable(nickname));
 }
 ]

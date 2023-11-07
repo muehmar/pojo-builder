@@ -1,0 +1,50 @@
+factoryMethodSample=[
+io.github.muehmar.exception.SomeException
+
+public static final class OptBuilder1 {
+  private final Builder builder;
+
+  private OptBuilder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public io.github.muehmar.Customer build() throws SomeException {
+    return builder.build();
+  }
+}
+]
+
+
+genericPojo=[
+java.lang.String
+java.util.List
+
+public static final class OptBuilder1<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private OptBuilder1(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public Customer<T, S> build() {
+    return builder.build();
+  }
+}
+]
+
+
+samplePojo=[
+.
+.
+public static final class OptBuilder1 {
+  private final Builder builder;
+
+  private OptBuilder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Customer build() {
+    return builder.build();
+  }
+}
+]

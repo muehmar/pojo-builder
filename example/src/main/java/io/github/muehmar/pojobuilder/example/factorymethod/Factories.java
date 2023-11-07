@@ -11,12 +11,8 @@ public class Factories {
   private Factories() {}
 
   @PojoBuilder
-  static URL url(String spec) {
-    try {
-      return new URL(spec);
-    } catch (MalformedURLException e) {
-      throw new IllegalArgumentException(e);
-    }
+  static URL url(String spec) throws MalformedURLException {
+    return new URL(spec);
   }
 
   @PojoBuilder

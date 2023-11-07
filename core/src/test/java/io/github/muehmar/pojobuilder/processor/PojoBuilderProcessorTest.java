@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.processor;
 
+import static io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder.fullFactoryMethodBuilder;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.PojoBuilder.pojoBuilder;
@@ -17,7 +18,6 @@ import io.github.muehmar.pojobuilder.generator.PojoFields;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
-import io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Generics;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -502,7 +502,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             + "@PojoBuilder\n"
             + "  public static <T extends String, S, U> "
             + pojoClassname.getSimpleName()
-            + "<T, S>create(T t, S s, U u, String other) {\n"
+            + "<T, S>create(T t, S s, U u, String other) throws IllegalArgumentException {\n"
             + "    return new "
             + pojoClassname.getSimpleName()
             + "<>();\n"
@@ -521,12 +521,16 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     final PList<PojoField> fields = PList.of(f1, f2, f3, f4);
 
     final FactoryMethod factoryMethod =
-        FactoryMethodBuilder.factoryMethodBuilder()
+        fullFactoryMethodBuilder()
             .ownerClassname(pojoClassname.getClassname())
             .pkg(PACKAGE)
             .methodName(Name.fromString("create"))
             .arguments(fields.map(f -> new Argument(f.getName(), f.getType())))
-            .andAllOptionals()
+            .exceptions(
+                PList.of(
+                    new QualifiedClassname(
+                        Classname.fromString("IllegalArgumentException"),
+                        PackageName.fromString("java.lang"))))
             .build();
     final Pojo expected =
         pojoBuilder()

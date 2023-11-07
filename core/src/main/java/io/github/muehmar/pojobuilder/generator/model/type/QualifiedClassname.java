@@ -21,6 +21,10 @@ public class QualifiedClassname {
     return String.format("%s.%s", pkg.asString(), classname.asString());
   }
 
+  public String getImport() {
+    return String.format("%s.%s", pkg.asString(), classname.getTopLevelClass());
+  }
+
   @Override
   public String toString() {
     return asString();
