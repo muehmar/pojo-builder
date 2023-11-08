@@ -1,0 +1,6 @@
+twoExceptions=[
+io.github.muehmar.exception.SomeException
+java.lang.IllegalArgumentException
+
+SomeException, IllegalArgumentException
+]

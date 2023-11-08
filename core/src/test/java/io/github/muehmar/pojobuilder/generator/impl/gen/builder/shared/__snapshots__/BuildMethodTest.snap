@@ -1,0 +1,25 @@
+calledWithGenericSample=[
+.
+.
+public Customer<T, S> build() {
+  return builder.build();
+}
+]
+
+
+calledWithGenericSampleWithCustomBuildMethod=[
+.
+.
+public String build() {
+  return builder.build();
+}
+]
+
+
+factoryMethodSample=[
+io.github.muehmar.exception.SomeException
+
+public io.github.muehmar.Customer build() throws SomeException {
+  return builder.build();
+}
+]

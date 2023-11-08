@@ -25,7 +25,6 @@ import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.annotations.Nullable;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
-import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.PojoBuilderGenerator;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
@@ -142,15 +141,6 @@ public class PojoBuilderProcessor extends AbstractProcessor {
     final PojoSettings pojoSettings = extractSettingsFromAnnotationPath(elementAndPath.getPath());
     final ExecutableElement executableElement = elementAndPath.getElement();
 
-    if (not(executableElement.getThrownTypes().isEmpty())) {
-      throw new PojoBuilderException(
-          "Annotating a throwing factory method is currently not supported, method '"
-              + executableElement.getEnclosingElement()
-              + "."
-              + executableElement.getSimpleName()
-              + "'");
-    }
-
     final QualifiedClassname factoryMethodOwner =
         ClassnameParser.parseThrowing(executableElement.getEnclosingElement().toString());
 
@@ -198,6 +188,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
             .pkg(pojoPackage)
             .methodName(Name.fromString(executableElement.getSimpleName().toString()))
             .arguments(factoryMethodArguments)
+            .exceptions(ExceptionProcessor.process(executableElement))
             .build();
 
     return pojoBuilder()

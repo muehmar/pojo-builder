@@ -61,6 +61,7 @@ class FinalRequiredBuilder {
         .returnType(p -> "OptBuilder0" + p.getTypeVariablesFormatted())
         .methodName("andAllOptionals")
         .noArguments()
+        .doesNotThrow()
         .content(p -> String.format("return new OptBuilder0%s(builder);", p.getDiamond()))
         .build();
   }
@@ -72,6 +73,7 @@ class FinalRequiredBuilder {
         .returnType(p -> "Builder" + p.getTypeVariablesFormatted())
         .methodName("andOptionals")
         .noArguments()
+        .doesNotThrow()
         .content("return builder;")
         .build();
   }

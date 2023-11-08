@@ -3,6 +3,7 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
+import static io.github.muehmar.codegenerator.java.MethodGen.Argument.argument;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuilderMethodConstructor.builderMethodConstructor;
@@ -14,7 +15,6 @@ import io.github.muehmar.pojobuilder.generator.impl.gen.RefsGen;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.model.BuilderField;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.model.BuilderFieldWithMethod;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.model.IndexedField;
-import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import java.util.function.Function;
 
@@ -92,9 +92,8 @@ public class FieldBuilderClass {
         .returnType(f -> nextClassTypeVariables(rawClassNameGenerator, f.getIndexedField()))
         .methodName((f, s) -> f.getField().builderSetMethodName(s).asString())
         .singleArgument(
-            f ->
-                String.format(
-                    "%s %s", f.getField().getType().getTypeDeclaration(), f.getField().getName()))
+            f -> argument(f.getField().getType().getTypeDeclaration(), f.getField().getName()))
+        .doesNotThrow()
         .content(content)
         .build()
         .append(RefsGen.fieldRefs(), BuilderField::getField)
@@ -118,9 +117,10 @@ public class FieldBuilderClass {
         .methodName((f, s) -> f.getField().builderSetMethodName(s).asString())
         .singleArgument(
             f ->
-                String.format(
-                    "Optional<%s> %s",
-                    f.getField().getType().getTypeDeclaration(), f.getField().getName()))
+                argument(
+                    String.format("Optional<%s>", f.getField().getType().getTypeDeclaration()),
+                    f.getField().getName()))
+        .doesNotThrow()
         .content(content)
         .build()
         .append(w -> w.ref(JAVA_UTIL_OPTIONAL))
@@ -144,7 +144,7 @@ public class FieldBuilderClass {
                 f.getFieldBuilderMethod().getMethodName(),
                 f.getFieldBuilderMethod().getArgumentNames().mkString(", "));
 
-    final Function<BuilderFieldWithMethod, String> nextClassTypeVariables =
+    final Function<BuilderFieldWithMethod, Object> nextClassTypeVariables =
         f -> nextClassTypeVariables(rawClassNameGenerator, f.getIndexedField());
 
     final Generator<BuilderFieldWithMethod, PojoSettings> singleMethod =
@@ -153,7 +153,12 @@ public class FieldBuilderClass {
             .noGenericTypes()
             .returnType(nextClassTypeVariables)
             .methodName(f -> f.getFieldBuilderMethod().getMethodName().asString())
-            .arguments(f -> f.getFieldBuilderMethod().getArguments().map(Argument::formatted))
+            .arguments(
+                f ->
+                    f.getFieldBuilderMethod()
+                        .getArguments()
+                        .map(arg -> argument(arg.getType().getTypeDeclaration(), arg.getName())))
+            .doesNotThrow()
             .content(content)
             .build()
             .append(
