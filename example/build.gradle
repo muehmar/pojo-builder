@@ -10,5 +10,7 @@ dependencies {
     implementation project(':core-annotations')
     annotationProcessor project(':core')
 
+    compileOnly libs.jakarta.annotationApi
+
     testImplementation libs.bundles.junit
 }

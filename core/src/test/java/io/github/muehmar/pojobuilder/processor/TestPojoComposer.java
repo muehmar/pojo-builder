@@ -152,14 +152,19 @@ public class TestPojoComposer {
     }
 
     public PojoFields withField(String type, String name, Class<?> annotation) {
-      final String finalModifier = annotation.equals(Ignore.class) ? "" : "final";
-      builder.append(String.format("  @%s\n", annotation.getSimpleName()));
+      return withField(type, name, annotation.getName());
+    }
+
+    public PojoFields withField(String type, String name, String annotation) {
+      final String finalModifier = annotation.equals(Ignore.class.getName()) ? "" : "final";
+      final String className = annotation.substring(annotation.lastIndexOf(".") + 1);
+      builder.append(String.format("  @%s\n", className));
       builder.append(String.format("  private %s %s %s;\n", finalModifier, type, name));
       final PList<TypeAndName> fields =
-          annotation.equals(Ignore.class)
+          annotation.equals(Ignore.class.getName())
               ? this.fields
               : this.fields.add(new TypeAndName(type, name));
-      return new PojoFields(builder, className, fields);
+      return new PojoFields(builder, this.className, fields);
     }
 
     public String create() {
