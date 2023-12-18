@@ -61,6 +61,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 import lombok.Value;
 
@@ -410,7 +411,16 @@ public class PojoBuilderProcessor extends AbstractProcessor {
 
   private Optional<PojoField> mapNullablePojoField(
       Element element, Name name, Type type, DetectionSettings settings) {
-    return Optional.ofNullable(element.getAnnotation(Nullable.class))
+    final PList<String> nullableAnnotationClasses =
+        PList.of(
+            Nullable.class.getName(), "javax.annotation.Nullable", "jakarta.annotation.Nullable");
+
+    return PList.fromIter(element.getAnnotationMirrors())
+        .map(AnnotationMirror::getAnnotationType)
+        .map(javax.lang.model.type.DeclaredType::asElement)
+        .map(Element::asType)
+        .map(TypeMirror::toString)
+        .find(annotationClassName -> nullableAnnotationClasses.exists(annotationClassName::equals))
         .filter(
             ignore ->
                 settings

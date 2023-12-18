@@ -32,9 +32,12 @@ import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import io.github.muehmar.pojobuilder.generator.model.type.WildcardType;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
@@ -107,8 +110,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
     assertEquals(expected, pojoAndSettings.getPojo());
   }
 
-  @Test
-  void run_when_fieldAnnotatedWithNullable_then_pojoFieldIsOptional() {
+  @ParameterizedTest
+  @MethodSource("nullableAnnotations")
+  void run_when_fieldAnnotatedWithNullable_then_pojoFieldIsOptional(String nullableAnnotation) {
     final QualifiedClassname pojoClassname = randomPojoClassname();
 
     final String classString =
@@ -117,7 +121,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .withImport(Nullable.class)
             .annotation(PojoBuilder.class)
             .className(pojoClassname.getName())
-            .withField("String", "id", Nullable.class)
+            .withField("String", "id", nullableAnnotation)
             .constructor()
             .create();
 
@@ -140,6 +144,12 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .build();
 
     assertEquals(expected, pojoAndSettings.getPojo());
+  }
+
+  public static Stream<Arguments> nullableAnnotations() {
+    return Stream.of(
+            Nullable.class.getName(), "javax.annotation.Nullable", "jakarta.annotation.Nullable")
+        .map(Arguments::arguments);
   }
 
   @ParameterizedTest
