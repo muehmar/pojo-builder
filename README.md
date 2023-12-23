@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.4.2"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.4.2"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.5.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.5.0"
 }
 ```
 
@@ -186,9 +186,9 @@ There are two options to choose the order of the fields used by the builder:
 * Declaration order: In this case, the builder uses the properties in the order they are declared in the class
 * Required fields first: This is the same order used in the standard builder, where required fields are used first.
 
-### Custom methods for fields in SafeBuilder
+### Custom methods for fields in PojoBuilder
 
-It is possible define custom methods for the SafeBuilder for a specific field which can be used to populate the
+It is possible define custom methods for the PojoBuilder for a specific field which can be used to populate the
 corresponding field when using the builder. One could define one or more methods which return an instance of the
 corresponding field, where the methods must be static and at least package private:
 
@@ -268,7 +268,7 @@ method maps the actual build instance to another type and is called by the build
 returns a String instead of the `Customer` instance:
 
 ```
-@SafeBuilder
+@PojoBuilder
 public class Customer {
     ...
     
@@ -326,7 +326,7 @@ In case there is a field which is instantiated in the constructor and no argumen
 annotation for this field:
 
 ```
-@SafeBuilder
+@PojoBuilder
 public class IgnoreFieldClass {
   private final String id;
   private final String name;
@@ -374,11 +374,11 @@ There are multiple ways to tell the processor which attributes of a pojo are req
 has the parameter `optionalDetection` which is an array of `OptionalDetection` and allows customisation of each pojo if
 necessary:
 
-| OptionalDetection                     | Description                                                                                                                                                                                                                          |
-|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| OptionalDetection.OPTIONAL_CLASS      | In this case every field in the pojo which is wrapped in an Optional is considered as optional.                                                                                                                                      |
-| OptionalDetection.NULLABLE_ANNOTATION | With this option a field in the pojo can be annotated with the `Nullable` annotation to mark it as optional. The `Nullable` annotation is delivered within this package, `javax.annotations.Nullable` (JSR305) is not yet supported. |
-| OptionalDetection.NONE                | All fields are treated as required. This setting gets ignored in case it is used in combination with one of the others.                                                                                                              |
+| OptionalDetection                     | Description                                                                                                                                                                                                                     |
+|---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OptionalDetection.OPTIONAL_CLASS      | In this case every field in the pojo which is wrapped in an Optional is considered as optional.                                                                                                                                 |
+| OptionalDetection.NULLABLE_ANNOTATION | With this option a field in the pojo can be annotated with the `Nullable` annotation to mark it as optional. The `Nullable` annotation is delivered within this package, `javax.annotation.Nullable` (JSR305) is supported too. |
+| OptionalDetection.NONE                | All fields are treated as required. This setting gets ignored in case it is used in combination with one of the others.                                                                                                         |
 
 Both options are active as default.
 
@@ -421,6 +421,9 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.5.0
+    * Support `javax.annotation.Nullable` (issue `#27`)
+    * Support checked exceptions for factory methods (issue `#16`)
 * 1.4.2
     * Fix arguments order for field builders (issue `#22`)
     * Remove redundant explicit `Object` type upper bound of generic parameters (issue `#9`)
@@ -441,9 +444,9 @@ public @interface AllRequiredPojoBuilder {
 * 0.13.0 - Add `@Ignore` annotation
 * 0.12.0
     * Drop support for `equals/hashCode` and `toString` method
-    * Allow to disable the default methods in SafeBuilder when defining custom methods
-    * Support varargs in custom SafeBuilder methods
-* 0.11.0 - Add `@FieldBuilder` annotation to create custom methods for the SafeBuilder
+    * Allow to disable the default methods in PojoBuilder when defining custom methods
+    * Support varargs in custom PojoBuilder methods
+* 0.11.0 - Add `@FieldBuilder` annotation to create custom methods for the PojoBuilder
 * 0.10.1 - Make the base class and the extension interface package private
 * 0.10.0
     * Add configurable prefix for the builder set methods
@@ -457,7 +460,7 @@ public @interface AllRequiredPojoBuilder {
 * 0.7.2 - Fix type conversion for annotated getter method for optional fields
 * 0.7.1 - Fix possible stackoverflow caused by circular annotation paths
 * 0.7.0
-    * SafeBuilder can be created as discrete class
+    * PojoBuilder can be created as discrete class
     * Improve meta annotation processing
     * Classname of the data class can be used to create custom builder or extension class names
 * 0.6.0
@@ -481,5 +484,5 @@ public @interface AllRequiredPojoBuilder {
 * 0.2.3 - Make the extension be extendable by the pojo itself
 * 0.2.2 - Support constructors with optional fields wrapped into `java.util.Optional`
 * 0.2.1 - Add support for primitives and arrays
-* 0.2.0 - Add SafeBuilder to the extension class
+* 0.2.0 - Add PojoBuilder to the extension class
 * 0.1.0 - Initial release, creates empty extension class
