@@ -13,6 +13,8 @@ import io.github.muehmar.pojobuilder.generator.model.FieldBuilderMethodBuilder;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
+import io.github.muehmar.pojobuilder.processor.mapper.ArgumentMapper;
+import io.github.muehmar.pojobuilder.processor.mapper.TypeMirrorMapper;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;

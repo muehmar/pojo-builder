@@ -8,6 +8,7 @@ import io.github.muehmar.pojobuilder.generator.model.Generics;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
+import io.github.muehmar.pojobuilder.processor.mapper.TypeMirrorMapper;
 import java.util.List;
 import javax.lang.model.element.TypeParameterElement;
 
