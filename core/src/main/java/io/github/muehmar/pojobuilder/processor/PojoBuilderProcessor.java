@@ -25,6 +25,7 @@ import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.annotations.Nullable;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
+import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.PojoBuilderGenerator;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
@@ -100,6 +101,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
 
     processClassOrRecord(annotatedElements);
     processStaticMethod(annotatedElements);
+    processConstructor(annotatedElements);
 
     return false;
   }
@@ -125,12 +127,75 @@ public class PojoBuilderProcessor extends AbstractProcessor {
         .forEach(this::processExecutableElementAndPath);
   }
 
+  private void processConstructor(PList<? extends Element> annotatedElements) {
+    annotatedElements
+        .filter(this::isConstructor)
+        .filter(ExecutableElement.class::isInstance)
+        .map(ExecutableElement.class::cast)
+        .distinct(Object::toString)
+        .flatMapOptional(this::findAnnotationPath)
+        .forEach(this::processConstructorAndPath);
+  }
+
   private boolean isClassOrRecord(Element e) {
     return e.getKind().equals(ElementKind.CLASS) || e.getKind().name().equalsIgnoreCase("Record");
   }
 
   private boolean isMethod(Element element) {
     return element.getKind().equals(ElementKind.METHOD);
+  }
+
+  private boolean isConstructor(Element element) {
+    return element.getKind().equals(ElementKind.CONSTRUCTOR);
+  }
+
+  private void processConstructorAndPath(
+      ElementAndAnnotationPath<ExecutableElement> elementAndPath) {
+    final PojoSettings pojoSettings = extractSettingsFromAnnotationPath(elementAndPath.getPath());
+    final ExecutableElement constructorElement = elementAndPath.getElement();
+
+    final Element maybeClassElement = constructorElement.getEnclosingElement();
+    if (!(maybeClassElement instanceof TypeElement)) {
+      throw new PojoBuilderException(
+          String.format(
+              "Cannot process constructor %s because enclosing element is not a class or record!",
+              constructorElement.getSimpleName()));
+    }
+    final TypeElement classElement = (TypeElement) maybeClassElement;
+
+    final DetectionSettings detectionSettings =
+        new DetectionSettings(pojoSettings.getOptionalDetections());
+
+    final String fullClassName = classElement.toString();
+    final QualifiedClassname pojoClassname = ClassnameParser.parseThrowing(fullClassName);
+
+    final Constructor constructor =
+        ConstructorProcessor.processConstructor(pojoClassname.getSimpleName(), constructorElement);
+    final Generics generics =
+        TypeParameterProcessor.processTypeParameters(classElement.getTypeParameters());
+    final PList<FieldBuilder> fieldBuilders = FieldBuilderProcessor.process(classElement);
+    final Optional<BuildMethod> buildMethod = BuildMethodProcessor.process(classElement);
+
+    final PList<PojoField> fields =
+        PList.fromIter(constructorElement.getParameters())
+            .map(e -> convertToPojoField(e, detectionSettings));
+
+    final Pojo pojo =
+        pojoBuilder()
+            .pojoClassname(pojoClassname)
+            .pojoNameWithTypeVariables(
+                pojoClassname.getName().append(generics.getTypeVariablesFormatted()))
+            .pkg(pojoClassname.getPkg())
+            .fields(fields)
+            .constructors(PList.single(constructor))
+            .generics(generics)
+            .fieldBuilders(fieldBuilders)
+            .andAllOptionals()
+            .factoryMethod(Optional.empty())
+            .buildMethod(buildMethod)
+            .build();
+
+    outputPojo(pojo, pojoSettings);
   }
 
   private boolean isStaticMethod(ExecutableElement executableElement) {
