@@ -13,7 +13,7 @@ class ConstructorAnnotationDataTest {
         ConstructorAnnotationDataBuilder.<String>constructorAnnotationDataBuilder()
             .name("name")
             .data("data")
-                .andAllOptionals()
+            .andAllOptionals()
             .age(Optional.of(42))
             .build();
 

@@ -7,6 +7,7 @@ import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
+import io.github.muehmar.pojobuilder.processor.mapper.TypeMirrorMapper;
 import java.util.List;
 import java.util.Optional;
 import javax.lang.model.element.Element;

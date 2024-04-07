@@ -8,6 +8,7 @@ import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Classname;
 import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
+import io.github.muehmar.pojobuilder.processor.writer.PojoWriter;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.Value;
@@ -30,9 +31,9 @@ public abstract class BaseExtensionProcessorTest {
   protected static PojoAndSettings runAnnotationProcessor(
       QualifiedClassname classname, String content) {
     final AtomicReference<PojoAndSettings> ref = new AtomicReference<>();
-    final PojoBuilderProcessor pojoBuilderProcessor =
-        new PojoBuilderProcessor(
-            ((pojo, settings) -> ref.set(new PojoAndSettings(pojo, settings))));
+    final PojoWriter pojoWriter =
+        PojoWriter.redirectWriter((pojo, settings) -> ref.set(new PojoAndSettings(pojo, settings)));
+    final PojoBuilderProcessor pojoBuilderProcessor = new PojoBuilderProcessor(pojoWriter);
 
     try {
       Reflect.compile(

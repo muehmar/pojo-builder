@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.processor;
+package io.github.muehmar.pojobuilder.processor.mapper;
 
 import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.type.TypeKind.BYTE;

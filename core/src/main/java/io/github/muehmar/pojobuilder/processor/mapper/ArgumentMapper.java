@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.processor;
+package io.github.muehmar.pojobuilder.processor.mapper;
 
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.Name;

@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.processor;
+package io.github.muehmar.pojobuilder.processor.mapper;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Optionals;
@@ -13,7 +13,7 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 
-public class AnnotationMemberExtractor {
+public class AnnotationMemberMapper {
 
   public static final String OPTIONAL_DETECTION = "optionalDetection";
   public static final String PACKAGE_PRIVATE_BUILDER = "packagePrivateBuilder";
@@ -24,7 +24,7 @@ public class AnnotationMemberExtractor {
   public static final String ENABLE_STANDARD_BUILDER = "enableStandardBuilder";
   public static final String INCLUDE_OUTER_CLASS_NAME = "includeOuterClassName";
 
-  private AnnotationMemberExtractor() {}
+  private AnnotationMemberMapper() {}
 
   public static Optional<PList<OptionalDetection>> getOptionalDetection(
       AnnotationMirror annotationMirror) {
