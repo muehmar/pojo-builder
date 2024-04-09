@@ -14,8 +14,8 @@ public @interface PojoBuilder {
   };
 
   /**
-   * Override the default name which is used for the discrete builder class. `{CLASSNAME}` gets by
-   * the classname of the annotated class.
+   * Override the default name which is used for the discrete builder class. `{CLASSNAME}` gets
+   * replaced by the classname of the annotated class.
    */
   String builderName() default "{CLASSNAME}Builder";
 
