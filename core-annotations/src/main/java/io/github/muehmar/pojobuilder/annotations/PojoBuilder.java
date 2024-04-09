@@ -13,6 +13,9 @@ public @interface PojoBuilder {
     OptionalDetection.OPTIONAL_CLASS, OptionalDetection.NULLABLE_ANNOTATION
   };
 
+  /** Defines how a constructor is selected and used by the builder to instantiate a pojo. */
+  ConstructorMatching constructorMatching() default ConstructorMatching.TYPE;
+
   /**
    * Override the default name which is used for the discrete builder class. `{CLASSNAME}` gets
    * replaced by the classname of the annotated class.
