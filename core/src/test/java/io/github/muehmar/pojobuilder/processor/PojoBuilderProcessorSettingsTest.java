@@ -3,6 +3,7 @@ package io.github.muehmar.pojobuilder.processor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.ConstructorMatching;
 import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
@@ -181,6 +182,28 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     assertEquals(
         PojoSettings.defaultSettings().withIncludeOuterClassName(false),
+        pojoAndSettings.getSettings());
+  }
+
+  @Test
+  void run_when_pojoBuilderAnnotationWithConstructorMatchingNameAndType_then_correctSettings() {
+    final QualifiedClassname pojoClassname = randomPojoClassname();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotationEnumParam(
+                PojoBuilder.class,
+                "constructorMatching",
+                ConstructorMatching.class,
+                ConstructorMatching.TYPE_AND_NAME)
+            .className(pojoClassname.getName())
+            .create();
+
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
+
+    assertEquals(
+        PojoSettings.defaultSettings().withConstructorMatching(ConstructorMatching.TYPE_AND_NAME),
         pojoAndSettings.getSettings());
   }
 }

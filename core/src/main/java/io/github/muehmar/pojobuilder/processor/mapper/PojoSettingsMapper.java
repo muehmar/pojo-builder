@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.processor.mapper;
 
 import static io.github.muehmar.pojobuilder.processor.mapper.AnnotationMemberMapper.getBuilderName;
 import static io.github.muehmar.pojobuilder.processor.mapper.AnnotationMemberMapper.getBuilderSetMethodPrefix;
+import static io.github.muehmar.pojobuilder.processor.mapper.AnnotationMemberMapper.getConstructorMatching;
 import static io.github.muehmar.pojobuilder.processor.mapper.AnnotationMemberMapper.getEnableFullBuilder;
 import static io.github.muehmar.pojobuilder.processor.mapper.AnnotationMemberMapper.getEnableStandardBuilder;
 import static io.github.muehmar.pojobuilder.processor.mapper.AnnotationMemberMapper.getFullBuilderFieldOrder;
@@ -40,6 +41,7 @@ public class PojoSettingsMapper {
       AnnotationMirror annotation, PojoSettings currentSettings) {
     return currentSettings
         .overrideOptionalDetection(getOptionalDetection(annotation))
+        .overrideConstructorMatching(getConstructorMatching(annotation))
         .overrideBuilderName(
             getBuilderName(annotation)
                 .map(String::trim)

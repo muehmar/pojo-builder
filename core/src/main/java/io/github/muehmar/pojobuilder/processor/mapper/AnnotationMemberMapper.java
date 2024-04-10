@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.processor.mapper;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Optionals;
+import io.github.muehmar.pojobuilder.annotations.ConstructorMatching;
 import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class AnnotationMemberMapper {
   public static final String ENABLE_FULL_BUILDER = "enableFullBuilder";
   public static final String ENABLE_STANDARD_BUILDER = "enableStandardBuilder";
   public static final String INCLUDE_OUTER_CLASS_NAME = "includeOuterClassName";
+  public static final String CONSTRUCTOR_MATCHING = "constructorMatching";
 
   private AnnotationMemberMapper() {}
 
@@ -75,6 +77,17 @@ public class AnnotationMemberMapper {
             FULL_BUILDER_FIELD_ORDER,
             o ->
                 FullBuilderFieldOrder.fromString(o.toString())
+                    .orElseThrow(IllegalArgumentException::new)));
+  }
+
+  public static Optional<ConstructorMatching> getConstructorMatching(
+      AnnotationMirror annotationMirror) {
+    return getMember(
+        annotationMirror,
+        new ExtensionMember<>(
+            CONSTRUCTOR_MATCHING,
+            o ->
+                ConstructorMatching.fromString(o.toString())
                     .orElseThrow(IllegalArgumentException::new)));
   }
 
