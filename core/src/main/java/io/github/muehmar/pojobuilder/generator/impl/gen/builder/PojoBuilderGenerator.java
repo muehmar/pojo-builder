@@ -79,7 +79,7 @@ public class PojoBuilderGenerator {
   }
 
   private static Generator<Pojo, PojoSettings> standardBuilderFactoryMethod(
-      BiFunction<Pojo, PojoSettings, String> methodName) {
+      BiFunction<Pojo, PojoSettings, Object> methodName) {
     final Function<Pojo, Object> returnType = p -> "Builder0" + p.getTypeVariablesFormatted();
     final Function<Pojo, String> content =
         p ->
@@ -101,7 +101,7 @@ public class PojoBuilderGenerator {
   }
 
   private static Generator<Pojo, PojoSettings> fullBuilderFactoryMethod(
-      BiFunction<Pojo, PojoSettings, String> methodName) {
+      BiFunction<Pojo, PojoSettings, Object> methodName) {
     final Function<Pojo, Object> returnType = p -> "FullBuilder0" + p.getTypeVariablesFormatted();
     final Function<Pojo, String> content =
         p ->
