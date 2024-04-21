@@ -15,6 +15,7 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.Strings;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import javax.lang.model.element.AnnotationMirror;
 
@@ -41,7 +42,8 @@ public class PojoSettingsMapper {
       AnnotationMirror annotation, PojoSettings currentSettings) {
     return currentSettings
         .overrideOptionalDetection(getOptionalDetection(annotation))
-        .overrideConstructorMatching(getConstructorMatching(annotation))
+        .overrideFieldMatching(
+            getConstructorMatching(annotation).map(FieldMatching::fromConstructorMatching))
         .overrideBuilderName(
             getBuilderName(annotation)
                 .map(String::trim)

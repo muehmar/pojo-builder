@@ -9,6 +9,7 @@ import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import org.junit.jupiter.api.Test;
@@ -203,7 +204,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
     assertEquals(
-        PojoSettings.defaultSettings().withConstructorMatching(ConstructorMatching.TYPE_AND_NAME),
+        PojoSettings.defaultSettings().withFieldMatching(FieldMatching.TYPE_AND_NAME),
         pojoAndSettings.getSettings());
   }
 }

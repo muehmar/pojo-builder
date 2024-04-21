@@ -3,7 +3,6 @@ package io.github.muehmar.pojobuilder.generator.model.settings;
 import static java.util.Optional.empty;
 
 import ch.bluecare.commons.data.PList;
-import io.github.muehmar.pojobuilder.annotations.ConstructorMatching;
 import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
@@ -28,7 +27,7 @@ public class PojoSettings {
   boolean fullBuilderEnabled;
   FullBuilderFieldOrder fullBuilderFieldOrder;
   boolean includeOuterClassName;
-  ConstructorMatching constructorMatching;
+  FieldMatching fieldMatching;
 
   public static PojoSettings defaultSettings() {
     return PojoSettingsBuilder.create()
@@ -39,7 +38,7 @@ public class PojoSettings {
         .fullBuilderEnabled(true)
         .fullBuilderFieldOrder(FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST)
         .includeOuterClassName(true)
-        .constructorMatching(ConstructorMatching.TYPE)
+        .fieldMatching(FieldMatching.TYPE)
         .andAllOptionals()
         .builderName(Optional.of(CLASS_NAME_PLACEHOLDER.append(BUILDER_CLASS_POSTFIX)))
         .builderSetMethodPrefix(empty())
@@ -80,9 +79,8 @@ public class PojoSettings {
     return optionalDetections.map(this::withOptionalDetections).orElse(this);
   }
 
-  public PojoSettings overrideConstructorMatching(
-      Optional<ConstructorMatching> constructorMatching) {
-    return constructorMatching.map(this::withConstructorMatching).orElse(this);
+  public PojoSettings overrideFieldMatching(Optional<FieldMatching> fieldMatching) {
+    return fieldMatching.map(this::withFieldMatching).orElse(this);
   }
 
   public PojoSettings overrideBuilderName(Optional<Name> builderName) {
