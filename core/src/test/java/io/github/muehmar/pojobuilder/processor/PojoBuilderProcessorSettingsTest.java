@@ -3,11 +3,13 @@ package io.github.muehmar.pojobuilder.processor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.pojobuilder.annotations.ConstructorMatching;
 import io.github.muehmar.pojobuilder.annotations.FullBuilderFieldOrder;
 import io.github.muehmar.pojobuilder.annotations.OptionalDetection;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.ClassAccessLevelModifier;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import org.junit.jupiter.api.Test;
@@ -181,6 +183,28 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     assertEquals(
         PojoSettings.defaultSettings().withIncludeOuterClassName(false),
+        pojoAndSettings.getSettings());
+  }
+
+  @Test
+  void run_when_pojoBuilderAnnotationWithConstructorMatchingNameAndType_then_correctSettings() {
+    final QualifiedClassname pojoClassname = randomPojoClassname();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotationEnumParam(
+                PojoBuilder.class,
+                "constructorMatching",
+                ConstructorMatching.class,
+                ConstructorMatching.TYPE_AND_NAME)
+            .className(pojoClassname.getName())
+            .create();
+
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
+
+    assertEquals(
+        PojoSettings.defaultSettings().withFieldMatching(FieldMatching.TYPE_AND_NAME),
         pojoAndSettings.getSettings());
   }
 }

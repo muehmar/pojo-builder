@@ -1,0 +1,30 @@
+nonMatchingForSamplePojo[TYPE]=[
+No matching constructor found for class/record io.github.muehmar.Customer.
+The class/record io.github.muehmar.Customer needs a constructor which is:
+  * Accessible from within the same package, i.e. at least package-private
+  * Has the following 3 arguments in the same order:
+    * Argument with type Integer
+    * Argument with type String
+    * Argument with type String or Optional<String>
+
+The following accessible constructors are found but do not match:
+  * Customer(Integer id, String username, String nickname, Optional<Integer> id)
+    * Mismatch reason: Field does not match name
+    * Mismatch reason: Field does not match type
+]
+
+
+nonMatchingForSamplePojo[TYPE_AND_NAME]=[
+No matching constructor found for class/record io.github.muehmar.Customer.
+The class/record io.github.muehmar.Customer needs a constructor which is:
+  * Accessible from within the same package, i.e. at least package-private
+  * Has the following 3 arguments in the same order:
+    * Argument named id with type Integer
+    * Argument named username with type String
+    * Argument named nickname with type String or Optional<String>
+
+The following accessible constructors are found but do not match:
+  * Customer(Integer id, String username, String nickname, Optional<Integer> id)
+    * Mismatch reason: Field does not match name
+    * Mismatch reason: Field does not match type
+]

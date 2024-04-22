@@ -5,9 +5,9 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OP
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
-import io.github.muehmar.pojobuilder.generator.model.FieldArgument;
-import io.github.muehmar.pojobuilder.generator.model.MatchingConstructor;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
+import io.github.muehmar.pojobuilder.generator.model.matching.FieldArgument;
+import io.github.muehmar.pojobuilder.generator.model.matching.MatchingConstructor;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import java.util.Optional;
 import lombok.Value;
@@ -24,8 +24,10 @@ public class ConstructorCallGenerator {
     return Generator.<Pojo, PojoSettings>emptyGen()
         .append(
             constructorCallForFields(),
-            pojo -> {
-              final MatchingConstructor matchingConstructor = pojo.getMatchingConstructorOrThrow();
+            (pojo, settings) -> {
+              final MatchingConstructor matchingConstructor =
+                  pojo.findMatchingConstructor(settings.getFieldMatching())
+                      .getFirstMatchingConstructorOrThrow(pojo, settings.getFieldMatching());
               final PList<FieldArgument> fieldArguments = matchingConstructor.getFieldArguments();
               return new ConstructorCall(pojo, fieldArguments, matchingConstructor);
             })

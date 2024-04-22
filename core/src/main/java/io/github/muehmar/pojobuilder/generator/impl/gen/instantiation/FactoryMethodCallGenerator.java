@@ -5,8 +5,9 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OP
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
-import io.github.muehmar.pojobuilder.generator.model.FieldArgument;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
+import io.github.muehmar.pojobuilder.generator.model.matching.FieldArgument;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import java.util.Optional;
 import lombok.Value;
@@ -24,7 +25,8 @@ public class FactoryMethodCallGenerator {
     return pojo.getFactoryMethod()
         .flatMap(
             factoryMethod ->
-                pojo.matchArguments(factoryMethod.getArguments())
+                pojo.matchArguments(factoryMethod.getArguments(), FieldMatching.TYPE)
+                    .getFieldArguments()
                     .map(
                         fieldArguments ->
                             new FactoryMethodCall(pojo, factoryMethod, fieldArguments)));

@@ -4,6 +4,10 @@ import static io.github.muehmar.pojobuilder.Booleans.not;
 
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
+import io.github.muehmar.pojobuilder.generator.model.matching.FieldArgument;
+import io.github.muehmar.pojobuilder.generator.model.matching.MismatchReason;
+import io.github.muehmar.pojobuilder.generator.model.matching.SingleArgumentMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
@@ -56,6 +60,23 @@ public class PojoField {
     return necessity
         .onRequired(() -> assertRequiredType(pojoName, method))
         .onOptional(() -> assertOptionalType(pojoName, method));
+  }
+
+  public SingleArgumentMatchingResult match(Argument argument, FieldMatching fieldMatching) {
+    if (fieldMatching.equals(FieldMatching.TYPE_AND_NAME)
+        && not(argument.getName().equals(this.getName()))) {
+      return SingleArgumentMatchingResult.fromMismatchReason(
+          MismatchReason.nonMatchingName(this, argument));
+    }
+
+    return argument
+        .getRelationFromField(this)
+        .map(relation -> new FieldArgument(this, argument, relation))
+        .map(SingleArgumentMatchingResult::fromFieldArgument)
+        .orElseGet(
+            () ->
+                SingleArgumentMatchingResult.fromMismatchReason(
+                    MismatchReason.nonMatchingArgumentType(this, argument)));
   }
 
   private boolean assertRequiredType(Name pojoName, FieldBuilderMethod method) {

@@ -9,9 +9,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.github.muehmar.pojobuilder.FieldBuilderMethods;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.PojoFields;
+import io.github.muehmar.pojobuilder.generator.model.matching.FieldArgument;
+import io.github.muehmar.pojobuilder.generator.model.matching.SingleArgumentMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PojoFieldTest {
 
@@ -127,5 +134,54 @@ class PojoFieldTest {
             .withReturnType(Types.optional(field.getType()));
 
     assertTrue(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+  }
+
+  @ParameterizedTest
+  @EnumSource(FieldMatching.class)
+  void match_when_typeDoesNotMatch_then_doesNotMatchIndependentOfFieldMatching(
+      FieldMatching fieldMatching) {
+    final PojoField pojoField = PojoFields.requiredId();
+    final Argument argument = new Argument(pojoField.getName(), Types.string());
+
+    final SingleArgumentMatchingResult result = pojoField.match(argument, fieldMatching);
+
+    assertEquals(Optional.empty(), result.getFieldArgument());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"id", "id_"})
+  void match_when_fieldMatchingOnlyType_then_matchesIndependentOfTheName(String name) {
+    final PojoField pojoField = PojoFields.requiredId();
+    final Argument argument = new Argument(Name.fromString(name), pojoField.getType());
+
+    final SingleArgumentMatchingResult result = pojoField.match(argument, FieldMatching.TYPE);
+
+    final FieldArgument expectedFieldArgument =
+        new FieldArgument(pojoField, argument, OptionalFieldRelation.SAME_TYPE);
+    assertEquals(Optional.of(expectedFieldArgument), result.getFieldArgument());
+  }
+
+  @Test
+  void match_when_fieldMatchingTypeAndName_then_doesNotMatchForDifferentName() {
+    final PojoField pojoField = PojoFields.requiredId();
+    final Argument argument = new Argument(Name.fromString("id_"), pojoField.getType());
+
+    final SingleArgumentMatchingResult result =
+        pojoField.match(argument, FieldMatching.TYPE_AND_NAME);
+
+    assertEquals(Optional.empty(), result.getFieldArgument());
+  }
+
+  @Test
+  void match_when_fieldMatchingTypeAndName_then_doesMatchForSameName() {
+    final PojoField pojoField = PojoFields.requiredId();
+    final Argument argument = new Argument(pojoField.getName(), pojoField.getType());
+
+    final SingleArgumentMatchingResult result =
+        pojoField.match(argument, FieldMatching.TYPE_AND_NAME);
+
+    final FieldArgument expectedFieldArgument =
+        new FieldArgument(pojoField, argument, OptionalFieldRelation.SAME_TYPE);
+    assertEquals(Optional.of(expectedFieldArgument), result.getFieldArgument());
   }
 }

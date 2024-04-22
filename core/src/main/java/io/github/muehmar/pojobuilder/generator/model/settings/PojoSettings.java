@@ -27,6 +27,7 @@ public class PojoSettings {
   boolean fullBuilderEnabled;
   FullBuilderFieldOrder fullBuilderFieldOrder;
   boolean includeOuterClassName;
+  FieldMatching fieldMatching;
 
   public static PojoSettings defaultSettings() {
     return PojoSettingsBuilder.create()
@@ -37,6 +38,7 @@ public class PojoSettings {
         .fullBuilderEnabled(true)
         .fullBuilderFieldOrder(FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST)
         .includeOuterClassName(true)
+        .fieldMatching(FieldMatching.TYPE)
         .andAllOptionals()
         .builderName(Optional.of(CLASS_NAME_PLACEHOLDER.append(BUILDER_CLASS_POSTFIX)))
         .builderSetMethodPrefix(empty())
@@ -75,6 +77,10 @@ public class PojoSettings {
   public PojoSettings overrideOptionalDetection(
       Optional<PList<OptionalDetection>> optionalDetections) {
     return optionalDetections.map(this::withOptionalDetections).orElse(this);
+  }
+
+  public PojoSettings overrideFieldMatching(Optional<FieldMatching> fieldMatching) {
+    return fieldMatching.map(this::withFieldMatching).orElse(this);
   }
 
   public PojoSettings overrideBuilderName(Optional<Name> builderName) {

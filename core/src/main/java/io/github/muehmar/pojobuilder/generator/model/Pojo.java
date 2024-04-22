@@ -2,7 +2,13 @@ package io.github.muehmar.pojobuilder.generator.model;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
-import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
+import io.github.muehmar.pojobuilder.generator.model.matching.ArgumentsMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.matching.ConstructorMatchingResults;
+import io.github.muehmar.pojobuilder.generator.model.matching.MatchingConstructor;
+import io.github.muehmar.pojobuilder.generator.model.matching.MismatchReason;
+import io.github.muehmar.pojobuilder.generator.model.matching.SingleArgumentMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.matching.SingleConstructorMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import java.util.Optional;
 import lombok.Value;
@@ -57,42 +63,39 @@ public class Pojo {
     return pojoNameWithTypeVariables;
   }
 
-  public Optional<MatchingConstructor> findMatchingConstructor() {
-    return constructors
-        .flatMapOptional(
-            c -> matchArguments(c.getArguments()).map(f -> new MatchingConstructor(c, f)))
-        .headOption();
+  public ConstructorMatchingResults findMatchingConstructor(FieldMatching fieldMatching) {
+    final PList<SingleConstructorMatchingResult> constructorMatchingResults =
+        constructors.map(
+            constructor ->
+                matchArguments(constructor.getArguments(), fieldMatching)
+                    .fold(
+                        fieldArguments ->
+                            SingleConstructorMatchingResult.ofMatchingConstructor(
+                                new MatchingConstructor(constructor, fieldArguments)),
+                        mismatchReasons ->
+                            SingleConstructorMatchingResult.ofMismatchReasons(
+                                constructor, mismatchReasons)));
+    return new ConstructorMatchingResults(constructorMatchingResults);
   }
 
-  public MatchingConstructor getMatchingConstructorOrThrow() {
-    return findMatchingConstructor()
-        .orElseThrow(() -> new PojoBuilderException(noMatchingConstructorMessage()));
-  }
-
-  /**
-   * Matches a list of arguments against the fields and returns the matched {@link FieldArgument}'s
-   * if they match completely.
-   */
-  public Optional<PList<FieldArgument>> matchArguments(PList<Argument> arguments) {
+  public ArgumentsMatchingResult matchArguments(
+      PList<Argument> arguments, FieldMatching fieldMatching) {
     if (fields.size() != arguments.size()) {
-      return Optional.empty();
+      return ArgumentsMatchingResult.fromSingleArgumentMatchingResult(
+          SingleArgumentMatchingResult.fromMismatchReason(
+              MismatchReason.nonMatchingArgumentCount(this, arguments)));
     }
 
-    final PList<FieldArgument> fieldArguments =
+    final PList<SingleArgumentMatchingResult> matchingResults =
         fields
             .zip(arguments)
-            .flatMapOptional(p -> FieldArgument.fromFieldAndArgument(p.first(), p.second()));
+            .map(
+                p -> {
+                  final PojoField pojoField = p.first();
+                  final Argument argument = p.second();
+                  return pojoField.match(argument, fieldMatching);
+                });
 
-    return Optional.of(fieldArguments).filter(f -> f.size() == arguments.size());
-  }
-
-  private String noMatchingConstructorMessage() {
-    return String.format(
-        "No matching constructor found for class/record %s."
-            + " A constructor should have all the fields as arguments in the order of declaration and matching type,"
-            + " where the actual type of a non-required field can be wrapped into an java.util.Optional. Furthermore"
-            + "it should be accessible from within the same package, i.e. at least package-private. If a field is"
-            + "instantiated in the constructor and not part of the arguments, you can annotate it with @Ignore.",
-        getPojoClassname());
+    return new ArgumentsMatchingResult(matchingResults);
   }
 }

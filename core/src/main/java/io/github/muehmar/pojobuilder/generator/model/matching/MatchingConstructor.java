@@ -1,7 +1,8 @@
-package io.github.muehmar.pojobuilder.generator.model;
+package io.github.muehmar.pojobuilder.generator.model.matching;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
+import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import lombok.Value;
 
 @Value

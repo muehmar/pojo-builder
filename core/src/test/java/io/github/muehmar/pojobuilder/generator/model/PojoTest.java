@@ -7,12 +7,17 @@ import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.SAME_TYPE;
 import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.WRAP_INTO_OPTIONAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.Names;
 import io.github.muehmar.pojobuilder.generator.Pojos;
+import io.github.muehmar.pojobuilder.generator.model.matching.ArgumentsMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.matching.ConstructorMatchingResults;
+import io.github.muehmar.pojobuilder.generator.model.matching.FieldArgument;
+import io.github.muehmar.pojobuilder.generator.model.matching.MatchingConstructor;
+import io.github.muehmar.pojobuilder.generator.model.matching.MatchingConstructorBuilder;
+import io.github.muehmar.pojobuilder.generator.model.matching.SingleArgumentMatchingResult;
+import io.github.muehmar.pojobuilder.generator.model.settings.FieldMatching;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 import java.util.Set;
@@ -34,27 +39,33 @@ class PojoTest {
             .fieldArguments(fieldArguments)
             .build();
 
-    final Optional<MatchingConstructor> matchingConstructor = pojo.findMatchingConstructor();
+    final ConstructorMatchingResults constructorMatchingResults =
+        pojo.findMatchingConstructor(FieldMatching.TYPE);
 
-    assertTrue(matchingConstructor.isPresent());
-    assertEquals(expected, matchingConstructor.get());
+    final Optional<MatchingConstructor> matchingConstructor =
+        constructorMatchingResults.getFirstMatchingConstructor();
+    assertEquals(Optional.of(expected), matchingConstructor);
   }
 
   @Test
   void findMatchingConstructor_when_samplePojoWithoutConstructor_then_noMatchingConstructorFound() {
     final Pojo pojo = Pojos.sample().withConstructors(PList.empty());
-    final Optional<MatchingConstructor> matchingConstructor = pojo.findMatchingConstructor();
 
-    assertFalse(matchingConstructor.isPresent());
+    final ConstructorMatchingResults constructorMatchingResults =
+        pojo.findMatchingConstructor(FieldMatching.TYPE);
+
+    assertEquals(Optional.empty(), constructorMatchingResults.getFirstMatchingConstructor());
   }
 
   @Test
   void findMatchingConstructor_when_samplePojoAndOneRemovedField_then_noMatchingConstructorFound() {
     final Pojo p = Pojos.sample();
     final Pojo pojo = p.withFields(p.getFields().drop(1));
-    final Optional<MatchingConstructor> matchingConstructor = pojo.findMatchingConstructor();
 
-    assertFalse(matchingConstructor.isPresent());
+    final ConstructorMatchingResults constructorMatchingResults =
+        pojo.findMatchingConstructor(FieldMatching.TYPE);
+
+    assertEquals(Optional.empty(), constructorMatchingResults.getFirstMatchingConstructor());
   }
 
   @Test
@@ -62,9 +73,11 @@ class PojoTest {
       findMatchingConstructor_when_samplePojoAndReversedFieldOrder_then_noMatchingConstructorFound() {
     final Pojo p = Pojos.sample();
     final Pojo pojo = p.withFields(p.getFields().reverse());
-    final Optional<MatchingConstructor> matchingConstructor = pojo.findMatchingConstructor();
 
-    assertFalse(matchingConstructor.isPresent());
+    final ConstructorMatchingResults constructorMatchingResults =
+        pojo.findMatchingConstructor(FieldMatching.TYPE);
+
+    assertEquals(Optional.empty(), constructorMatchingResults.getFirstMatchingConstructor());
   }
 
   @Test
@@ -138,29 +151,52 @@ class PojoTest {
   }
 
   @Test
-  void matchFields_when_sameOrderAndSameTypes_then_doesMatchAndReturnSameFields() {
+  void matchArguments_when_orderAndTypesMatch_then_doesMatchAndReturnSameFields() {
     final PList<Argument> arguments =
         PList.of(
             new Argument(Names.id(), Types.string()), new Argument(Names.zip(), Types.integer()));
 
     final PList<PojoField> fields =
         PList.of(
-            new PojoField(Names.id(), Types.string(), REQUIRED),
-            new PojoField(Names.zip(), Types.integer(), OPTIONAL));
+            new PojoField(Names.id().append("_"), Types.string(), REQUIRED),
+            new PojoField(Names.zip().append("_"), Types.integer(), OPTIONAL));
 
     final Pojo pojo = Pojos.sample().withFields(fields);
 
     // method call
-    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+    final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    final PList<FieldArgument> expected =
-        fields.zip(arguments).map(p -> new FieldArgument(p.first(), p.second(), SAME_TYPE));
+    final PList<SingleArgumentMatchingResult> expectedResults =
+        fields
+            .zip(arguments)
+            .map(p -> new FieldArgument(p.first(), p.second(), SAME_TYPE))
+            .map(SingleArgumentMatchingResult::fromFieldArgument);
 
-    assertEquals(Optional.of(expected), result);
+    assertEquals(new ArgumentsMatchingResult(expectedResults), result);
   }
 
   @Test
-  void matchFields_when_sameTypesInWrongOrder_then_doesNotMatch() {
+  void matchArguments_when_orderAndTypesMatchButDifferentNameWhenMustMatch_then_doesNotMatch() {
+    final PList<Argument> arguments =
+        PList.of(
+            new Argument(Names.id(), Types.string()), new Argument(Names.zip(), Types.integer()));
+
+    final PList<PojoField> fields =
+        PList.of(
+            new PojoField(Names.id().append("_"), Types.string(), REQUIRED),
+            new PojoField(Names.zip().append("_"), Types.integer(), OPTIONAL));
+
+    final Pojo pojo = Pojos.sample().withFields(fields);
+
+    // method call
+    final ArgumentsMatchingResult result =
+        pojo.matchArguments(arguments, FieldMatching.TYPE_AND_NAME);
+
+    assertEquals(Optional.empty(), result.getFieldArguments());
+  }
+
+  @Test
+  void matchArguments_when_sameTypesInWrongOrder_then_doesNotMatch() {
     final PList<Argument> arguments =
         PList.of(
             new Argument(Names.id(), Types.string()), new Argument(Names.zip(), Types.integer()));
@@ -173,14 +209,14 @@ class PojoTest {
     final Pojo pojo = Pojos.sample().withFields(fields);
 
     // method call
-    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+    final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), result);
+    assertEquals(Optional.empty(), result.getFieldArguments());
   }
 
   @Test
   void
-      matchFields_when_sameTypesButOptionalFieldIsWrappedInOptional_then_doesMatchAndReturnSameFields() {
+      matchArguments_when_sameTypesButOptionalFieldIsWrappedInOptional_then_doesMatchAndReturnSameFields() {
     final PList<Argument> arguments =
         PList.of(
             new Argument(Names.id(), Types.string()),
@@ -194,7 +230,7 @@ class PojoTest {
     final Pojo pojo = Pojos.sample().withFields(fields);
 
     // method call
-    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+    final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
     final PList<FieldArgument> expected =
         fields
@@ -206,11 +242,11 @@ class PojoTest {
                         p.second(),
                         p.first().isRequired() ? SAME_TYPE : WRAP_INTO_OPTIONAL));
 
-    assertEquals(Optional.of(expected), result);
+    assertEquals(Optional.of(expected), result.getFieldArguments());
   }
 
   @Test
-  void matchFields_when_sameTypesButRequiredFieldIsWrappedInOptional_then_doesNotMatch() {
+  void matchArguments_when_sameTypesButRequiredFieldIsWrappedInOptional_then_doesNotMatch() {
     final PList<Argument> arguments =
         PList.of(
             new Argument(Names.id(), Types.optional(Types.string())),
@@ -224,13 +260,13 @@ class PojoTest {
     final Pojo pojo = Pojos.sample().withFields(fields);
 
     // method call
-    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+    final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), result);
+    assertEquals(Optional.empty(), result.getFieldArguments());
   }
 
   @Test
-  void matchFields_when_fieldsAndArgumentsHaveNotTheSameSize_then_doesNotMatch() {
+  void matchArguments_when_fieldsAndArgumentsHaveNotTheSameSize_then_doesNotMatch() {
     final PList<Argument> arguments =
         PList.of(
             new Argument(Names.id(), Types.string()),
@@ -241,8 +277,8 @@ class PojoTest {
     final Pojo pojo = Pojos.sample().withFields(fields);
 
     // method call
-    final Optional<PList<FieldArgument>> result = pojo.matchArguments(arguments);
+    final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), result);
+    assertEquals(Optional.empty(), result.getFieldArguments());
   }
 }
