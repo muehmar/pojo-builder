@@ -6,10 +6,10 @@
 Generates advanced builders for your immutable data classes or Java 16 records.
 
 The processor distinguishes between required and optional properties/fields in a class or record. The generated builder
-ensures during compile time, that all required properties are set, so you will no longer forgot to set a
-property which is needed. Also in case of refactoring, adding new required properties will fail the build
-for every usage of the builder until the new property is set for every object creation. This can also be achieved
-with the optional properties, i.e. one can force the initialization of all optional properties.
+ensures during compile time, that all required properties are set, so you will no longer forgot to set a property which
+is needed. Also in case of refactoring, adding new required properties will fail the build for every usage of the
+builder until the new property is set for every object creation. This can also be achieved with the optional properties,
+i.e. one can force the initialization of all optional properties.
 
 ## Usage
 
@@ -84,8 +84,8 @@ Currently, the generator does not support static methods throwing checked except
 
 ### Compile-Time safety
 
-The builder is implemented by creating a single builder class for each property, with a single method setting
-the corresponding property and returning the next builder for the next property. The `build`
+The builder is implemented by creating a single builder class for each property, with a single method setting the
+corresponding property and returning the next builder for the next property. The `build`
 method will only be present after each required property is set.
 
 For example, given the following class:
@@ -303,17 +303,15 @@ A custom build method must be static and can be package-private.
 A data class must provide a constructor with all fields as arguments. The builder is created in the same package as the
 class, therefore the constructor can be package private if needed.
 
-A record (Java 16) provides already a constructor and therefore satisfies all requirements
-automatically.
+A record (Java 16) provides already a constructor and therefore satisfies all requirements automatically.
 
 ### Constructor
 
 The constructor must accept all fields as arguments and in the same order of declaration. Depending
 on `constructorMatching`, either the types or types and names must match (
-see [Parameter constructoMatching](#parameter-constructormatching). The types of the optional fields can either be
-the actual type which may be nullable in case of absence or wrapped into a `java.util.Optional`. The annotation
-processor is smart enough to detect which case is used, there can also be a mix for the optional fields in case you
-really need it.
+see [Parameter constructoMatching](#parameter-constructormatching)). The types of the optional fields can either be the
+actual type which may be nullable in case of absence or wrapped into a `java.util.Optional`. The annotation processor is
+smart enough to detect which case is used, there can also be a mix for the optional fields in case you really need it.
 
 ```
 @PojoBuilder
