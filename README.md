@@ -5,9 +5,9 @@
 
 Generates advanced builders for your immutable data classes or Java 16 records.
 
-The processor distinguishes between required and optional properties/fields in a class or record. The generated builder 
+The processor distinguishes between required and optional properties/fields in a class or record. The generated builder
 ensures during compile time, that all required properties are set, so you will no longer forgot to set a
-property which is needed. Also in case of refactoring, adding new required properties will fail the build 
+property which is needed. Also in case of refactoring, adding new required properties will fail the build
 for every usage of the builder until the new property is set for every object creation. This can also be achieved
 with the optional properties, i.e. one can force the initialization of all optional properties.
 
@@ -62,8 +62,10 @@ public records Customer(
 ```
 
 ### Factory method annotation
-In case a class is not part of the source code (e.g. library or JDK) or a factory method contains a lot of arguments, 
+
+In case a class is not part of the source code (e.g. library or JDK) or a factory method contains a lot of arguments,
 one could also annotate a factory method:
+
 ```
 public class Factories {
 
@@ -73,6 +75,7 @@ public class Factories {
   }
 }
 ```
+
 The generator will create a builder with arguments in the same order of declaration and the argument name.
 
 Currently, the generator does not support static methods throwing checked exceptions.
@@ -80,6 +83,7 @@ Currently, the generator does not support static methods throwing checked except
 ## Features
 
 ### Compile-Time safety
+
 The builder is implemented by creating a single builder class for each property, with a single method setting
 the corresponding property and returning the next builder for the next property. The `build`
 method will only be present after each required property is set.
@@ -121,9 +125,9 @@ returned class after setting the name has again one single method `email()`. As 
 required property in this example the returned class for `email()` offers three methods:
 
 * `build()` As all required properties are set at that time, building the instance is allowed here.
-* `andOptionals()` Returns the well-known simple builder allowing one to set certain optional properties before creating the
-  instance. The builder is populated with all required properties but without the possibility to
-  change or delete them.
+* `andOptionals()` Returns the well-known simple builder allowing one to set certain optional properties before creating
+  the instance. The builder is populated with all required properties but without the possibility to change or delete
+  them.
 * `andAllOptionals()` Enforces one to set all optional properties in the same way as it is done for the required
   properties. The `build()` method will only be available after all optional properties have been set. This method is
   used in the example above, i.e. the compiler enforces one to set the `nickname` property too. This is especially
@@ -157,7 +161,9 @@ generation
     .setNickname("Dex")
     .build();
 ```
+
 or alternatively using the `customerBuilder()` method in `CustomerBuilder` which might be statically imported:
+
 ```
   customerBuilder()
     .setName("Dexter")
@@ -170,9 +176,11 @@ or alternatively using the `customerBuilder()` method in `CustomerBuilder` which
 The first character of the field name is automatically converted to uppercase if a prefix is used.
 
 ### Full builder
-The generator creates additionally to the described standard builder also a full builder, i.e. a builder which enforces 
-to set every property of a class. The generated builder class provides static factory methods (prefix with `full`) to 
+
+The generator creates additionally to the described standard builder also a full builder, i.e. a builder which enforces
+to set every property of a class. The generated builder class provides static factory methods (prefix with `full`) to
 create a full builder, with the `Customer` class this would look like:
+
 ```
   fullCustomerBuilder()
     .setName("Dexter")
@@ -180,9 +188,11 @@ create a full builder, with the `Customer` class this would look like:
     .setNickname("Dex")
     .build();
 ```
+
 There is no `andAllOptionals` method call after the last required field `email`.
 
 There are two options to choose the order of the fields used by the builder:
+
 * Declaration order: In this case, the builder uses the properties in the order they are declared in the class
 * Required fields first: This is the same order used in the standard builder, where required fields are used first.
 
@@ -290,19 +300,20 @@ A custom build method must be static and can be package-private.
 
 ## Requirements
 
-A data class must provide a constructor with all fields as arguments. The builder 
-is created in the same package as the class, therefore the constructor can be package
-private if needed.
+A data class must provide a constructor with all fields as arguments. The builder is created in the same package as the
+class, therefore the constructor can be package private if needed.
 
 A record (Java 16) provides already a constructor and therefore satisfies all requirements
 automatically.
 
 ### Constructor
 
-The constructor must accept all fields as arguments and in the same order of declaration. The types
-of the required fields must match exactly. The types of the optional fields can either be the actual type which may be
-nullable in case of absence or wrapped into a `java.util.Optional`. The annotation processor is smart enough to detect
-which case is used, there can also be a mix for the optional fields in case you really need it.
+The constructor must accept all fields as arguments and in the same order of declaration. Depending
+on `constructorMatching`, either the types or types and names must match (
+see [Parameter constructoMatching](#parameter-constructormatching). The types of the optional fields can either be
+the actual type which may be nullable in case of absence or wrapped into a `java.util.Optional`. The annotation
+processor is smart enough to detect which case is used, there can also be a mix for the optional fields in case you
+really need it.
 
 ```
 @PojoBuilder
@@ -349,7 +360,8 @@ The following annotations exists:
   which the custom method should be used.
 * `@Ignore` Used to mark a field which should get ignored by the processor. Used particularly for fields which are
   instantiated withing the constructor and not present as argument in the constructor.
-* `@Nullable` Used to denote optional fields which can be nullable in case of absence. Can also be used in factory methods.
+* `@Nullable` Used to denote optional fields which can be nullable in case of absence. Can also be used in factory
+  methods.
 * `@BuildMethod` Used to mark a method which is used to map the actual instance to another object used by the generated
   build method.
 
@@ -359,13 +371,14 @@ The `@PojoBuilder` annotation contains the following parameters.
 
 | Parameter                | Default value                         | Description                                                                                                                                                                                          |
 |--------------------------|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `optionalDetection`      | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next section for details.                                                                                           |
+| `optionalDetection`      | [OPTIONAL_CLASS, NULLABLE_ANNOTATION] | Defines how optional fields in data class are detected by the processor. See the next sections for details.                                                                                          |
+| `constructorMatching`    | TYPE                                  | Defines how a constructor must match the declared fields to be used to create instances. See next sections for details.                                                                              |
 | `builderName`            | "{CLASSNAME}Builder"                  | Allows to override the default name of the discrete builder. `{CLASSNAME}` gets replaced by the name of the data class. Ignored if `discreteBuilder` is false.                                       |
 | `builderSetMethodPrefix` | ""                                    | Prefix which is used for the setter methods of the builder.                                                                                                                                          |
 | `packagePrivateBuilder`  | false                                 | Generates a package-private builder which is only accessible from within the same package.                                                                                                           |
 | `enableStandardBuilder`  | true                                  | Allows to disable the generation of the standard builder.                                                                                                                                            |
 | `enableFullBuilder`      | true                                  | Allows to disable the generation of the full builder.                                                                                                                                                |
-| `fullBuilderFieldOrder`  | REQUIRED_FIELDS_FIRST                 | Defines the order of the fields in the full builder.                                                                                                                                                 |
+| `fullBuilderFieldOrder`  | REQUIRED_FIELDS_FIRST                 | Defines the order of the fields in the full builder. See next sections for details.                                                                                                                  |
 | `includeOuterClassName`  | true                                  | Uses the outer class name to create the builder name. E.g. a class `OuterClass.InnerClass` would create a builder `OuterClassInnerClassBuilder`. If disabled this would only be `InnerClassBuilder`. |
 
 #### Parameter `optionalDetection`
@@ -381,6 +394,20 @@ necessary:
 | OptionalDetection.NONE                | All fields are treated as required. This setting gets ignored in case it is used in combination with one of the others.                                                                                                         |
 
 Both options are active as default.
+
+#### Parameter `constructorMatching`
+
+Defines how the arguments of a constructor must match the declared fields. Currently, the arguments need to have the
+same order as the order of the declared fields.
+
+As mentioned, the actual types of the arguments of optional fields, may be wrapped into `java.util.Optional`.
+
+| ConstructorMatching               | Description                                                                                        |
+|-----------------------------------|----------------------------------------------------------------------------------------------------|
+| ConstructorMatching.TYPE          | Only the types of the arguments of the constructor need to match the types of the declared fields. |
+| ConstructorMatching.TYPE_AND_NAME | The types and names of the arguments of the constructor need to match the declared fields.         |
+
+With version 1.x, the default ìs `TYPE` but may change with a next major release.
 
 #### Parameter `fullBuilderFieldOrder`
 
@@ -421,6 +448,11 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.6.0
+    * Improve compile time safety by adding the possibility to check the argument names for used constructor (
+      issue `#32`)
+    * Improve error message in case no suitable constructor is found (issue `#29`)
+    * Add possibility to annotate the constructor of a pojo (issue `#26`)
 * 1.5.0
     * Support `javax.annotation.Nullable` (issue `#27`)
     * Support checked exceptions for factory methods (issue `#16`)
@@ -432,7 +464,7 @@ public @interface AllRequiredPojoBuilder {
 * 1.3.0 - Add annotation element to use only the inner class name for the builder (issue `#12`)
 * 1.2.0 - Add full builder (issue `#2`)
 * 1.1.0 - Add second factory method with the pojo name for static imports (issue `#7`)
-* 1.0.0 - Fork and Release of PojoBuilder 
+* 1.0.0 - Fork and Release of PojoBuilder
     * Remove the pojo extension generation
 * 0.15.1 - Fix import for nested classes (issue `#15`)
 * 0.15.0
