@@ -5,8 +5,10 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Filters.isFullBuilderEnabled;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Filters.isStandardBuilderEnabled;
 
+import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
+import io.github.muehmar.codegenerator.java.MethodGen.Argument;
 import io.github.muehmar.pojobuilder.generator.impl.gen.RefsGen;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -21,17 +23,29 @@ public class BuilderFactoryMethods {
 
   public static Generator<Pojo, PojoSettings> builderFactoryMethods() {
     return Generator.<Pojo, PojoSettings>emptyGen()
-        .append(standardBuilderFactoryMethod(BuilderType.STANDARD, NameOption.SHORT))
+        .append(method(BuilderType.STANDARD, NameOption.SHORT, GenericsOption.NO_GENERICS))
         .appendSingleBlankLine()
-        .append(standardBuilderFactoryMethod(BuilderType.STANDARD, NameOption.INCLUDE_CLASS_NAME))
+        .append(
+            method(BuilderType.STANDARD, NameOption.INCLUDE_CLASS_NAME, GenericsOption.NO_GENERICS))
         .appendSingleBlankLine()
-        .append(standardBuilderFactoryMethod(BuilderType.FULL, NameOption.SHORT))
+        .append(method(BuilderType.STANDARD, NameOption.SHORT, GenericsOption.WITH_GENERICS))
         .appendSingleBlankLine()
-        .append(standardBuilderFactoryMethod(BuilderType.FULL, NameOption.INCLUDE_CLASS_NAME));
+        .append(
+            method(
+                BuilderType.STANDARD, NameOption.INCLUDE_CLASS_NAME, GenericsOption.WITH_GENERICS))
+        .appendSingleBlankLine()
+        .append(method(BuilderType.FULL, NameOption.SHORT, GenericsOption.NO_GENERICS))
+        .appendSingleBlankLine()
+        .append(method(BuilderType.FULL, NameOption.INCLUDE_CLASS_NAME, GenericsOption.NO_GENERICS))
+        .appendSingleBlankLine()
+        .append(method(BuilderType.FULL, NameOption.SHORT, GenericsOption.WITH_GENERICS))
+        .appendSingleBlankLine()
+        .append(
+            method(BuilderType.FULL, NameOption.INCLUDE_CLASS_NAME, GenericsOption.WITH_GENERICS));
   }
 
-  private static Generator<Pojo, PojoSettings> standardBuilderFactoryMethod(
-      BuilderType builderType, NameOption nameOption) {
+  private static Generator<Pojo, PojoSettings> method(
+      BuilderType builderType, NameOption nameOption, GenericsOption genericsOption) {
     final Function<Pojo, Object> returnType =
         p -> builderType.typeUppercase + "Builder0" + p.getTypeVariablesFormatted();
     final Function<Pojo, String> content =
@@ -45,12 +59,12 @@ public class BuilderFactoryMethods {
             p -> p.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
         .returnType(returnType)
         .methodName((pojo, settings) -> nameOption.getMethodName(pojo, settings, builderType))
-        .noArguments()
+        .arguments(genericsOption::createArguments)
         .doesNotThrow()
         .content(content)
         .build()
         .append(RefsGen.genericRefs())
-        .filter(builderType.isEnabled());
+        .filter(builderType.isEnabled().and(genericsOption.isEnabled()));
   }
 
   private enum BuilderType {
@@ -98,5 +112,40 @@ public class BuilderFactoryMethods {
     };
 
     abstract String getMethodName(Pojo pojo, PojoSettings settings, BuilderType builderType);
+  }
+
+  private enum GenericsOption {
+    NO_GENERICS {
+      @Override
+      PList<Argument> createArguments(Pojo pojo, PojoSettings settings) {
+        return PList.empty();
+      }
+
+      @Override
+      BiPredicate<Pojo, PojoSettings> isEnabled() {
+        return (pojo, settings) -> true;
+      }
+    },
+    WITH_GENERICS {
+      @Override
+      PList<Argument> createArguments(Pojo pojo, PojoSettings settings) {
+        return pojo.getGenerics()
+            .asList()
+            .map(
+                generic ->
+                    new Argument(
+                        String.format("Class<%s>", generic.getTypeVariable()),
+                        String.format("classOf%s", generic.getTypeVariable())));
+      }
+
+      @Override
+      BiPredicate<Pojo, PojoSettings> isEnabled() {
+        return (pojo, settings) -> pojo.getGenerics().asList().nonEmpty();
+      }
+    };
+
+    abstract PList<Argument> createArguments(Pojo pojo, PojoSettings settings);
+
+    abstract BiPredicate<Pojo, PojoSettings> isEnabled();
   }
 }

@@ -52,4 +52,41 @@ class BuilderFactoryMethodsTest {
 
     expect.toMatchSnapshot(writerSnapshot(writer));
   }
+
+  @Test
+  @SnapshotName("genericSamplePojo")
+  void generate_when_genericSamplePojo_then_matchSnapshot() {
+    final Generator<Pojo, PojoSettings> generator = builderFactoryMethods();
+
+    final Writer writer =
+        generator.generate(Pojos.genericSample(), defaultSettings(), javaWriter());
+
+    expect.toMatchSnapshot(writerSnapshot(writer));
+  }
+
+  @Test
+  @SnapshotName("genericSamplePojoStandardBuilderDisabled")
+  void generate_when_genericSamplePojoStandardBuilderDisabled_then_matchSnapshot() {
+    final Generator<Pojo, PojoSettings> generator = builderFactoryMethods();
+
+    final Writer writer =
+        generator.generate(
+            Pojos.genericSample(),
+            defaultSettings().withStandardBuilderEnabled(false),
+            javaWriter());
+
+    expect.toMatchSnapshot(writerSnapshot(writer));
+  }
+
+  @Test
+  @SnapshotName("genericSamplePojoFullBuilderDisabled")
+  void generate_when_genericSamplePojoFullBuilderDisabled_then_matchSnapshot() {
+    final Generator<Pojo, PojoSettings> generator = builderFactoryMethods();
+
+    final Writer writer =
+        generator.generate(
+            Pojos.genericSample(), defaultSettings().withFullBuilderEnabled(false), javaWriter());
+
+    expect.toMatchSnapshot(writerSnapshot(writer));
+  }
 }
