@@ -12,7 +12,7 @@ import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 public class BuilderFactoryMethods {
@@ -21,62 +21,82 @@ public class BuilderFactoryMethods {
 
   public static Generator<Pojo, PojoSettings> builderFactoryMethods() {
     return Generator.<Pojo, PojoSettings>emptyGen()
-        .append(standardBuilderFactoryMethod((pojo, settings) -> "create"))
+        .append(standardBuilderFactoryMethod(BuilderType.STANDARD, NameOption.SHORT))
         .appendSingleBlankLine()
-        .append(
-            standardBuilderFactoryMethod(
-                (pojo, settings) ->
-                    String.format("%s", settings.builderName(pojo).startLowerCase())))
+        .append(standardBuilderFactoryMethod(BuilderType.STANDARD, NameOption.INCLUDE_CLASS_NAME))
         .appendSingleBlankLine()
-        .append(fullBuilderFactoryMethod((pojo, settings) -> "createFull"))
+        .append(standardBuilderFactoryMethod(BuilderType.FULL, NameOption.SHORT))
         .appendSingleBlankLine()
-        .append(
-            fullBuilderFactoryMethod(
-                (pojo, settings) ->
-                    String.format("full%s", settings.builderName(pojo).startUpperCase())));
+        .append(standardBuilderFactoryMethod(BuilderType.FULL, NameOption.INCLUDE_CLASS_NAME));
   }
 
   private static Generator<Pojo, PojoSettings> standardBuilderFactoryMethod(
-      BiFunction<Pojo, PojoSettings, Object> methodName) {
-    final Function<Pojo, Object> returnType = p -> "Builder0" + p.getTypeVariablesFormatted();
+      BuilderType builderType, NameOption nameOption) {
+    final Function<Pojo, Object> returnType =
+        p -> builderType.typeUppercase + "Builder0" + p.getTypeVariablesFormatted();
     final Function<Pojo, String> content =
         p ->
             String.format(
-                "return new Builder0%s(new Builder%s());",
-                p.getDiamond(), p.getTypeVariablesFormatted());
+                "return new %sBuilder0%s(new Builder%s());",
+                builderType.typeUppercase, p.getDiamond(), p.getTypeVariablesFormatted());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
         .genericTypes(
             p -> p.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
         .returnType(returnType)
-        .methodName(methodName)
+        .methodName((pojo, settings) -> nameOption.getMethodName(pojo, settings, builderType))
         .noArguments()
         .doesNotThrow()
         .content(content)
         .build()
         .append(RefsGen.genericRefs())
-        .filter(isStandardBuilderEnabled());
+        .filter(builderType.isEnabled());
   }
 
-  private static Generator<Pojo, PojoSettings> fullBuilderFactoryMethod(
-      BiFunction<Pojo, PojoSettings, Object> methodName) {
-    final Function<Pojo, Object> returnType = p -> "FullBuilder0" + p.getTypeVariablesFormatted();
-    final Function<Pojo, String> content =
-        p ->
-            String.format(
-                "return new FullBuilder0%s(new Builder%s());",
-                p.getDiamond(), p.getTypeVariablesFormatted());
-    return JavaGenerators.<Pojo, PojoSettings>methodGen()
-        .modifiers(PUBLIC, STATIC)
-        .genericTypes(
-            p -> p.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
-        .returnType(returnType)
-        .methodName(methodName)
-        .noArguments()
-        .doesNotThrow()
-        .content(content)
-        .build()
-        .append(RefsGen.genericRefs())
-        .filter(isFullBuilderEnabled());
+  private enum BuilderType {
+    STANDARD("", "") {
+      @Override
+      BiPredicate<Pojo, PojoSettings> isEnabled() {
+        return isStandardBuilderEnabled();
+      }
+    },
+    FULL("full", "Full") {
+      @Override
+      BiPredicate<Pojo, PojoSettings> isEnabled() {
+        return isFullBuilderEnabled();
+      }
+    };
+
+    private final String typeLowercase;
+    private final String typeUppercase;
+
+    BuilderType(String typeLowercase, String typeUppercase) {
+      this.typeLowercase = typeLowercase;
+      this.typeUppercase = typeUppercase;
+    }
+
+    abstract BiPredicate<Pojo, PojoSettings> isEnabled();
+  }
+
+  private enum NameOption {
+    SHORT {
+      @Override
+      String getMethodName(Pojo pojo, PojoSettings settings, BuilderType builderType) {
+        return String.format("create%s", builderType.typeUppercase);
+      }
+    },
+    INCLUDE_CLASS_NAME {
+      @Override
+      String getMethodName(Pojo pojo, PojoSettings settings, BuilderType builderType) {
+        return settings
+            .builderName(pojo)
+            .startUpperCase()
+            .prefix(builderType.typeLowercase)
+            .startLowerCase()
+            .asString();
+      }
+    };
+
+    abstract String getMethodName(Pojo pojo, PojoSettings settings, BuilderType builderType);
   }
 }

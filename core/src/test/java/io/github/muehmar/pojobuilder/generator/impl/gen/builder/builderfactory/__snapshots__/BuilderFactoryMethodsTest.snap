@@ -17,3 +17,31 @@ public static FullBuilder0 fullCustomerBuilder() {
   return new FullBuilder0(new Builder());
 }
 ]
+
+
+samplePojoFullBuilderDisabled=[
+.
+.
+public static Builder0 create() {
+  return new Builder0(new Builder());
+}
+
+public static Builder0 customerBuilder() {
+  return new Builder0(new Builder());
+}
+
+]
+
+
+samplePojoStandardBuilderDisabled=[
+.
+.
+
+public static FullBuilder0 createFull() {
+  return new FullBuilder0(new Builder());
+}
+
+public static FullBuilder0 fullCustomerBuilder() {
+  return new FullBuilder0(new Builder());
+}
+]
