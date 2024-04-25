@@ -12,7 +12,7 @@ dependencyResolutionManagement {
             library('pojobuilder-core', 'io.github.muehmar','pojo-builder').versionRef('pojobuilder')
             library('pojobuilder-annotations', 'io.github.muehmar','pojo-builder-annotations').versionRef('pojobuilder')
 
-            library('codeGenerator', 'io.github.muehmar:code-generator:0.21.0')
+            library('codeGenerator', 'io.github.muehmar:code-generator:0.22.0')
 
             version('junit', '5.10.0')
             library('junit-api', 'org.junit.jupiter', 'junit-jupiter-api').versionRef('junit')
