@@ -17,11 +17,27 @@ public final class CustomerBuilder {
     return new Builder0<>(new Builder<T, S>());
   }
 
+  public static <T extends List<String>, S> Builder0<T, S> create(Class<T> classOfT, Class<S> classOfS) {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
   public static <T extends List<String>, S> FullBuilder0<T, S> createFull() {
     return new FullBuilder0<>(new Builder<T, S>());
   }
 
   public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder() {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> createFull(Class<T> classOfT, Class<S> classOfS) {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
     return new FullBuilder0<>(new Builder<T, S>());
   }
 
@@ -206,6 +222,14 @@ public final class CustomerBuilder {
     return new Builder0<>(new Builder<T, S>());
   }
 
+  public static <T extends List<String>, S> Builder0<T, S> create(Class<T> classOfT, Class<S> classOfS) {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
+    return new Builder0<>(new Builder<T, S>());
+  }
+
   public static final class Builder<T extends List<String>, S> {
     private Builder() {
     }
@@ -333,6 +357,14 @@ public final class CustomerBuilder {
   }
 
   public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder() {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> createFull(Class<T> classOfT, Class<S> classOfS) {
+    return new FullBuilder0<>(new Builder<T, S>());
+  }
+
+  public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
     return new FullBuilder0<>(new Builder<T, S>());
   }
 

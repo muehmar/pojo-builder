@@ -80,6 +80,20 @@ The generator will create a builder with arguments in the same order of declarat
 
 Currently, the generator does not support static methods throwing checked exceptions.
 
+### Usage of the builder
+
+The created builder class provides a number of static factory methods to instantiate the builder. These methods can be
+used as follows:
+
+```
+final Customer dexter = CustomerBuilder.customerBuilder()
+  .name("Dexter")
+  .email("dexter@miami-metro.us")
+  .andAllOptionals()
+  .nickname("Dex")
+  .build();
+```
+
 ## Features
 
 ### Compile-Time safety
@@ -111,12 +125,12 @@ private final Optional<String> nickname;
 will lead to a builder which can be used like the following:
 
 ```
-  CustomerBuilder.create()
-    .name("Dexter")
-    .email("dexter@miami-metro.us")
-    .andAllOptionals()
-    .nickname("Dex")
-    .build();
+CustomerBuilder.customerBuilder()
+  .name("Dexter")
+  .email("dexter@miami-metro.us")
+  .andAllOptionals()
+  .nickname("Dex")
+  .build();
 ```
 
 This does not seem to be very different from the normal builder pattern at a first glance but calling `create()`
@@ -142,9 +156,9 @@ overloaded methods to add the optional properties. The property can be set direc
 example above, the builder provides methods with the following signature:
 
 ```
-  public Builder nickname(String nickname);
-  
-  public Builder nickname(Optional<String> nickname);
+public Builder nickname(String nickname);
+
+public Builder nickname(Optional<String> nickname);
 ```
 
 #### Prefix for the setter method
@@ -154,39 +168,39 @@ generation
 (see [Annotation Parameters](#annotation-parameters)):
 
 ```
-  CustomerBuilder.create()
-    .setName("Dexter")
-    .setEmail("dexter@miami-metro.us")
-    .andAllOptionals()
-    .setNickname("Dex")
-    .build();
+CustomerBuilder.create()
+  .setName("Dexter")
+  .setEmail("dexter@miami-metro.us")
+  .andAllOptionals()
+  .setNickname("Dex")
+  .build();
 ```
 
 or alternatively using the `customerBuilder()` method in `CustomerBuilder` which might be statically imported:
 
 ```
-  customerBuilder()
-    .setName("Dexter")
-    .setEmail("dexter@miami-metro.us")
-    .andAllOptionals()
-    .setNickname("Dex")
-    .build();
+customerBuilder()
+  .setName("Dexter")
+  .setEmail("dexter@miami-metro.us")
+  .andAllOptionals()
+  .setNickname("Dex")
+  .build();
 ```
 
 The first character of the field name is automatically converted to uppercase if a prefix is used.
 
 ### Full builder
 
-The generator creates additionally to the described standard builder also a full builder, i.e. a builder which enforces
-to set every property of a class. The generated builder class provides static factory methods (prefix with `full`) to
-create a full builder, with the `Customer` class this would look like:
+The generator creates additionally to the standard builder also a full builder, i.e. a builder which enforces to set
+every property (not only the required ones) of a class. The generated builder class provides static factory methods (
+prefix with `full`) to create a full builder, with the `Customer` class this would look like:
 
 ```
-  fullCustomerBuilder()
-    .setName("Dexter")
-    .setEmail("dexter@miami-metro.us")
-    .setNickname("Dex")
-    .build();
+fullCustomerBuilder()
+  .setName("Dexter")
+  .setEmail("dexter@miami-metro.us")
+  .setNickname("Dex")
+  .build();
 ```
 
 There is no `andAllOptionals` method call after the last required field `email`.
@@ -195,6 +209,62 @@ There are two options to choose the order of the fields used by the builder:
 
 * Declaration order: In this case, the builder uses the properties in the order they are declared in the class
 * Required fields first: This is the same order used in the standard builder, where required fields are used first.
+
+### Factory methods
+
+The builder provides for non-generic classes the following 4 factory methods:
+
+```
+// Instanties a standar builder
+public static Builder0 create();
+
+// Instanties a standard builder
+public static Builder0 customerBuilder();
+
+// Instanties a full builder
+public static FullBuilder0 createFull();
+
+// Instanties a full builder
+public static FullBuilder0 fullCustomerBuilder();
+```
+
+The short versions `create` and `createFull` can be used in case no static import of the factory method is done,
+e.g. `CustomerBuilder.create()` or `CustomerBuilder.createFull()` and the versions including the name of the pojo are
+intended to be used with static imports.
+
+#### Factory methods for generic classes
+
+If the builder is used for generic classes, all factory methods are overloaded with the class of the type parameter of
+the generic class.
+
+```
+// Instanties a standar builder for generic classes
+public <T> static Builder0<T> create(Class<T> classOfT);
+
+// Instanties a standard builder for generic classes
+public <T> static Builder0<T> customerBuilder(Class<T> classOfT);
+
+// Instanties a full builder for generic classes
+public <T> static FullBuilder0<T> createFull(Class<T> classOfT);
+
+// Instanties a full builder for generic classes
+public <T> static FullBuilder0<T> fullCustomerBuilder(Class<T> classOfT);
+```
+
+Such a method can be statically imported. The default methods cannot be statically imported since the java compiler is
+not able to infer the type arguments. Now the following
+
+```
+CustomerBuilder.<String>customerBuilder()
+```
+
+can be written as
+
+```
+customerBuilder(String.class)
+```
+
+if static imports are preferred.
 
 ### Custom methods for fields in PojoBuilder
 
@@ -446,6 +516,7 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.7.0 - Support static imports of factory methods for generic classes
 * 1.6.0
     * Improve compile time safety by adding the possibility to check the argument names for used constructor (
       issue `#32`)
