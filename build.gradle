@@ -17,7 +17,7 @@ allprojects {
     group = rootProject.ext.group
 }
 
-task build {
+tasks.register('build') {
     // Make the release plugin happy
 }
 
