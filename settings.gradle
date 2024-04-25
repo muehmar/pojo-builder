@@ -25,11 +25,14 @@ dependencyResolutionManagement {
             library('google-autoservice', 'com.google.auto.service:auto-service:1.1.1')
             library('joor', 'org.jooq:joor-java-8:0.9.15')
 
-            library('lombok', 'org.projectlombok:lombok:1.18.28')
+            library('lombok', 'org.projectlombok:lombok:1.18.32')
 
-            library('snapshotTesting','io.github.origin-energy:java-snapshot-testing-junit5:4.0.6')
+            library('snapshotTesting','io.github.origin-energy:java-snapshot-testing-junit5:4.0.8')
 
             library('slf4j', 'org.slf4j:slf4j-api:2.0.7')
+
+            plugin('release', 'net.researchgate.release').version('2.8.1')
+            plugin('versions', 'com.github.ben-manes.versions').version('0.51.0')
         }
     }
 }
