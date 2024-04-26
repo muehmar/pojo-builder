@@ -78,8 +78,6 @@ public class Factories {
 
 The generator will create a builder with arguments in the same order of declaration and the argument name.
 
-Currently, the generator does not support static methods throwing checked exceptions.
-
 ### Usage of the builder
 
 The created builder class provides a number of static factory methods to instantiate the builder. These methods can be
