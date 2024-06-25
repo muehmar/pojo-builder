@@ -1,12 +1,14 @@
 package io.github.muehmar.pojobuilder.processor;
 
 import static io.github.muehmar.pojobuilder.Booleans.not;
+import static io.github.muehmar.pojobuilder.generator.model.ConstructorBuilder.fullConstructorBuilder;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.processor.mapper.ArgumentMapper;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -37,6 +39,12 @@ public class ConstructorProcessor {
     final PList<Argument> arguments =
         PList.fromIter(constructor.getParameters()).map(ArgumentMapper::toArgument);
 
-    return new Constructor(constructorName, arguments);
+    final PList<QualifiedClassname> exceptions = ExceptionProcessor.process(constructor);
+
+    return fullConstructorBuilder()
+        .name(constructorName)
+        .arguments(arguments)
+        .exceptions(exceptions)
+        .build();
   }
 }

@@ -1,5 +1,5 @@
 genericSample=[
-public Customer<T, S> build() {
+public Customer<T, S> build() throws IOException {
   final Customer<T, S> instance =
       new Customer<T, S>(id, data, additionalData);
   return instance;
@@ -8,7 +8,7 @@ public Customer<T, S> build() {
 
 
 genericSampleAndBuildMethod=[
-public String build() {
+public String build() throws IOException {
   final Customer<T, S> instance =
       new Customer<T, S>(id, data, additionalData);
   return Customer.customBuildMethod(instance);
@@ -17,7 +17,7 @@ public String build() {
 
 
 sample=[
-public Customer build() {
+public Customer build() throws IOException {
   final Customer instance =
       new Customer(id, username, nickname);
   return instance;

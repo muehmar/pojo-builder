@@ -9,10 +9,13 @@ import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
 import io.github.muehmar.pojobuilder.generator.impl.gen.ThrowsGenerator;
 import io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.FactoryMethodCallGenerator;
+import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
+import io.github.muehmar.pojobuilder.generator.model.matching.MatchingConstructor;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import java.util.function.Function;
 
@@ -49,7 +52,17 @@ class BuildMethod {
         .append(
             ThrowsGenerator.throwsGenerator(),
             pojo ->
-                pojo.getFactoryMethod().map(FactoryMethod::getExceptions).orElseGet(PList::empty));
+                pojo.getFactoryMethod().map(FactoryMethod::getExceptions).orElseGet(PList::empty))
+        .append(ThrowsGenerator.throwsGenerator(), BuildMethod::getConstructorExceptionsFromPojo);
+  }
+
+  private static PList<QualifiedClassname> getConstructorExceptionsFromPojo(
+      Pojo pojo, PojoSettings settings) {
+    return pojo.findMatchingConstructor(settings.getFieldMatching())
+        .getFirstMatchingConstructor()
+        .map(MatchingConstructor::getConstructor)
+        .map(Constructor::getExceptions)
+        .orElseGet(PList::empty);
   }
 
   private static Generator<Pojo, PojoSettings> buildMethodContent() {

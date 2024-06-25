@@ -1,6 +1,7 @@
 genericPojo=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +70,7 @@ public final class CustomerBuilder {
       return this;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       final Customer<T, S> instance =
           new Customer<T, S>(id, data, additionalData);
       return instance;
@@ -115,7 +116,7 @@ public final class CustomerBuilder {
       return builder;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       return builder.build();
     }
   }
@@ -143,7 +144,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       return builder.build();
     }
   }
@@ -195,7 +196,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       return builder.build();
     }
   }
@@ -206,6 +207,7 @@ public final class CustomerBuilder {
 genericPojoFullBuilderDisabled=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -258,7 +260,7 @@ public final class CustomerBuilder {
       return this;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       final Customer<T, S> instance =
           new Customer<T, S>(id, data, additionalData);
       return instance;
@@ -304,7 +306,7 @@ public final class CustomerBuilder {
       return builder;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       return builder.build();
     }
   }
@@ -332,7 +334,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       return builder.build();
     }
   }
@@ -344,6 +346,7 @@ public final class CustomerBuilder {
 genericPojoStandardBuilderDisabled=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -396,7 +399,7 @@ public final class CustomerBuilder {
       return this;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       final Customer<T, S> instance =
           new Customer<T, S>(id, data, additionalData);
       return instance;
@@ -450,7 +453,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer<T, S> build() {
+    public Customer<T, S> build() throws IOException {
       return builder.build();
     }
   }
@@ -461,6 +464,7 @@ public final class CustomerBuilder {
 samplePojoAndDifferentAccessLevelModifiers[PACKAGE_PRIVATE]=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.Optional;
 
 final class CustomerBuilder {
@@ -512,7 +516,7 @@ final class CustomerBuilder {
       return this;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       final Customer instance =
           new Customer(id, username, nickname);
       return instance;
@@ -558,7 +562,7 @@ final class CustomerBuilder {
       return builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -586,7 +590,7 @@ final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -638,7 +642,7 @@ final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -649,6 +653,7 @@ final class CustomerBuilder {
 samplePojoAndDifferentAccessLevelModifiers[PUBLIC]=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public final class CustomerBuilder {
@@ -700,7 +705,7 @@ public final class CustomerBuilder {
       return this;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       final Customer instance =
           new Customer(id, username, nickname);
       return instance;
@@ -746,7 +751,7 @@ public final class CustomerBuilder {
       return builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -774,7 +779,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -826,7 +831,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -837,6 +842,7 @@ public final class CustomerBuilder {
 samplePojoFullBuilderDisabled=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public final class CustomerBuilder {
@@ -880,7 +886,7 @@ public final class CustomerBuilder {
       return this;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       final Customer instance =
           new Customer(id, username, nickname);
       return instance;
@@ -926,7 +932,7 @@ public final class CustomerBuilder {
       return builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -954,7 +960,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }
@@ -966,6 +972,7 @@ public final class CustomerBuilder {
 samplePojoStandardBuilderDisabled=[
 package io.github.muehmar;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public final class CustomerBuilder {
@@ -1009,7 +1016,7 @@ public final class CustomerBuilder {
       return this;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       final Customer instance =
           new Customer(id, username, nickname);
       return instance;
@@ -1063,7 +1070,7 @@ public final class CustomerBuilder {
       this.builder = builder;
     }
 
-    public Customer build() {
+    public Customer build() throws IOException {
       return builder.build();
     }
   }

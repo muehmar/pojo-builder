@@ -1,16 +1,16 @@
 calledWithGenericSample=[
-.
-.
-public Customer<T, S> build() {
+java.io.IOException
+
+public Customer<T, S> build() throws IOException {
   return builder.build();
 }
 ]
 
 
 calledWithGenericSampleWithCustomBuildMethod=[
-.
-.
-public String build() {
+java.io.IOException
+
+public String build() throws IOException {
   return builder.build();
 }
 ]

@@ -46,7 +46,7 @@ public static final class FullBuilder3 {
     this.builder = builder;
   }
 
-  public Customer build() {
+  public Customer build() throws IOException {
     return builder.build();
   }
 }
@@ -101,7 +101,7 @@ public static final class FullBuilder3<T extends List<String>, S> {
     this.builder = builder;
   }
 
-  public Customer<T, S> build() {
+  public Customer<T, S> build() throws IOException {
     return builder.build();
   }
 }
@@ -156,7 +156,7 @@ public static final class FullBuilder3 {
     this.builder = builder;
   }
 
-  public Customer build() {
+  public Customer build() throws IOException {
     return builder.build();
   }
 }

@@ -37,7 +37,8 @@ class ConstructorMatchingResultsTest {
                 samplePojoConstructor.getName(),
                 samplePojoConstructor
                     .getArguments()
-                    .add(new Argument(Names.id(), Types.optional(Types.integer())))),
+                    .add(new Argument(Names.id(), Types.optional(Types.integer()))),
+                PList.empty()),
             PList.of(
                 new MismatchReason("Field does not match name"),
                 new MismatchReason("Field does not match type")));
