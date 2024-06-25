@@ -16,6 +16,7 @@ public static final class OptBuilder1 {
 
 
 genericPojo=[
+java.io.IOException
 java.lang.String
 java.util.List
 
@@ -26,7 +27,7 @@ public static final class OptBuilder1<T extends List<String>, S> {
     this.builder = builder;
   }
 
-  public Customer<T, S> build() {
+  public Customer<T, S> build() throws IOException {
     return builder.build();
   }
 }
@@ -34,8 +35,8 @@ public static final class OptBuilder1<T extends List<String>, S> {
 
 
 samplePojo=[
-.
-.
+java.io.IOException
+
 public static final class OptBuilder1 {
   private final Builder builder;
 
@@ -43,7 +44,7 @@ public static final class OptBuilder1 {
     this.builder = builder;
   }
 
-  public Customer build() {
+  public Customer build() throws IOException {
     return builder.build();
   }
 }

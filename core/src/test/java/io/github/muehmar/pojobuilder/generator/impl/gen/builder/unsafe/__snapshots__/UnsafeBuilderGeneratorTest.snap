@@ -1,0 +1,83 @@
+io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGeneratorTest.builderClass_when_generatorUsedWithGenericSamplePojo_then_correctOutput=[
+java.io.IOException
+java.lang.String
+java.util.Optional
+
+public static final class Builder<T extends List<String>, S> {
+  private Builder() {
+  }
+
+  private String id;
+  private T data;
+  private S additionalData;
+
+  private Builder<T, S> id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  private Builder<T, S> data(T data) {
+    this.data = data;
+    return this;
+  }
+
+  public Builder<T, S> additionalData(S additionalData) {
+    this.additionalData = additionalData;
+    return this;
+  }
+
+  public Builder<T, S> additionalData(Optional<S> additionalData) {
+    this.additionalData = additionalData.orElse(null);
+    return this;
+  }
+
+  public Customer<T, S> build() throws IOException {
+    final Customer<T, S> instance =
+        new Customer<T, S>(id, data, additionalData);
+    return instance;
+  }
+}
+]
+
+
+io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGeneratorTest.builderClass_when_generatorUsedWithSamplePojo_then_correctOutput=[
+java.io.IOException
+java.lang.Integer
+java.lang.String
+java.util.Optional
+
+public static final class Builder {
+  private Builder() {
+  }
+
+  private Integer id;
+  private String username;
+  private String nickname;
+
+  private Builder id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  private Builder username(String username) {
+    this.username = username;
+    return this;
+  }
+
+  public Builder nickname(String nickname) {
+    this.nickname = nickname;
+    return this;
+  }
+
+  public Builder nickname(Optional<String> nickname) {
+    this.nickname = nickname.orElse(null);
+    return this;
+  }
+
+  public Customer build() throws IOException {
+    final Customer instance =
+        new Customer(id, username, nickname);
+    return instance;
+  }
+}
+]

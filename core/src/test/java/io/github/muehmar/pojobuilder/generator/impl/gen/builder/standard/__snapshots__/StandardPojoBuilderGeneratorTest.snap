@@ -1,0 +1,238 @@
+genericPojo=[
+java.io.IOException
+java.lang.String
+java.util.List
+java.util.Optional
+
+public static final class Builder0<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private Builder0(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public Builder1<T, S> id(String id) {
+    return new Builder1<>(builder.id(id));
+  }
+}
+
+public static final class Builder1<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private Builder1(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public Builder2<T, S> data(T data) {
+    return new Builder2<>(builder.data(data));
+  }
+}
+
+public static final class Builder2<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private Builder2(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public OptBuilder0<T, S> andAllOptionals() {
+    return new OptBuilder0<>(builder);
+  }
+
+  public Builder<T, S> andOptionals() {
+    return builder;
+  }
+
+  public Customer<T, S> build() throws IOException {
+    return builder.build();
+  }
+}
+
+public static final class OptBuilder0<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private OptBuilder0(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public OptBuilder1<T, S> additionalData(S additionalData) {
+    return new OptBuilder1<>(builder.additionalData(additionalData));
+  }
+
+  public OptBuilder1<T, S> additionalData(Optional<S> additionalData) {
+    return new OptBuilder1<>(builder.additionalData(additionalData));
+  }
+}
+
+public static final class OptBuilder1<T extends List<String>, S> {
+  private final Builder<T, S> builder;
+
+  private OptBuilder1(Builder<T, S> builder) {
+    this.builder = builder;
+  }
+
+  public Customer<T, S> build() throws IOException {
+    return builder.build();
+  }
+}
+]
+
+
+samplePojo=[
+java.io.IOException
+java.lang.Integer
+java.lang.String
+java.util.Optional
+
+public static final class Builder0 {
+  private final Builder builder;
+
+  private Builder0(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Builder1 id(Integer id) {
+    return new Builder1(builder.id(id));
+  }
+}
+
+public static final class Builder1 {
+  private final Builder builder;
+
+  private Builder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Builder2 username(String username) {
+    return new Builder2(builder.username(username));
+  }
+}
+
+public static final class Builder2 {
+  private final Builder builder;
+
+  private Builder2(Builder builder) {
+    this.builder = builder;
+  }
+
+  public OptBuilder0 andAllOptionals() {
+    return new OptBuilder0(builder);
+  }
+
+  public Builder andOptionals() {
+    return builder;
+  }
+
+  public Customer build() throws IOException {
+    return builder.build();
+  }
+}
+
+public static final class OptBuilder0 {
+  private final Builder builder;
+
+  private OptBuilder0(Builder builder) {
+    this.builder = builder;
+  }
+
+  public OptBuilder1 nickname(String nickname) {
+    return new OptBuilder1(builder.nickname(nickname));
+  }
+
+  public OptBuilder1 nickname(Optional<String> nickname) {
+    return new OptBuilder1(builder.nickname(nickname));
+  }
+}
+
+public static final class OptBuilder1 {
+  private final Builder builder;
+
+  private OptBuilder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Customer build() throws IOException {
+    return builder.build();
+  }
+}
+]
+
+
+samplePojoAndBuilderSetMethodPrefix=[
+java.io.IOException
+java.lang.Integer
+java.lang.String
+java.util.Optional
+
+public static final class Builder0 {
+  private final Builder builder;
+
+  private Builder0(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Builder1 setId(Integer id) {
+    return new Builder1(builder.setId(id));
+  }
+}
+
+public static final class Builder1 {
+  private final Builder builder;
+
+  private Builder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Builder2 setUsername(String username) {
+    return new Builder2(builder.setUsername(username));
+  }
+}
+
+public static final class Builder2 {
+  private final Builder builder;
+
+  private Builder2(Builder builder) {
+    this.builder = builder;
+  }
+
+  public OptBuilder0 andAllOptionals() {
+    return new OptBuilder0(builder);
+  }
+
+  public Builder andOptionals() {
+    return builder;
+  }
+
+  public Customer build() throws IOException {
+    return builder.build();
+  }
+}
+
+public static final class OptBuilder0 {
+  private final Builder builder;
+
+  private OptBuilder0(Builder builder) {
+    this.builder = builder;
+  }
+
+  public OptBuilder1 setNickname(String nickname) {
+    return new OptBuilder1(builder.setNickname(nickname));
+  }
+
+  public OptBuilder1 setNickname(Optional<String> nickname) {
+    return new OptBuilder1(builder.setNickname(nickname));
+  }
+}
+
+public static final class OptBuilder1 {
+  private final Builder builder;
+
+  private OptBuilder1(Builder builder) {
+    this.builder = builder;
+  }
+
+  public Customer build() throws IOException {
+    return builder.build();
+  }
+}
+]
