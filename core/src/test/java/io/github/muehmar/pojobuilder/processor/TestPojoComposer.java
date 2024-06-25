@@ -1,6 +1,7 @@
 package io.github.muehmar.pojobuilder.processor;
 
 import ch.bluecare.commons.data.PList;
+import io.github.muehmar.codegenerator.util.Strings;
 import io.github.muehmar.pojobuilder.annotations.Ignore;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
@@ -171,13 +172,16 @@ public class TestPojoComposer {
       return new PojoMethod(builder).create();
     }
 
-    public PojoConstructor constructor() {
+    public PojoConstructor constructor(Class<?>... exceptions) {
       final String args =
           fields
               .map(TypeAndName::unwrapOptionalClass)
               .map(tan -> String.format("%s %s", tan.type, tan.name))
               .mkString(",");
-      builder.append(String.format("  public %s(%s) {\n", className, args));
+      final String exceptionsFormatted =
+          Strings.surroundIfNotEmpty(
+              "throws ", PList.of(exceptions).map(Class::getCanonicalName).mkString(", "), "");
+      builder.append(String.format("  public %s(%s) %s {\n", className, args, exceptionsFormatted));
       fields.forEach(
           tan -> {
             if (tan.isOptionalClass()) {

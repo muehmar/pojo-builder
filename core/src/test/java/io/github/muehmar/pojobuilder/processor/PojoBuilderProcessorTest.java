@@ -30,6 +30,8 @@ import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import io.github.muehmar.pojobuilder.generator.model.type.WildcardType;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -67,7 +69,51 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
+            .generics(Generics.empty())
+            .fieldBuilders(PList.empty())
+            .build();
+
+    assertEquals(expected, pojoAndSettings.getPojo());
+  }
+
+  @Test
+  void run_when_constructorThrowingExceptions_then_correctPojoCreated() {
+    final QualifiedClassname pojoClassname = randomPojoClassname();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .annotation(PojoBuilder.class)
+            .className(pojoClassname.getName())
+            .withField("String", "id")
+            .constructor(IOException.class, MalformedURLException.class)
+            .create();
+
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
+
+    final PojoField m1 = new PojoField(Names.id(), string(), REQUIRED);
+    final PList<PojoField> fields = PList.single(m1);
+    final Pojo expected =
+        pojoBuilder()
+            .pojoClassname(pojoClassname)
+            .pojoNameWithTypeVariables(pojoClassname.getName())
+            .pkg(PACKAGE)
+            .fields(fields)
+            .constructors(
+                PList.single(
+                    new Constructor(
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.of(
+                            new QualifiedClassname(
+                                Classname.fromString("IOException"),
+                                PackageName.fromString("java.io")),
+                            new QualifiedClassname(
+                                Classname.fromString("MalformedURLException"),
+                                PackageName.fromString("java.net"))))))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -102,7 +148,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -138,7 +186,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -185,7 +235,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -229,7 +281,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(),
-                        PList.single(new Argument(Names.id(), Types.string())))))
+                        PList.single(new Argument(Names.id(), Types.string())),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -261,7 +314,8 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .pkg(PACKAGE)
             .fields(fields)
             .constructors(
-                PList.single(new Constructor(pojoClassname.getSimpleName(), PList.empty())))
+                PList.single(
+                    new Constructor(pojoClassname.getSimpleName(), PList.empty(), PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -309,7 +363,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -349,7 +405,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -384,7 +442,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();
@@ -439,7 +499,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.of(generic))
             .fieldBuilders(PList.empty())
             .build();
@@ -489,7 +551,9 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .constructors(
                 PList.single(
                     new Constructor(
-                        pojoClassname.getSimpleName(), fields.map(PojoFields::toArgument))))
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();

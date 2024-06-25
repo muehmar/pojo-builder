@@ -86,7 +86,8 @@ public class AnnotatedConstructorProcessorTest extends BaseExtensionProcessorTes
                 PList.single(
                     new Constructor(
                         pojoClassname.getSimpleName(),
-                        fields.map(f -> new Argument(f.getName(), f.getType())))))
+                        fields.map(f -> new Argument(f.getName(), f.getType())),
+                        PList.empty())))
             .generics(Generics.of(new Generic(Name.fromString("T"), PList.empty())))
             .fieldBuilders(PList.empty())
             .factoryMethod(Optional.empty())

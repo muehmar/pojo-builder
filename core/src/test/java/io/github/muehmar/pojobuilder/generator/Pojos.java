@@ -125,7 +125,13 @@ public class Pojos {
                         : PojoFields.toArgument(f));
 
     return pojo.withConstructors(
-        PList.single(new Constructor(Name.fromString("Customer"), arguments)));
+        PList.single(
+            new Constructor(
+                Name.fromString("Customer"),
+                arguments,
+                PList.single(
+                    new QualifiedClassname(
+                        Classname.fromString("IOException"), PackageName.fromString("java.io"))))));
   }
 
   public static Pojo genericSample() {
@@ -180,6 +186,7 @@ public class Pojos {
   public static Constructor deviateStandardConstructor(Pojo pojo) {
     return new Constructor(
         pojo.getPojoClassname().getSimpleName(),
-        pojo.getFields().map(f -> new Argument(f.getName(), f.getType())));
+        pojo.getFields().map(f -> new Argument(f.getName(), f.getType())),
+        PList.empty());
   }
 }
