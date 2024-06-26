@@ -6,6 +6,7 @@ import static io.github.muehmar.pojobuilder.snapshottesting.SnapshotUtil.writerS
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
+import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.writer.Writer;
 import io.github.muehmar.pojobuilder.generator.Pojos;
@@ -37,7 +38,7 @@ class BuildMethodTest {
     final Generator<Pojo, PojoSettings> generator = buildMethod();
     final io.github.muehmar.pojobuilder.generator.model.BuildMethod buildMethod =
         new io.github.muehmar.pojobuilder.generator.model.BuildMethod(
-            Name.fromString("customBuildMethod"), Types.string());
+            Name.fromString("customBuildMethod"), Types.string(), PList.empty());
     final Writer writer =
         generator.generate(
             Pojos.genericSample().withBuildMethod(Optional.of(buildMethod)),

@@ -275,6 +275,23 @@ public class TestPojoComposer {
       return new PojoMethod(builder);
     }
 
+    public PojoMethod methodWithAnnotation(
+        String returnType,
+        String methodName,
+        String content,
+        String annotation,
+        String arguments,
+        String exceptions) {
+      builder.append(String.format("  %s\n", annotation));
+      final String formattedExceptions = Strings.surroundIfNotEmpty("throws ", exceptions, "");
+      builder.append(
+          String.format(
+              "  public %s %s(%s) %s {\n", returnType, methodName, arguments, formattedExceptions));
+      builder.append(String.format("    %s;\n", content));
+      builder.append("  }\n");
+      return new PojoMethod(builder);
+    }
+
     public String create() {
       builder.append("}\n");
       return builder.toString();
