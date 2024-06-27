@@ -20,8 +20,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.5.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.5.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:1.8.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:1.8.0"
 }
 ```
 
@@ -514,6 +514,10 @@ public @interface AllRequiredPojoBuilder {
 
 ## Change Log
 
+* 1.8.0
+    * Fix missing import for return type of custom build method (issue `#37`)
+    * Support checked exceptions for custom build methods (issue `#38`)
+    * Support checked exceptions for constructors (issue `#36`)
 * 1.7.0 - Support static imports of factory methods for generic classes
 * 1.6.0
     * Improve compile time safety by adding the possibility to check the argument names for used constructor (
