@@ -13,8 +13,10 @@ import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.writer.Writer;
 import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
+import io.github.muehmar.pojobuilder.generator.model.type.Classname;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import io.github.muehmar.pojobuilder.snapshottesting.SnapshotTest;
 import java.util.Optional;
@@ -41,7 +43,9 @@ class BuildMethodTest {
     final Generator<Pojo, PojoSettings> generator = standardBuilderBuildMethod();
     final io.github.muehmar.pojobuilder.generator.model.BuildMethod buildMethod =
         new io.github.muehmar.pojobuilder.generator.model.BuildMethod(
-            Name.fromString("customBuildMethod"), Types.string(), PList.empty());
+            Name.fromString("customBuildMethod"),
+            Types.declaredType(Classname.fromString("URL"), PackageName.fromString("java.net")),
+            PList.empty());
     final Writer writer =
         generator.generate(
             Pojos.genericSample().withBuildMethod(Optional.of(buildMethod)),

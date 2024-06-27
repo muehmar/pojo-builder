@@ -6,6 +6,7 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
+import io.github.muehmar.pojobuilder.generator.impl.gen.RefsGen;
 import io.github.muehmar.pojobuilder.generator.impl.gen.ThrowsGenerator;
 import io.github.muehmar.pojobuilder.generator.model.Constructor;
 import io.github.muehmar.pojobuilder.generator.model.FactoryMethod;
@@ -47,7 +48,15 @@ public class BuildMethod {
         .noArguments()
         .throwsExceptions(throwsGenerator())
         .content(buildMethodContent)
-        .build();
+        .build()
+        .append(returnTypeRef());
+  }
+
+  private static Generator<Pojo, PojoSettings> returnTypeRef() {
+    return (pojo, settings, writer) ->
+        pojo.getBuildMethod()
+            .map(method -> RefsGen.addRefs(writer, method.getReturnType().getImports()))
+            .orElse(writer);
   }
 
   private static Generator<Pojo, PojoSettings> throwsGenerator() {

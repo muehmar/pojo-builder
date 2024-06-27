@@ -9,8 +9,9 @@ public Customer<T, S> build() throws IOException {
 
 calledWithGenericSampleWithCustomBuildMethod=[
 java.io.IOException
+java.net.URL
 
-public String build() throws IOException {
+public URL build() throws IOException {
   return builder.build();
 }
 ]
@@ -18,6 +19,7 @@ public String build() throws IOException {
 
 calledWithGenericSampleWithCustomBuildMethodThrowingExceptions=[
 java.io.IOException
+java.lang.String
 java.net.MalformedURLException
 
 public String build() throws IOException, MalformedURLException {
