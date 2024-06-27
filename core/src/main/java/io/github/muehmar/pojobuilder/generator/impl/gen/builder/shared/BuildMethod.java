@@ -1,5 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
+import static io.github.muehmar.codegenerator.Generator.constant;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 
 import ch.bluecare.commons.data.PList;
@@ -19,7 +20,12 @@ import java.util.function.Function;
 public class BuildMethod {
   private BuildMethod() {}
 
-  public static Generator<Pojo, PojoSettings> buildMethod() {
+  public static Generator<Pojo, PojoSettings> standardBuilderBuildMethod() {
+    return buildMethod(constant("return builder.build();"));
+  }
+
+  public static Generator<Pojo, PojoSettings> buildMethod(
+      Generator<Pojo, PojoSettings> buildMethodContent) {
     final Function<Pojo, Object> createReturnType =
         p ->
             p.getBuildMethod()
@@ -40,7 +46,7 @@ public class BuildMethod {
         .methodName("build")
         .noArguments()
         .throwsExceptions(throwsGenerator())
-        .content("return builder.build();")
+        .content(buildMethodContent)
         .build();
   }
 
@@ -55,6 +61,9 @@ public class BuildMethod {
 
   private static PList<QualifiedClassname> getConstructorExceptionsFromPojo(
       Pojo pojo, PojoSettings settings) {
+    if (pojo.getFactoryMethod().isPresent()) {
+      return PList.empty();
+    }
     return pojo.findMatchingConstructor(settings.getFieldMatching())
         .getFirstMatchingConstructor()
         .map(MatchingConstructor::getConstructor)

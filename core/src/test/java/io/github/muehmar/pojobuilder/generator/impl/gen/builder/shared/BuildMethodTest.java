@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.standardBuilderBuildMethod;
 import static io.github.muehmar.pojobuilder.snapshottesting.SnapshotUtil.writerSnapshot;
 
 import au.com.origin.snapshots.Expect;
@@ -24,8 +25,8 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("calledWithGenericSample")
-  void buildMethod_when_calledWithGenericSample_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void standardBuilderBuildMethod_when_calledWithGenericSample_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = standardBuilderBuildMethod();
     final Writer writer =
         generator.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
@@ -34,8 +35,9 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("calledWithGenericSampleWithCustomBuildMethod")
-  void buildMethod_when_calledWithGenericSampleWithCustomBuildMethod_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void
+      standardBuilderBuildMethod_when_calledWithGenericSampleWithCustomBuildMethod_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = standardBuilderBuildMethod();
     final io.github.muehmar.pojobuilder.generator.model.BuildMethod buildMethod =
         new io.github.muehmar.pojobuilder.generator.model.BuildMethod(
             Name.fromString("customBuildMethod"), Types.string(), PList.empty());
@@ -50,8 +52,8 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("factoryMethodSample")
-  void buildMethod_when_factoryMethodSample_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void standardBuilderBuildMethod_when_factoryMethodSample_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = standardBuilderBuildMethod();
     final Writer writer =
         generator.generate(
             Pojos.factoryMethodSample(), PojoSettings.defaultSettings(), javaWriter());

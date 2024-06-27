@@ -5,7 +5,8 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethodContent;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.SetMethodGenerator.setMethodGenerator;
 
 import io.github.muehmar.codegenerator.Generator;
@@ -40,7 +41,7 @@ public class UnsafeBuilderGenerator {
             .appendSingleBlankLine()
             .append(setMethodGenerator())
             .appendSingleBlankLine()
-            .append(buildMethod());
+            .append(buildMethod(buildMethodContent()));
 
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()

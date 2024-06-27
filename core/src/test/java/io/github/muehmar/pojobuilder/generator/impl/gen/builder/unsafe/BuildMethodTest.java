@@ -1,7 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
 
 import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethod;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethodContent;
 import static io.github.muehmar.pojobuilder.snapshottesting.SnapshotUtil.writerSnapshot;
 
 import au.com.origin.snapshots.Expect;
@@ -25,8 +25,8 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("sample")
-  void buildMethod_when_calledWithSample_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void buildMethodContent_when_calledWithSample_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = buildMethodContent();
     final String output =
         generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter()).asString();
 
@@ -35,8 +35,8 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("genericSample")
-  void buildMethod_when_calledWithGenericSample_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void buildMethodContent_when_calledWithGenericSample_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = buildMethodContent();
     final String output =
         generator
             .generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter())
@@ -47,8 +47,8 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("genericSampleAndBuildMethod")
-  void buildMethod_when_calledWithGenericSampleAndBuildMethod_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void buildMethodContent_when_calledWithGenericSampleAndBuildMethod_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = buildMethodContent();
     final io.github.muehmar.pojobuilder.generator.model.BuildMethod buildMethod =
         new BuildMethod(Name.fromString("customBuildMethod"), Types.string(), PList.empty());
     final Pojo pojo = Pojos.genericSample().withBuildMethod(Optional.of(buildMethod));
@@ -61,8 +61,8 @@ class BuildMethodTest {
   @Test
   @SnapshotName("sampleAndConstructorWithOptionalArgument")
   void
-      buildMethod_when_generatorUsedWithSamplePojoAndConstructorWithOptionalArgument_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+      buildMethodContent_when_generatorUsedWithSamplePojoAndConstructorWithOptionalArgument_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = buildMethodContent();
     final Writer writer =
         generator.generate(
             Pojos.sampleWithConstructorWithOptionalArgument(),
@@ -74,8 +74,8 @@ class BuildMethodTest {
 
   @Test
   @SnapshotName("sampleWithFactoryMethod")
-  void buildMethod_when_sampleWithFactoryMethod_then_correctOutput() {
-    final Generator<Pojo, PojoSettings> generator = buildMethod();
+  void buildMethodContent_when_sampleWithFactoryMethod_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = buildMethodContent();
     final Writer writer =
         generator.generate(
             Pojos.factoryMethodSample(), PojoSettings.defaultSettings(), javaWriter());
