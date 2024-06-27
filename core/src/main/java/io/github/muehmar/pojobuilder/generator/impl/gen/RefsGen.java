@@ -30,7 +30,7 @@ public class RefsGen {
     };
   }
 
-  private static Writer addRefs(Writer writer, PList<Name> imports) {
+  public static Writer addRefs(Writer writer, PList<Name> imports) {
     return imports.map(Name::asString).foldLeft(writer, Writer::ref);
   }
 }
