@@ -52,11 +52,19 @@ public class BuildMethod {
 
   private static Generator<Pojo, PojoSettings> throwsGenerator() {
     return Generator.<Pojo, PojoSettings>emptyGen()
-        .append(
-            ThrowsGenerator.throwsGenerator(),
-            pojo ->
-                pojo.getFactoryMethod().map(FactoryMethod::getExceptions).orElseGet(PList::empty))
-        .append(ThrowsGenerator.throwsGenerator(), BuildMethod::getConstructorExceptionsFromPojo);
+        .append(ThrowsGenerator.throwsGenerator(), BuildMethod::getAllBuildExceptionsFromPojo);
+  }
+
+  private static PList<QualifiedClassname> getAllBuildExceptionsFromPojo(
+      Pojo pojo, PojoSettings settings) {
+    return getExceptionsFromFactoryMethod(pojo)
+        .concat(getConstructorExceptionsFromPojo(pojo, settings))
+        .concat(getBuildMethodExceptionsFromPojo(pojo))
+        .distinct(Function.identity());
+  }
+
+  private static PList<QualifiedClassname> getExceptionsFromFactoryMethod(Pojo pojo) {
+    return pojo.getFactoryMethod().map(FactoryMethod::getExceptions).orElseGet(PList::empty);
   }
 
   private static PList<QualifiedClassname> getConstructorExceptionsFromPojo(
@@ -68,6 +76,12 @@ public class BuildMethod {
         .getFirstMatchingConstructor()
         .map(MatchingConstructor::getConstructor)
         .map(Constructor::getExceptions)
+        .orElseGet(PList::empty);
+  }
+
+  private static PList<QualifiedClassname> getBuildMethodExceptionsFromPojo(Pojo pojo) {
+    return pojo.getBuildMethod()
+        .map(io.github.muehmar.pojobuilder.generator.model.BuildMethod::getExceptions)
         .orElseGet(PList::empty);
   }
 }

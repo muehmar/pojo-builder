@@ -1,13 +1,13 @@
 package io.github.muehmar.pojobuilder.processor;
 
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.ioException;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.malformedUrlException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
-import io.github.muehmar.pojobuilder.generator.model.PackageName;
-import io.github.muehmar.pojobuilder.generator.model.type.Classname;
 import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
@@ -83,7 +83,7 @@ class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
                 "return inst.toString()",
                 "@BuildMethod",
                 pojoClassname.getSimpleName() + " inst",
-                "java.io.IOException, java.net.URISyntaxException")
+                "java.io.IOException, java.net.MalformedURLException")
             .create();
 
     final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
@@ -94,12 +94,7 @@ class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
         new BuildMethod(
             Name.fromString("customBuildMethod"),
             Types.string(),
-            PList.of(
-                new QualifiedClassname(
-                    Classname.fromString("IOException"), PackageName.fromString("java.io")),
-                new QualifiedClassname(
-                    Classname.fromString("URISyntaxException"),
-                    PackageName.fromString("java.net"))));
+            PList.of(ioException(), malformedUrlException()));
     assertEquals(Optional.of(expected), buildMethod);
   }
 }

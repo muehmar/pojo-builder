@@ -4,6 +4,8 @@ import static io.github.muehmar.pojobuilder.generator.model.FactoryMethodBuilder
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.PojoBuilder.pojoBuilder;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.ioException;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.malformedUrlException;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.integer;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.string;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -107,13 +109,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
                     new Constructor(
                         pojoClassname.getSimpleName(),
                         fields.map(PojoFields::toArgument),
-                        PList.of(
-                            new QualifiedClassname(
-                                Classname.fromString("IOException"),
-                                PackageName.fromString("java.io")),
-                            new QualifiedClassname(
-                                Classname.fromString("MalformedURLException"),
-                                PackageName.fromString("java.net"))))))
+                        PList.of(ioException(), malformedUrlException()))))
             .generics(Generics.empty())
             .fieldBuilders(PList.empty())
             .build();

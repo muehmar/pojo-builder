@@ -1,8 +1,9 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.standardBuilderBuildMethod;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.ioException;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.malformedUrlException;
 import static io.github.muehmar.pojobuilder.snapshottesting.SnapshotUtil.writerSnapshot;
 
 import au.com.origin.snapshots.Expect;
@@ -41,6 +42,25 @@ class BuildMethodTest {
     final io.github.muehmar.pojobuilder.generator.model.BuildMethod buildMethod =
         new io.github.muehmar.pojobuilder.generator.model.BuildMethod(
             Name.fromString("customBuildMethod"), Types.string(), PList.empty());
+    final Writer writer =
+        generator.generate(
+            Pojos.genericSample().withBuildMethod(Optional.of(buildMethod)),
+            PojoSettings.defaultSettings(),
+            javaWriter());
+
+    expect.toMatchSnapshot(writerSnapshot(writer));
+  }
+
+  @Test
+  @SnapshotName("calledWithGenericSampleWithCustomBuildMethodThrowingExceptions")
+  void
+      standardBuilderBuildMethod_when_calledWithGenericSampleWithCustomBuildMethodThrowingExceptions_then_correctOutput() {
+    final Generator<Pojo, PojoSettings> generator = standardBuilderBuildMethod();
+    final io.github.muehmar.pojobuilder.generator.model.BuildMethod buildMethod =
+        new io.github.muehmar.pojobuilder.generator.model.BuildMethod(
+            Name.fromString("customBuildMethod"),
+            Types.string(),
+            PList.of(ioException(), malformedUrlException()));
     final Writer writer =
         generator.generate(
             Pojos.genericSample().withBuildMethod(Optional.of(buildMethod)),

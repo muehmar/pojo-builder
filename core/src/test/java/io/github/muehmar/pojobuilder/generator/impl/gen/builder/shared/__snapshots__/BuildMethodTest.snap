@@ -16,6 +16,16 @@ public String build() throws IOException {
 ]
 
 
+calledWithGenericSampleWithCustomBuildMethodThrowingExceptions=[
+java.io.IOException
+java.net.MalformedURLException
+
+public String build() throws IOException, MalformedURLException {
+  return builder.build();
+}
+]
+
+
 factoryMethodSample=[
 io.github.muehmar.exception.SomeException
 

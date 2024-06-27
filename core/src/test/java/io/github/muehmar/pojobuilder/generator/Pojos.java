@@ -2,6 +2,7 @@ package io.github.muehmar.pojobuilder.generator;
 
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.ioException;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
@@ -181,8 +182,6 @@ public class Pojos {
     return new Constructor(
         pojo.getPojoClassname().getSimpleName(),
         pojo.getFields().map(f -> new Argument(f.getName(), f.getType())),
-        PList.single(
-            new QualifiedClassname(
-                Classname.fromString("IOException"), PackageName.fromString("java.io"))));
+        PList.single(ioException()));
   }
 }
