@@ -1,46 +1,35 @@
 genericSample=[
-public Customer<T, S> build() throws IOException {
-  final Customer<T, S> instance =
-      new Customer<T, S>(id, data, additionalData);
-  return instance;
-}
+final Customer<T, S> instance =
+    new Customer<T, S>(id, data, additionalData);
+return instance;
 ]
 
 
 genericSampleAndBuildMethod=[
-public String build() throws IOException {
-  final Customer<T, S> instance =
-      new Customer<T, S>(id, data, additionalData);
-  return Customer.customBuildMethod(instance);
-}
+final Customer<T, S> instance =
+    new Customer<T, S>(id, data, additionalData);
+return Customer.customBuildMethod(instance);
 ]
 
 
 sample=[
-public Customer build() throws IOException {
-  final Customer instance =
-      new Customer(id, username, nickname);
-  return instance;
-}
+final Customer instance =
+    new Customer(id, username, nickname);
+return instance;
 ]
 
 
 sampleAndConstructorWithOptionalArgument=[
 java.util.Optional
 
-public Customer build() {
-  final Customer instance =
-      new Customer(id, username, Optional.ofNullable(nickname));
-  return instance;
-}
+final Customer instance =
+    new Customer(id, username, Optional.ofNullable(nickname));
+return instance;
 ]
 
 
 sampleWithFactoryMethod=[
-io.github.muehmar.exception.SomeException
 java.util.Optional
 
-public io.github.muehmar.Customer build() throws SomeException {
-  return Pojos.Customer.create(id, username, Optional.ofNullable(nickname));
-}
+return Pojos.Customer.create(id, username, Optional.ofNullable(nickname));
 ]

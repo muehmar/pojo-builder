@@ -1,7 +1,10 @@
 package io.github.muehmar.pojobuilder.processor;
 
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.ioException;
+import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.malformedUrlException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -57,7 +60,41 @@ class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
 
     final Optional<BuildMethod> buildMethod = pojoAndSettings.getPojo().getBuildMethod();
     final BuildMethod expected =
-        new BuildMethod(Name.fromString("customBuildMethod"), Types.string());
+        new BuildMethod(Name.fromString("customBuildMethod"), Types.string(), PList.empty());
+    assertEquals(Optional.of(expected), buildMethod);
+  }
+
+  @Test
+  void run_when_simplePojoWithThrowingBuildMethod_then_correctBuildMethodInPojo() {
+    final QualifiedClassname pojoClassname = randomPojoClassname();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .withImport(io.github.muehmar.pojobuilder.annotations.BuildMethod.class)
+            .annotation(PojoBuilder.class)
+            .className(pojoClassname.getName())
+            .withField("String", "id")
+            .constructor()
+            .getter("String", "id")
+            .methodWithAnnotation(
+                "static String",
+                "customBuildMethod",
+                "return inst.toString()",
+                "@BuildMethod",
+                pojoClassname.getSimpleName() + " inst",
+                "java.io.IOException, java.net.MalformedURLException")
+            .create();
+
+    final BaseExtensionProcessorTest.PojoAndSettings pojoAndSettings =
+        runAnnotationProcessor(pojoClassname, classString);
+
+    final Optional<BuildMethod> buildMethod = pojoAndSettings.getPojo().getBuildMethod();
+    final BuildMethod expected =
+        new BuildMethod(
+            Name.fromString("customBuildMethod"),
+            Types.string(),
+            PList.of(ioException(), malformedUrlException()));
     assertEquals(Optional.of(expected), buildMethod);
   }
 }

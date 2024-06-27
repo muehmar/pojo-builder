@@ -6,6 +6,7 @@ import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
 import io.github.muehmar.pojobuilder.generator.model.BuildMethod;
 import io.github.muehmar.pojobuilder.generator.model.Name;
+import io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassname;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.processor.mapper.TypeMirrorMapper;
 import java.util.List;
@@ -44,7 +45,8 @@ public class BuildMethodProcessor {
 
     final Name methodName = Name.fromString(annotatedMethod.getSimpleName().toString());
     final Type returnType = TypeMirrorMapper.map(annotatedMethod.getReturnType());
-    return new BuildMethod(methodName, returnType);
+    final PList<QualifiedClassname> exceptions = ExceptionProcessor.process(annotatedMethod);
+    return new BuildMethod(methodName, returnType, exceptions);
   }
 
   private static ExecutableElement assertCorrectMethodSignature(
