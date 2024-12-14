@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example.factorymethod;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -23,7 +23,7 @@ class GenericClassTest {
     final GenericClass<Data, Byte> expectedGenericClass =
         new GenericClass<>("55", new Data(), Optional.of((byte) 0x55), Code.A1);
 
-    assertEquals(expectedGenericClass, genericClass);
+    assertThat(genericClass).isEqualTo(expectedGenericClass);
   }
 
   public static class Data extends ArrayList<String> implements Comparable<Data> {

@@ -1,7 +1,7 @@
 package io.github.muehmar.pojobuilder.example;
 
 import static io.github.muehmar.pojobuilder.example.PatientBuilder.patientBuilder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class PatientTest {
             .firstName(Optional.of("firstName"))
             .build();
 
-    assertEquals("firstName", patient.getFirstName());
-    assertEquals("lastName", patient.getLastName());
+    assertThat(patient.getFirstName()).isEqualTo("firstName");
+    assertThat(patient.getLastName()).isEqualTo("lastName");
   }
 }

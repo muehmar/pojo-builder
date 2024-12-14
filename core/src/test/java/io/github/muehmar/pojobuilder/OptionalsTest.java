@@ -1,8 +1,6 @@
 package io.github.muehmar.pojobuilder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,8 +16,8 @@ class OptionalsTest {
     Optionals.ifPresentOrElse(
         value, ignore -> consumerCalled.set(true), () -> runnableCalled.set(true));
 
-    assertTrue(runnableCalled.get());
-    assertFalse(consumerCalled.get());
+    assertThat(runnableCalled.get()).isTrue();
+    assertThat(consumerCalled.get()).isFalse();
   }
 
   @Test
@@ -29,7 +27,7 @@ class OptionalsTest {
     final Optional<Integer> value = Optional.of(10);
     Optionals.ifPresentOrElse(value, consumerValue::set, () -> runnableCalled.set(true));
 
-    assertFalse(runnableCalled.get());
-    assertEquals(10, consumerValue.get());
+    assertThat(runnableCalled.get()).isFalse();
+    assertThat(consumerValue.get()).isEqualTo(10);
   }
 }

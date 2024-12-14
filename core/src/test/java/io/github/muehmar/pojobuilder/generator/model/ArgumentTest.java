@@ -4,7 +4,7 @@ import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.optional;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.string;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.pojobuilder.generator.Names;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
@@ -21,8 +21,8 @@ class ArgumentTest {
     final Argument argument = new Argument(Names.id(), string());
     final PojoField field = new PojoField(Name.fromString("extId"), string(), necessity);
 
-    assertEquals(
-        Optional.of(OptionalFieldRelation.SAME_TYPE), argument.getRelationFromField(field));
+    assertThat(argument.getRelationFromField(field))
+        .isEqualTo(Optional.of(OptionalFieldRelation.SAME_TYPE));
   }
 
   @Test
@@ -31,9 +31,8 @@ class ArgumentTest {
     final Argument argument = new Argument(Names.id(), optional(string()));
     final PojoField field = new PojoField(Name.fromString("extId"), string(), OPTIONAL);
 
-    assertEquals(
-        Optional.of(OptionalFieldRelation.WRAP_INTO_OPTIONAL),
-        argument.getRelationFromField(field));
+    assertThat(argument.getRelationFromField(field))
+        .isEqualTo(Optional.of(OptionalFieldRelation.WRAP_INTO_OPTIONAL));
   }
 
   @Test
@@ -41,7 +40,7 @@ class ArgumentTest {
     final Argument argument = new Argument(Names.id(), optional(string()));
     final PojoField field = new PojoField(Name.fromString("extId"), string(), REQUIRED);
 
-    assertEquals(Optional.empty(), argument.getRelationFromField(field));
+    assertThat(argument.getRelationFromField(field)).isEmpty();
   }
 
   @Test
@@ -49,13 +48,13 @@ class ArgumentTest {
     final Argument argument = new Argument(Names.id(), string());
     final PojoField field = new PojoField(Name.fromString("extId"), optional(string()), REQUIRED);
 
-    assertEquals(Optional.empty(), argument.getRelationFromField(field));
+    assertThat(argument.getRelationFromField(field)).isEmpty();
   }
 
   @Test
   void formatted_when_calledForSimpleArgument_then_correctFormatted() {
     final Argument argument = new Argument(Names.id(), string());
-    assertEquals("String id", argument.formatted());
+    assertThat(argument.formatted()).isEqualTo("String id");
   }
 
   @Test
@@ -64,6 +63,6 @@ class ArgumentTest {
         new Argument(
             Name.fromString("map"),
             Types.map(Types.typeVariable(Name.fromString("T")), Types.optional(string())));
-    assertEquals("Map<T,Optional<String>> map", argument.formatted());
+    assertThat(argument.formatted()).isEqualTo("Map<T,Optional<String>> map");
   }
 }

@@ -5,7 +5,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.Bu
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.pojobuilder.generator.PojoFields;
@@ -24,8 +24,8 @@ class BuilderMethodConstructorTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private Builder2(Builder builder) {\n" + "  this.builder = builder;\n" + "}", output);
+    assertThat(output)
+        .isEqualTo("private Builder2(Builder builder) {\n" + "  this.builder = builder;\n" + "}");
   }
 
   @Test
@@ -37,8 +37,9 @@ class BuilderMethodConstructorTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private OptBuilder2(Builder builder) {\n" + "  this.builder = builder;\n" + "}", output);
+    assertThat(output)
+        .isEqualTo(
+            "private OptBuilder2(Builder builder) {\n" + "  this.builder = builder;\n" + "}");
   }
 
   @Test
@@ -49,9 +50,9 @@ class BuilderMethodConstructorTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private Builder2(Builder<T, S> builder) {\n" + "  this.builder = builder;\n" + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "private Builder2(Builder<T, S> builder) {\n" + "  this.builder = builder;\n" + "}");
   }
 
   @Test
@@ -63,8 +64,8 @@ class BuilderMethodConstructorTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private OptBuilder2(Builder<T, S> builder) {\n" + "  this.builder = builder;\n" + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "private OptBuilder2(Builder<T, S> builder) {\n" + "  this.builder = builder;\n" + "}");
   }
 }

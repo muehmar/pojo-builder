@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -16,7 +16,7 @@ class DeclaredTypeTest {
             Classname.fromString("Map"),
             PackageName.javaUtil(),
             PList.of(Types.string(), Types.integer()));
-    assertEquals("Map<String,Integer>", declaredType.getTypeDeclaration().asString());
+    assertThat(declaredType.getTypeDeclaration().asString()).isEqualTo("Map<String,Integer>");
   }
 
   @Test
@@ -26,7 +26,7 @@ class DeclaredTypeTest {
             Classname.fromString("Customer.Address"),
             PackageName.fromString("io.github.muehmar"),
             PList.empty());
-    assertEquals(
-        PList.single(Name.fromString("io.github.muehmar.Customer")), declaredType.getImports());
+    assertThat(declaredType.getImports())
+        .isEqualTo(PList.single(Name.fromString("io.github.muehmar.Customer")));
   }
 }

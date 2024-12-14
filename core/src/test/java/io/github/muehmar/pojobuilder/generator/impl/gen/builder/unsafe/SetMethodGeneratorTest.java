@@ -6,7 +6,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_ST
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_MAP;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
@@ -37,7 +37,7 @@ class SetMethodGeneratorTest {
             javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
     expect.toMatchSnapshot(output);
   }
 
@@ -54,8 +54,8 @@ class SetMethodGeneratorTest {
 
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
     expect.toMatchSnapshot(output);
   }
 
@@ -69,9 +69,9 @@ class SetMethodGeneratorTest {
             PojoSettings.defaultSettings(),
             javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
   }
 
   @Test
@@ -86,7 +86,7 @@ class SetMethodGeneratorTest {
             javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
     expect.toMatchSnapshot(output);
   }
 
@@ -104,8 +104,8 @@ class SetMethodGeneratorTest {
     final String output = writer.asString();
     expect.toMatchSnapshot(output);
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
   }
 
   @Test
@@ -119,10 +119,10 @@ class SetMethodGeneratorTest {
             PojoSettings.defaultSettings(),
             javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
   }
 
   @Test
@@ -139,7 +139,7 @@ class SetMethodGeneratorTest {
     final String output = writer.asString();
     expect.toMatchSnapshot(output);
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
   }
 }

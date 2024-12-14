@@ -7,8 +7,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_MA
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.integer;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.string;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.Generator;
@@ -37,11 +36,11 @@ class FieldDeclarationGenTest {
             PojoSettings.defaultSettings(),
             javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
 
-    assertEquals("private final Map<String,Integer> someMap;", writer.asString());
+    assertThat(writer.asString()).isEqualTo("private final Map<String,Integer> someMap;");
   }
 
   private static Stream<Arguments> privateAndFinalModifierUnordered() {

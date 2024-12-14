@@ -1,7 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen;
 
 import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.codegenerator.writer.Writer;
 import io.github.muehmar.pojobuilder.generator.Pojos;
@@ -16,6 +16,6 @@ class PackageGenTest {
     final Writer writer =
         generator.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals("package io.github.muehmar;", writer.asString());
+    assertThat(writer.asString()).isEqualTo("package io.github.muehmar;");
   }
 }

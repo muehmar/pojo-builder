@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model.settings;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.pojobuilder.generator.Pojos;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -17,7 +17,7 @@ class PojoSettingsTest {
   @Test
   void builderName_when_calledWithSamplePojo_then_correctBuilderName() {
     final Name name = PojoSettings.defaultSettings().builderName(Pojos.sample());
-    assertEquals("CustomerBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("CustomerBuilder");
   }
 
   @Test
@@ -25,7 +25,7 @@ class PojoSettingsTest {
     final Name name =
         PojoSettings.defaultSettings()
             .builderName(Pojos.sample().withPojoClassname(CUSTOMER_ADDRESS_CLASSNAME));
-    assertEquals("CustomerAddressBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("CustomerAddressBuilder");
   }
 
   @Test
@@ -35,7 +35,7 @@ class PojoSettingsTest {
         PojoSettings.defaultSettings().withIncludeOuterClassName(false);
     final Name name =
         pojoSettings.builderName(Pojos.sample().withPojoClassname(CUSTOMER_ADDRESS_CLASSNAME));
-    assertEquals("AddressBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("AddressBuilder");
   }
 
   @Test
@@ -47,7 +47,7 @@ class PojoSettingsTest {
             .withBuilderNameOpt(Name.fromString("{CLASSNAME}SafeBuilder"));
     final Name name =
         pojoSettings.builderName(Pojos.sample().withPojoClassname(CUSTOMER_ADDRESS_CLASSNAME));
-    assertEquals("AddressSafeBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("AddressSafeBuilder");
   }
 
   @Test
@@ -56,7 +56,7 @@ class PojoSettingsTest {
         PojoSettings.defaultSettings()
             .withBuilderNameOpt(Name.fromString("MyBuilder"))
             .builderName(Pojos.sample());
-    assertEquals("MyBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("MyBuilder");
   }
 
   @Test
@@ -65,13 +65,13 @@ class PojoSettingsTest {
         PojoSettings.defaultSettings()
             .withBuilderNameOpt(Name.fromString("{CLASSNAME}SafeBuilder"))
             .builderName(Pojos.sample());
-    assertEquals("CustomerSafeBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("CustomerSafeBuilder");
   }
 
   @Test
   void qualifiedBuilderName_when_calledWithSamplePojo_then_correctBuilderName() {
     final Name name = PojoSettings.defaultSettings().qualifiedBuilderName(Pojos.sample());
-    assertEquals("io.github.muehmar.CustomerBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("io.github.muehmar.CustomerBuilder");
   }
 
   @Test
@@ -79,6 +79,6 @@ class PojoSettingsTest {
     final Name name =
         PojoSettings.defaultSettings()
             .qualifiedBuilderName(Pojos.sample().withPojoClassname(CUSTOMER_ADDRESS_CLASSNAME));
-    assertEquals("io.github.muehmar.CustomerAddressBuilder", name.asString());
+    assertThat(name.asString()).isEqualTo("io.github.muehmar.CustomerAddressBuilder");
   }
 }

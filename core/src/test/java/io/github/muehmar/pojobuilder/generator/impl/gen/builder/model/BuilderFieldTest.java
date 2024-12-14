@@ -1,9 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.model;
 
 import static java.util.Optional.empty;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
@@ -30,7 +28,7 @@ class BuilderFieldTest {
         BuilderFields.of(Pojos.sample(), Pojos.sample().getFields().apply(0), 0)
             .withFieldBuilder(empty());
 
-    assertFalse(builderField.hasFieldBuilder());
+    assertThat(builderField.hasFieldBuilder()).isFalse();
   }
 
   @Test
@@ -47,7 +45,7 @@ class BuilderFieldTest {
         BuilderFields.of(Pojos.sample(), Pojos.sample().getFields().apply(0), 0)
             .withFieldBuilder(Optional.of(fieldBuilder));
 
-    assertTrue(builderField.hasFieldBuilder());
+    assertThat(builderField.hasFieldBuilder()).isTrue();
   }
 
   @Test
@@ -56,7 +54,7 @@ class BuilderFieldTest {
         BuilderFields.of(Pojos.sample(), Pojos.sample().getFields().apply(0), 0)
             .withFieldBuilder(empty());
 
-    assertFalse(builderField.isDisableDefaultMethods());
+    assertThat(builderField.isDisableDefaultMethods()).isFalse();
   }
 
   @ParameterizedTest
@@ -76,7 +74,7 @@ class BuilderFieldTest {
         BuilderFields.of(Pojos.sample(), Pojos.sample().getFields().apply(0), 0)
             .withFieldBuilder(Optional.of(fieldBuilder));
 
-    assertEquals(disableDefaultMethods, builderField.isDisableDefaultMethods());
+    assertThat(builderField.isDisableDefaultMethods()).isEqualTo(disableDefaultMethods);
   }
 
   @Test
@@ -84,7 +82,7 @@ class BuilderFieldTest {
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), PojoFields.requiredMap(), 0).withFieldBuilder(empty());
 
-    assertFalse(builderField.isFieldOptional());
+    assertThat(builderField.isFieldOptional()).isFalse();
   }
 
   @Test
@@ -92,24 +90,22 @@ class BuilderFieldTest {
     final BuilderField builderField =
         BuilderFields.of(Pojos.sample(), PojoFields.optionalName(), 0).withFieldBuilder(empty());
 
-    assertTrue(builderField.isFieldOptional());
+    assertThat(builderField.isFieldOptional()).isTrue();
   }
 
   @Test
   void allFromPojo_when_requiredFieldsFirst_then_correctOrder() {
     final PList<BuilderField> builderFields =
         BuilderField.allFromPojo(Pojos.sample2(), FullBuilderFieldOrder.REQUIRED_FIELDS_FIRST);
-    assertEquals(
-        PList.of("id", "username", "zip", "nickname"),
-        builderFields.map(bf -> bf.getField().getName().asString()));
+    assertThat(builderFields.map(bf -> bf.getField().getName().asString()))
+        .isEqualTo(PList.of("id", "username", "zip", "nickname"));
   }
 
   @Test
   void allFromPojo_when_declarationOrder_then_correctOrder() {
     final PList<BuilderField> builderFields =
         BuilderField.allFromPojo(Pojos.sample2(), FullBuilderFieldOrder.DECLARATION_ORDER);
-    assertEquals(
-        PList.of("id", "zip", "username", "nickname"),
-        builderFields.map(bf -> bf.getField().getName().asString()));
+    assertThat(builderFields.map(bf -> bf.getField().getName().asString()))
+        .isEqualTo(PList.of("id", "zip", "username", "nickname"));
   }
 }

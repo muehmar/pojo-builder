@@ -8,7 +8,7 @@ import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassn
 import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.malformedUrlException;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.integer;
 import static io.github.muehmar.pojobuilder.generator.model.type.Types.string;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.Ignore;
@@ -78,7 +78,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -114,7 +114,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -151,7 +151,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @ParameterizedTest
@@ -189,7 +189,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   public static Stream<Arguments> nullableAnnotations() {
@@ -238,7 +238,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @ParameterizedTest
@@ -283,7 +283,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -316,7 +316,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -366,7 +366,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -408,7 +408,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -445,7 +445,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -502,7 +502,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -554,7 +554,7 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .fieldBuilders(PList.empty())
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @Test
@@ -619,6 +619,6 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
             .factoryMethod(factoryMethod)
             .build();
 
-    assertEquals(expected, pojoAndSettings.getPojo());
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 }

@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example.ignorefield;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +11,8 @@ class IgnoreFieldClassTest {
     final IgnoreFieldClass ignoreFieldClass =
         IgnoreFieldClassBuilder.create().id("1234").name("Martin").andAllOptionals().build();
 
-    assertEquals("1234", ignoreFieldClass.getId());
-    assertEquals("Martin", ignoreFieldClass.getName());
-    assertEquals("1234-Martin", ignoreFieldClass.getDeviated());
+    assertThat(ignoreFieldClass.getId()).isEqualTo("1234");
+    assertThat(ignoreFieldClass.getName()).isEqualTo("Martin");
+    assertThat(ignoreFieldClass.getDeviated()).isEqualTo("1234-Martin");
   }
 }

@@ -1,6 +1,7 @@
 package io.github.muehmar.pojobuilder.processor;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
@@ -14,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import lombok.Value;
 import org.joor.CompileOptions;
 import org.joor.Reflect;
-import org.junit.jupiter.api.Assertions;
 
 public abstract class BaseExtensionProcessorTest {
   protected static final PackageName PACKAGE = PackageName.fromString("io.github.muehmar");
@@ -35,14 +35,17 @@ public abstract class BaseExtensionProcessorTest {
         PojoWriter.redirectWriter((pojo, settings) -> ref.set(new PojoAndSettings(pojo, settings)));
     final PojoBuilderProcessor pojoBuilderProcessor = new PojoBuilderProcessor(pojoWriter);
 
-    try {
-      Reflect.compile(
-          classname.asString(), content, new CompileOptions().processors(pojoBuilderProcessor));
-    } catch (Exception e) {
-      Assertions.fail("Compilation failed: " + e.getMessage());
-    }
+    assertThatNoException()
+        .as("Compilation failed")
+        .isThrownBy(
+            () -> {
+              Reflect.compile(
+                  classname.asString(),
+                  content,
+                  new CompileOptions().processors(pojoBuilderProcessor));
+            });
     final PojoAndSettings pojoAndSettings = ref.get();
-    assertNotNull(pojoAndSettings, "Output not redirected");
+    assertThat(pojoAndSettings).as("Output not redirected").isNotNull();
 
     return pojoAndSettings;
   }

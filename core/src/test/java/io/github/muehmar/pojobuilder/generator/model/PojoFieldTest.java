@@ -1,10 +1,8 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
 import static java.util.Optional.empty;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import io.github.muehmar.pojobuilder.FieldBuilderMethods;
 import io.github.muehmar.pojobuilder.exception.PojoBuilderException;
@@ -28,7 +26,7 @@ class PojoFieldTest {
         PojoSettings.defaultSettings().withBuilderSetMethodPrefix(empty());
     final Name builderSetMethodName = PojoFields.requiredId().builderSetMethodName(settings);
 
-    assertEquals("id", builderSetMethodName.asString());
+    assertThat(builderSetMethodName.asString()).isEqualTo("id");
   }
 
   @Test
@@ -37,7 +35,7 @@ class PojoFieldTest {
         PojoSettings.defaultSettings().withBuilderSetMethodPrefixOpt(Name.fromString("set"));
     final Name builderSetMethodName = PojoFields.requiredId().builderSetMethodName(settings);
 
-    assertEquals("setId", builderSetMethodName.asString());
+    assertThat(builderSetMethodName.asString()).isEqualTo("setId");
   }
 
   @Test
@@ -47,7 +45,7 @@ class PojoFieldTest {
         FieldBuilderMethods.forField(
             field, Name.fromString("method"), Argument.of(Name.fromString("val"), Types.string()));
 
-    assertTrue(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThat(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod)).isTrue();
   }
 
   @Test
@@ -60,7 +58,7 @@ class PojoFieldTest {
                 Argument.of(Name.fromString("val"), Types.string()))
             .withFieldName(Name.fromString("anyOtherName"));
 
-    assertFalse(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThat(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod)).isFalse();
   }
 
   @Test
@@ -75,7 +73,7 @@ class PojoFieldTest {
             .withFieldName(Name.fromString("anyOtherName"))
             .withReturnType(Types.voidType());
 
-    assertFalse(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThat(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod)).isFalse();
   }
 
   @Test
@@ -88,9 +86,8 @@ class PojoFieldTest {
                 Argument.of(Name.fromString("val"), Types.string()))
             .withReturnType(Types.string());
 
-    assertThrows(
-        PojoBuilderException.class,
-        () -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThatExceptionOfType(PojoBuilderException.class)
+        .isThrownBy(() -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
   }
 
   @Test
@@ -103,9 +100,8 @@ class PojoFieldTest {
                 Argument.of(Name.fromString("val"), Types.string()))
             .withReturnType(Types.optional(field.getType()));
 
-    assertThrows(
-        PojoBuilderException.class,
-        () -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThatExceptionOfType(PojoBuilderException.class)
+        .isThrownBy(() -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
   }
 
   @Test
@@ -118,9 +114,8 @@ class PojoFieldTest {
                 Argument.of(Name.fromString("val"), Types.string()))
             .withReturnType(Types.integer());
 
-    assertThrows(
-        PojoBuilderException.class,
-        () -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThatExceptionOfType(PojoBuilderException.class)
+        .isThrownBy(() -> field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
   }
 
   @Test
@@ -133,7 +128,7 @@ class PojoFieldTest {
                 Argument.of(Name.fromString("val"), Types.string()))
             .withReturnType(Types.optional(field.getType()));
 
-    assertTrue(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod));
+    assertThat(field.isFieldBuilderMethod(Name.fromString("Class"), fieldBuilderMethod)).isTrue();
   }
 
   @ParameterizedTest
@@ -145,7 +140,7 @@ class PojoFieldTest {
 
     final SingleArgumentMatchingResult result = pojoField.match(argument, fieldMatching);
 
-    assertEquals(Optional.empty(), result.getFieldArgument());
+    assertThat(result.getFieldArgument()).isEmpty();
   }
 
   @ParameterizedTest
@@ -158,7 +153,7 @@ class PojoFieldTest {
 
     final FieldArgument expectedFieldArgument =
         new FieldArgument(pojoField, argument, OptionalFieldRelation.SAME_TYPE);
-    assertEquals(Optional.of(expectedFieldArgument), result.getFieldArgument());
+    assertThat(result.getFieldArgument()).isEqualTo(Optional.of(expectedFieldArgument));
   }
 
   @Test
@@ -169,7 +164,7 @@ class PojoFieldTest {
     final SingleArgumentMatchingResult result =
         pojoField.match(argument, FieldMatching.TYPE_AND_NAME);
 
-    assertEquals(Optional.empty(), result.getFieldArgument());
+    assertThat(result.getFieldArgument()).isEmpty();
   }
 
   @Test
@@ -182,6 +177,6 @@ class PojoFieldTest {
 
     final FieldArgument expectedFieldArgument =
         new FieldArgument(pojoField, argument, OptionalFieldRelation.SAME_TYPE);
-    assertEquals(Optional.of(expectedFieldArgument), result.getFieldArgument());
+    assertThat(result.getFieldArgument()).isEqualTo(Optional.of(expectedFieldArgument));
   }
 }

@@ -1,9 +1,6 @@
 package io.github.muehmar.pojobuilder.example.fieldbuilder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -17,16 +14,16 @@ class FieldBuilderClassTest {
     final FieldBuilderClass<String> fieldBuilder2 =
         FieldBuilderClassBuilder.<String>create().randomString().prop2("asd").build();
 
-    assertNotEquals(fieldBuilder1.getProp1(), fieldBuilder2.getProp1());
+    assertThat(fieldBuilder2.getProp1()).isNotEqualTo(fieldBuilder1.getProp1());
   }
 
   @Test
   void builderForProp1ContainsOnlyCustomMethods() {
     final Class<?> clazz = FieldBuilderClassBuilder.Builder0.class;
-    assertFalse(classHasMethod(clazz, "prop1"));
-    assertTrue(classHasMethod(clazz, "randomString"));
-    assertTrue(classHasMethod(clazz, "fromInt"));
-    assertTrue(classHasMethod(clazz, "fromVarargs"));
+    assertThat(classHasMethod(clazz, "prop1")).isFalse();
+    assertThat(classHasMethod(clazz, "randomString")).isTrue();
+    assertThat(classHasMethod(clazz, "fromInt")).isTrue();
+    assertThat(classHasMethod(clazz, "fromVarargs")).isTrue();
   }
 
   @Test
@@ -34,7 +31,7 @@ class FieldBuilderClassTest {
     final FieldBuilderClass<String> fieldBuilder =
         FieldBuilderClassBuilder.<String>create().fromInt(52).prop2("asd").build();
 
-    assertEquals("52", fieldBuilder.getProp1());
+    assertThat(fieldBuilder.getProp1()).isEqualTo("52");
   }
 
   @Test
@@ -45,7 +42,7 @@ class FieldBuilderClassTest {
             .prop2("prop2")
             .build();
 
-    assertEquals("hello-world-!", fieldBuilder.getProp1());
+    assertThat(fieldBuilder.getProp1()).isEqualTo("hello-world-!");
   }
 
   @Test
@@ -59,7 +56,7 @@ class FieldBuilderClassTest {
             .data("")
             .build();
 
-    assertEquals(Optional.of("CONSTANT"), fieldBuilder.getProp3());
+    assertThat(fieldBuilder.getProp3()).isEqualTo(Optional.of("CONSTANT"));
   }
 
   @Test
@@ -73,7 +70,7 @@ class FieldBuilderClassTest {
             .supplier(() -> "supplierData")
             .build();
 
-    assertEquals(Optional.of("supplierData"), fieldBuilder.getData());
+    assertThat(fieldBuilder.getData()).isEqualTo(Optional.of("supplierData"));
   }
 
   private static boolean classHasMethod(Class<?> clazz, String methodName) {

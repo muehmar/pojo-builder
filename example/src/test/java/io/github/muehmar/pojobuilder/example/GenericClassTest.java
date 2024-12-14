@@ -4,8 +4,7 @@ import static io.github.muehmar.pojobuilder.example.GenericClassBuilder.create;
 import static io.github.muehmar.pojobuilder.example.GenericClassBuilder.createFull;
 import static io.github.muehmar.pojobuilder.example.GenericClassBuilder.fullGenericClassBuilder;
 import static io.github.muehmar.pojobuilder.example.GenericClassBuilder.genericClassBuilder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -20,9 +19,9 @@ class GenericClassTest {
     final GenericClass<Data, String> genericClass =
         GenericClassBuilder.<Data, String>create().prop1("prop1").data(data).code(Code.A1).build();
 
-    assertEquals("Hello World!", genericClass.getData().get(0));
-    assertEquals("prop1", genericClass.getProp1());
-    assertEquals(Code.A1, genericClass.getCode());
+    assertThat(genericClass.getData().get(0)).isEqualTo("Hello World!");
+    assertThat(genericClass.getProp1()).isEqualTo("prop1");
+    assertThat(genericClass.getCode()).isEqualTo(Code.A1);
   }
 
   @Test
@@ -33,7 +32,7 @@ class GenericClassTest {
     final GenericClass<Data, String> genericClass =
         create(Data.class, String.class).prop1("prop1").data(data).code(Code.A1).build();
 
-    assertNotNull(genericClass);
+    assertThat(genericClass).isNotNull();
   }
 
   @Test
@@ -48,7 +47,7 @@ class GenericClassTest {
             .code(Code.A1)
             .build();
 
-    assertNotNull(genericClass);
+    assertThat(genericClass).isNotNull();
   }
 
   @Test
@@ -64,7 +63,7 @@ class GenericClassTest {
             .additionalData(Optional.empty())
             .build();
 
-    assertNotNull(genericClass);
+    assertThat(genericClass).isNotNull();
   }
 
   @Test
@@ -80,7 +79,7 @@ class GenericClassTest {
             .additionalData(Optional.empty())
             .build();
 
-    assertNotNull(genericClass);
+    assertThat(genericClass).isNotNull();
   }
 
   public static class Data extends ArrayList<String> implements Comparable<Data> {

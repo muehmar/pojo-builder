@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example.annotatedconstructor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,8 @@ class ConstructorAnnotationDataTest {
             .age(Optional.of(42))
             .build();
 
-    assertEquals("name", constructorAnnotationData.getName());
-    assertEquals(Optional.of(42), constructorAnnotationData.getAge());
-    assertEquals("data", constructorAnnotationData.getData());
+    assertThat(constructorAnnotationData.getName()).isEqualTo("name");
+    assertThat(constructorAnnotationData.getAge()).isEqualTo(Optional.of(42));
+    assertThat(constructorAnnotationData.getData()).isEqualTo("data");
   }
 }

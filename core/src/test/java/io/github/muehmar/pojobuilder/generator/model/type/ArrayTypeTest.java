@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.impl.gen.Refs;
@@ -12,30 +12,31 @@ class ArrayTypeTest {
   @Test
   void getTypeDeclaration_when_stringArray_then_correctDeclaration() {
     final ArrayType arrayType = ArrayType.fromItemType(Types.string());
-    assertEquals("String[]", arrayType.getTypeDeclaration().asString());
+    assertThat(arrayType.getTypeDeclaration().asString()).isEqualTo("String[]");
   }
 
   @Test
   void getTypeDeclaration_when_stringVarargs_then_correctDeclaration() {
     final ArrayType arrayType = ArrayType.varargs(Types.string());
-    assertEquals("String...", arrayType.getTypeDeclaration().asString());
+    assertThat(arrayType.getTypeDeclaration().asString()).isEqualTo("String...");
   }
 
   @Test
   void getName_when_stringArray_then_correctName() {
     final ArrayType arrayType = ArrayType.fromItemType(Types.string());
-    assertEquals("String[]", arrayType.getName().asString());
+    assertThat(arrayType.getName().asString()).isEqualTo("String[]");
   }
 
   @Test
   void getName_when_stringVarargs_then_correctName() {
     final ArrayType arrayType = ArrayType.varargs(Types.string());
-    assertEquals("String...", arrayType.getName().asString());
+    assertThat(arrayType.getName().asString()).isEqualTo("String...");
   }
 
   @Test
   void getImports_when_stringArray_then_allImports() {
     final ArrayType arrayType = ArrayType.fromItemType(Types.string());
-    assertEquals(PList.single(Refs.JAVA_LANG_STRING), arrayType.getImports().map(Name::asString));
+    assertThat(arrayType.getImports().map(Name::asString))
+        .isEqualTo(PList.single(Refs.JAVA_LANG_STRING));
   }
 }

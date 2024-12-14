@@ -2,7 +2,7 @@ package io.github.muehmar.pojobuilder.processor;
 
 import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.ioException;
 import static io.github.muehmar.pojobuilder.generator.model.type.QualifiedClassnames.malformedUrlException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.PojoBuilder;
@@ -31,7 +31,7 @@ class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
         runAnnotationProcessor(pojoClassname, classString);
 
     final Optional<BuildMethod> buildMethod = pojoAndSettings.getPojo().getBuildMethod();
-    assertEquals(Optional.empty(), buildMethod);
+    assertThat(buildMethod).isEmpty();
   }
 
   @Test
@@ -61,7 +61,7 @@ class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
     final Optional<BuildMethod> buildMethod = pojoAndSettings.getPojo().getBuildMethod();
     final BuildMethod expected =
         new BuildMethod(Name.fromString("customBuildMethod"), Types.string(), PList.empty());
-    assertEquals(Optional.of(expected), buildMethod);
+    assertThat(buildMethod).isEqualTo(Optional.of(expected));
   }
 
   @Test
@@ -95,6 +95,6 @@ class PojoBuilderProcessorBuildMethodTest extends BaseExtensionProcessorTest {
             Name.fromString("customBuildMethod"),
             Types.string(),
             PList.of(ioException(), malformedUrlException()));
-    assertEquals(Optional.of(expected), buildMethod);
+    assertThat(buildMethod).isEqualTo(Optional.of(expected));
   }
 }
