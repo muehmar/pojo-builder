@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
@@ -15,30 +15,29 @@ class GenericsTest {
 
   @Test
   void getTypeVariablesFormatted_when_generics_then_correctFormatted() {
-    assertEquals("<T, S>", GENERICS.getTypeVariablesFormatted());
+    assertThat(GENERICS.getTypeVariablesFormatted()).isEqualTo("<T, S>");
   }
 
   @Test
   void getTypeVariablesFormatted_when_emptyGenerics_then_emptyOutput() {
-    assertEquals("", Generics.empty().getTypeVariablesFormatted());
+    assertThat(Generics.empty().getTypeVariablesFormatted()).isEqualTo("");
   }
 
   @Test
   void getBoundedTypeVariablesFormatted_when_generics_then_correctFormatted() {
-    assertEquals(
-        "<T extends Object & List<String>, S>", GENERICS.getBoundedTypeVariablesFormatted());
+    assertThat(GENERICS.getBoundedTypeVariablesFormatted())
+        .isEqualTo("<T extends Object & List<String>, S>");
   }
 
   @Test
   void getBoundedTypeVariablesFormatted_when_emptyGenerics_then_emptyOutput() {
-    assertEquals("", Generics.empty().getBoundedTypeVariablesFormatted());
+    assertThat(Generics.empty().getBoundedTypeVariablesFormatted()).isEqualTo("");
   }
 
   @Test
   void getImports_when_generics_then_correctImports() {
     final PList<Name> imports = GENERICS.getImports();
-    assertEquals(
-        PList.of("java.lang.Object", "java.util.List", "java.lang.String"),
-        imports.map(Name::asString));
+    assertThat(imports.map(Name::asString))
+        .isEqualTo(PList.of("java.lang.Object", "java.util.List", "java.lang.String"));
   }
 }

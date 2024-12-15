@@ -1,7 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder.full;
 
 import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
@@ -75,6 +75,6 @@ class FullBuilderGeneratorTest {
             PojoSettings.defaultSettings().withFullBuilderEnabled(false),
             javaWriter());
 
-    assertEquals("", writer.asString());
+    assertThat(writer.asString()).isEqualTo("");
   }
 }

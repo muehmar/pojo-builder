@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -11,15 +11,15 @@ class UserTest {
     final User user =
         UserBuilder.create().name("Joe").andAllOptionals().age(Optional.empty()).build();
 
-    assertEquals("Joe", user.getName());
-    assertEquals(Optional.empty(), user.getAge());
+    assertThat(user.getName()).isEqualTo("Joe");
+    assertThat(user.getAge()).isEmpty();
   }
 
   @Test
   void newBuilder_when_usedToCreateInstanceSetOptional_then_allAttributesSetAccordingly() {
     final User user = UserBuilder.create().name("Joe").andAllOptionals().age(50).build();
 
-    assertEquals("Joe", user.getName());
-    assertEquals(Optional.of(50), user.getAge());
+    assertThat(user.getName()).isEqualTo("Joe");
+    assertThat(user.getAge()).contains(50);
   }
 }

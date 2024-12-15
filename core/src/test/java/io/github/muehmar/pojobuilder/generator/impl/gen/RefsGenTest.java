@@ -6,8 +6,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_ST
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_LIST;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_MAP;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.writer.Writer;
@@ -31,9 +30,9 @@ class RefsGenTest {
     final Writer writer =
         gen.generate(PojoFields.requiredMap(), PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
   }
 
   @Test
@@ -42,8 +41,8 @@ class RefsGenTest {
     final Writer writer =
         gen.generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
   }
 
   @Test
@@ -52,7 +51,7 @@ class RefsGenTest {
     final Writer writer =
         gen.generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().isEmpty());
+    assertThat(writer.getRefs().isEmpty()).isTrue();
   }
 
   @Test
@@ -66,9 +65,9 @@ class RefsGenTest {
     final Writer writer =
         gen.generate(fieldBuilderMethod, PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
-    assertFalse(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isFalse();
   }
 }

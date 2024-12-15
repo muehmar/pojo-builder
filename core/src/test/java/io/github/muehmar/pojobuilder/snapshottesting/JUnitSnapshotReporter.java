@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.snapshottesting;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.origin.snapshots.Snapshot;
 import au.com.origin.snapshots.reporters.SnapshotReporter;
@@ -13,6 +13,6 @@ public class JUnitSnapshotReporter implements SnapshotReporter {
 
   @Override
   public void report(Snapshot snapshot, Snapshot snapshot1) {
-    assertEquals(snapshot.getBody(), snapshot1.getBody());
+    assertThat(snapshot1.getBody()).isEqualTo(snapshot.getBody());
   }
 }

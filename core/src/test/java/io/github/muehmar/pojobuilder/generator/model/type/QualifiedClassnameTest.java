@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model.type;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.pojobuilder.generator.model.PackageName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,6 @@ class QualifiedClassnameTest {
             Classname.fromString("OuterClass.InnerClass"),
             PackageName.fromString("io.github.muehmar"));
 
-    assertEquals("io.github.muehmar.OuterClass", qualifiedClassname.getImport());
+    assertThat(qualifiedClassname.getImport()).isEqualTo("io.github.muehmar.OuterClass");
   }
 }

@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example.factorymethod;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +13,6 @@ class UrlBuilderTest {
 
     final URL expectedUrl = new URL("http://localhost:8080");
 
-    assertEquals(expectedUrl, url);
+    assertThat(url).isEqualTo(expectedUrl);
   }
 }

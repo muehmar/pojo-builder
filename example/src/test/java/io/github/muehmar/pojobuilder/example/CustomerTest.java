@@ -2,8 +2,7 @@ package io.github.muehmar.pojobuilder.example;
 
 import static io.github.muehmar.pojobuilder.example.ProfessionBuilder.fullProfessionBuilder;
 import static java.util.Optional.empty;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -26,12 +25,12 @@ class CustomerTest {
             .setAge(empty())
             .build();
 
-    assertEquals(SAMPLE_ID, customer.getId());
-    assertEquals("Dexter", customer.getName());
-    assertEquals(12.5d, customer.getRandom());
-    assertArrayEquals(new byte[] {0x15}, customer.getKey());
-    assertEquals(Optional.of("Dex"), customer.getNickname());
-    assertEquals(empty(), customer.getAge());
+    assertThat(customer.getId()).isEqualTo(SAMPLE_ID);
+    assertThat(customer.getName()).isEqualTo("Dexter");
+    assertThat(customer.getRandom()).isEqualTo(12.5d);
+    assertThat(customer.getKey()).containsExactly(new byte[] {0x15});
+    assertThat(customer.getNickname()).isEqualTo(Optional.of("Dex"));
+    assertThat(customer.getAge()).isEqualTo(empty());
   }
 
   @Test
@@ -43,8 +42,8 @@ class CustomerTest {
             .andAllOptionals()
             .build();
 
-    assertEquals("Waldweg 10", address.getStreet());
-    assertEquals("Winterthur", address.getCity());
+    assertThat(address.getStreet()).isEqualTo("Waldweg 10");
+    assertThat(address.getCity()).isEqualTo("Winterthur");
   }
 
   @Test
@@ -52,6 +51,6 @@ class CustomerTest {
     final Customer.Profession profession =
         fullProfessionBuilder().name("Software developer").build();
 
-    assertEquals("Software developer", profession.getName());
+    assertThat(profession.getName()).isEqualTo("Software developer");
   }
 }

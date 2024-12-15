@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example.standardbuilder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +15,8 @@ class BuilderClassTest {
             .prop3(new OuterClass.InnerClass("prop3"))
             .build();
 
-    assertEquals("prop1", builderClass.getProp1());
-    assertEquals("prop2", builderClass.getProp2());
-    assertEquals("prop3", builderClass.getProp3().getValue());
+    assertThat(builderClass.getProp1()).isEqualTo("prop1");
+    assertThat(builderClass.getProp2()).isEqualTo("prop2");
+    assertThat(builderClass.getProp3().getValue()).isEqualTo("prop3");
   }
 }

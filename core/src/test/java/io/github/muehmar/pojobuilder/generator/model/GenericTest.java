@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
@@ -19,6 +19,7 @@ class GenericTest {
                     Types.comparable(Types.typeVariable(Name.fromString("T")))))
             .build();
 
-    assertEquals("T extends List<String> & Comparable<T>", generic.getTypeDeclaration().asString());
+    assertThat(generic.getTypeDeclaration().asString())
+        .isEqualTo("T extends List<String> & Comparable<T>");
   }
 }

@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.processor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
@@ -60,7 +60,7 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
     final FieldBuilder fieldBuilder = new FieldBuilder(false, methods);
 
-    assertEquals(PList.single(fieldBuilder), pojoAndSettings.getPojo().getFieldBuilders());
+    assertThat(PList.single(fieldBuilder)).isEqualTo(pojoAndSettings.getPojo().getFieldBuilders());
   }
 
   @Test
@@ -130,10 +130,16 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
                 .innerClassName(Optional.of(Name.fromString("CustomIdBuilder")))
                 .build());
 
-    assertEquals(1, pojoAndSettings.getPojo().getFieldBuilders().size());
-    assertEquals(
-        methods.toHashSet(),
-        pojoAndSettings.getPojo().getFieldBuilders().apply(0).getMethods().toPList().toHashSet());
+    assertThat(1).isEqualTo(pojoAndSettings.getPojo().getFieldBuilders().size());
+    assertThat(methods.toHashSet())
+        .isEqualTo(
+            pojoAndSettings
+                .getPojo()
+                .getFieldBuilders()
+                .apply(0)
+                .getMethods()
+                .toPList()
+                .toHashSet());
   }
 
   @ParameterizedTest
@@ -166,10 +172,10 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
     final PList<FieldBuilder> fieldBuilders = pojoAndSettings.getPojo().getFieldBuilders();
 
-    assertEquals(1, fieldBuilders.size());
+    assertThat(fieldBuilders.size()).isEqualTo(1);
     final FieldBuilder fieldBuilder = fieldBuilders.apply(0);
 
-    assertEquals(disableDefaultMethods, fieldBuilder.isDisableDefaultMethods());
+    assertThat(fieldBuilder.isDisableDefaultMethods()).isEqualTo(disableDefaultMethods);
   }
 
   @ParameterizedTest
@@ -216,9 +222,9 @@ class PojoBuilderProcessorFieldBuilderTest extends BaseExtensionProcessorTest {
 
     final PList<FieldBuilder> fieldBuilders = pojoAndSettings.getPojo().getFieldBuilders();
 
-    assertEquals(1, fieldBuilders.size());
+    assertThat(fieldBuilders.size()).isEqualTo(1);
     final FieldBuilder fieldBuilder = fieldBuilders.apply(0);
 
-    assertEquals(disableDefaultMethods, fieldBuilder.isDisableDefaultMethods());
+    assertThat(fieldBuilder.isDisableDefaultMethods()).isEqualTo(disableDefaultMethods);
   }
 }

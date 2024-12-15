@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.processor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.annotations.ConstructorMatching;
@@ -29,7 +29,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(PojoSettings.defaultSettings(), pojoAndSettings.getSettings());
+    assertThat(PojoSettings.defaultSettings()).isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -45,9 +45,9 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("CustomBuilderName")),
-        pojoAndSettings.getSettings());
+    assertThat(
+            PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("CustomBuilderName")))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -63,10 +63,10 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings()
-            .withBuilderAccessLevel(ClassAccessLevelModifier.PACKAGE_PRIVATE),
-        pojoAndSettings.getSettings());
+    assertThat(
+            PojoSettings.defaultSettings()
+                .withBuilderAccessLevel(ClassAccessLevelModifier.PACKAGE_PRIVATE))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -86,9 +86,10 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withOptionalDetections(PList.single(OptionalDetection.NONE)),
-        pojoAndSettings.getSettings());
+    assertThat(
+            PojoSettings.defaultSettings()
+                .withOptionalDetections(PList.single(OptionalDetection.NONE)))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -104,9 +105,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("PojoBuilder")),
-        pojoAndSettings.getSettings());
+    assertThat(PojoSettings.defaultSettings().withBuilderNameOpt(Name.fromString("PojoBuilder")))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -122,9 +122,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withStandardBuilderEnabled(false),
-        pojoAndSettings.getSettings());
+    assertThat(PojoSettings.defaultSettings().withStandardBuilderEnabled(false))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -140,9 +139,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withFullBuilderEnabled(false),
-        pojoAndSettings.getSettings());
+    assertThat(PojoSettings.defaultSettings().withFullBuilderEnabled(false))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -162,10 +160,10 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings()
-            .withFullBuilderFieldOrder(FullBuilderFieldOrder.DECLARATION_ORDER),
-        pojoAndSettings.getSettings());
+    assertThat(
+            PojoSettings.defaultSettings()
+                .withFullBuilderFieldOrder(FullBuilderFieldOrder.DECLARATION_ORDER))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -181,9 +179,8 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withIncludeOuterClassName(false),
-        pojoAndSettings.getSettings());
+    assertThat(PojoSettings.defaultSettings().withIncludeOuterClassName(false))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 
   @Test
@@ -203,8 +200,7 @@ class PojoBuilderProcessorSettingsTest extends BaseExtensionProcessorTest {
 
     final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
 
-    assertEquals(
-        PojoSettings.defaultSettings().withFieldMatching(FieldMatching.TYPE_AND_NAME),
-        pojoAndSettings.getSettings());
+    assertThat(PojoSettings.defaultSettings().withFieldMatching(FieldMatching.TYPE_AND_NAME))
+        .isEqualTo(pojoAndSettings.getSettings());
   }
 }

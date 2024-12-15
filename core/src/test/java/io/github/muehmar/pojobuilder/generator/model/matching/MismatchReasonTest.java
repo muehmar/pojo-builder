@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model.matching;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.Names;
@@ -17,8 +17,8 @@ class MismatchReasonTest {
         MismatchReason.nonMatchingName(
             PojoFields.optionalName(), new Argument(Names.id(), Types.string()));
 
-    assertEquals(
-        "Field 'name' does not match the name of argument 'id'.", mismatchReason.getReason());
+    assertThat(mismatchReason.getReason())
+        .isEqualTo("Field 'name' does not match the name of argument 'id'.");
   }
 
   @Test
@@ -27,9 +27,9 @@ class MismatchReasonTest {
         MismatchReason.nonMatchingArgumentType(
             PojoFields.optionalName(), new Argument(Names.id(), Types.string()));
 
-    assertEquals(
-        "The type 'String' of argument 'id' does not match the type 'String' of field 'name'.",
-        mismatchReason.getReason());
+    assertThat(mismatchReason.getReason())
+        .isEqualTo(
+            "The type 'String' of argument 'id' does not match the type 'String' of field 'name'.");
   }
 
   @Test
@@ -37,8 +37,7 @@ class MismatchReasonTest {
     final MismatchReason mismatchReason =
         MismatchReason.nonMatchingArgumentCount(Pojos.sample(), PList.empty());
 
-    assertEquals(
-        "The number of arguments (0) does not match the number of fields (3).",
-        mismatchReason.getReason());
+    assertThat(mismatchReason.getReason())
+        .isEqualTo("The number of arguments (0) does not match the number of fields (3).");
   }
 }

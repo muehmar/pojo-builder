@@ -1,7 +1,6 @@
 package io.github.muehmar.pojobuilder.example.disabledbuilder;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.pojobuilder.example.MethodHelper;
 import org.junit.jupiter.api.Test;
@@ -12,10 +11,10 @@ class NoStandardBuilderObjectTest {
   void noStandardBuilderObjectBuilder_hasNoStandardBuilderFactoryMethods() {
     final Class<NoStandardBuilderObjectBuilder> builderClass = NoStandardBuilderObjectBuilder.class;
 
-    assertTrue(MethodHelper.hasMethod(builderClass, "createFull"));
-    assertTrue(MethodHelper.hasMethod(builderClass, "fullNoStandardBuilderObjectBuilder"));
+    assertThat(MethodHelper.hasMethod(builderClass, "createFull")).isTrue();
+    assertThat(MethodHelper.hasMethod(builderClass, "fullNoStandardBuilderObjectBuilder")).isTrue();
 
-    assertFalse(MethodHelper.hasMethod(builderClass, "create"));
-    assertFalse(MethodHelper.hasMethod(builderClass, "noStandardBuilderObjectBuilder"));
+    assertThat(MethodHelper.hasMethod(builderClass, "create")).isFalse();
+    assertThat(MethodHelper.hasMethod(builderClass, "noStandardBuilderObjectBuilder")).isFalse();
   }
 }

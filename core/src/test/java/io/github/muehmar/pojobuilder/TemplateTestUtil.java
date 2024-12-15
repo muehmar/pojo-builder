@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.muehmar.pojobuilder.generator.Resources;
 import java.io.BufferedWriter;
@@ -23,7 +23,7 @@ public class TemplateTestUtil {
     if (updateTemplate) {
       writeResourcePojoTemplate(template, output);
     }
-    assertEquals(readResourcePojoTemplate(template), output);
+    assertThat(output).isEqualTo(readResourcePojoTemplate(template));
   }
 
   private static String readResourcePojoTemplate(String template) {

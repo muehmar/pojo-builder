@@ -3,7 +3,7 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.instantiation;
 import static io.github.muehmar.codegenerator.writer.Writer.javaWriter;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.ConstructorCallGenerator.constructorCallGenerator;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.codegenerator.writer.Writer;
@@ -20,8 +20,8 @@ class ConstructorCallGeneratorTest {
         constructorCallGenerator()
             .generate(Pojos.sample(), PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals(PList.empty(), writer.getRefs());
-    assertEquals("new Customer(id, username, nickname);", writer.asString());
+    assertThat(writer.getRefs()).isEqualTo(PList.empty());
+    assertThat(writer.asString()).isEqualTo("new Customer(id, username, nickname);");
   }
 
   @Test
@@ -30,8 +30,8 @@ class ConstructorCallGeneratorTest {
         constructorCallGenerator()
             .generate(Pojos.genericSample(), PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals(PList.empty(), writer.getRefs());
-    assertEquals("new Customer<T, S>(id, data, additionalData);", writer.asString());
+    assertThat(writer.getRefs()).isEqualTo(PList.empty());
+    assertThat(writer.asString()).isEqualTo("new Customer<T, S>(id, data, additionalData);");
   }
 
   @Test
@@ -42,7 +42,8 @@ class ConstructorCallGeneratorTest {
     final Writer pojo =
         constructorCallGenerator().generate(sample, PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals(PList.single(JAVA_UTIL_OPTIONAL), pojo.getRefs());
-    assertEquals("new Customer(id, username, Optional.ofNullable(nickname));", pojo.asString());
+    assertThat(pojo.getRefs()).isEqualTo(PList.single(JAVA_UTIL_OPTIONAL));
+    assertThat(pojo.asString())
+        .isEqualTo("new Customer(id, username, Optional.ofNullable(nickname));");
   }
 }

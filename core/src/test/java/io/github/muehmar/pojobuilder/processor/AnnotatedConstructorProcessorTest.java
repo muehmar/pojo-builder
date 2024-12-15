@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.processor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Argument;
@@ -18,7 +18,7 @@ import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-public class AnnotatedConstructorProcessorTest extends BaseExtensionProcessorTest {
+class AnnotatedConstructorProcessorTest extends BaseExtensionProcessorTest {
   @Test
   void run_when_simplePojoWithAnnotatedConstructor_then_correctPojo() {
     final QualifiedClassname pojoClassname = randomPojoClassname();
@@ -94,6 +94,6 @@ public class AnnotatedConstructorProcessorTest extends BaseExtensionProcessorTes
             .buildMethod(Optional.empty())
             .build();
 
-    assertEquals(expectedPojo, pojo);
+    assertThat(pojo).isEqualTo(expectedPojo);
   }
 }

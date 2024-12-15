@@ -3,9 +3,7 @@ package io.github.muehmar.pojobuilder.generator.model.type;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_INTEGER;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_LANG_STRING;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Refs.JAVA_UTIL_MAP;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.model.Name;
@@ -25,40 +23,40 @@ class TypeTest {
   void getImports_when_javaMap_then_correctQualifiedNames() {
     final Type type = Types.map(Types.string(), Types.integer());
     final PList<String> allQualifiedNames = type.getImports().map(Name::asString);
-    assertEquals(3, allQualifiedNames.size());
-    assertTrue(allQualifiedNames.exists(JAVA_UTIL_MAP::equals));
-    assertTrue(allQualifiedNames.exists(JAVA_LANG_STRING::equals));
-    assertTrue(allQualifiedNames.exists(JAVA_LANG_INTEGER::equals));
+    assertThat(allQualifiedNames.size()).isEqualTo(3);
+    assertThat(allQualifiedNames.exists(JAVA_UTIL_MAP::equals)).isTrue();
+    assertThat(allQualifiedNames.exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(allQualifiedNames.exists(JAVA_LANG_INTEGER::equals)).isTrue();
   }
 
   @ParameterizedTest
   @EnumSource(PrimitiveType.class)
   void isPrimitive_when_calledForEachPrimitive_then_trueForAll(PrimitiveType primitiveType) {
     final Type type = Type.fromSpecificType(primitiveType);
-    assertTrue(type.isPrimitive());
+    assertThat(type.isPrimitive()).isTrue();
   }
 
   @Test
   void isPrimitive_when_calledForNonPrimitives_then_falseForAll() {
-    assertFalse(Types.string().isPrimitive());
-    assertFalse(Types.integer().isPrimitive());
+    assertThat(Types.string().isPrimitive()).isFalse();
+    assertThat(Types.integer().isPrimitive()).isFalse();
   }
 
   @Test
   void isVoid_when_calledForVoidType_then_true() {
-    assertTrue(Types.voidType().isVoid());
+    assertThat(Types.voidType().isVoid()).isTrue();
   }
 
   @ParameterizedTest
   @MethodSource("nonArrayTypes")
   void isArray_when_calledForArray_then_true(Type type) {
-    assertTrue(Types.array(type).isArray());
+    assertThat(Types.array(type).isArray()).isTrue();
   }
 
   @ParameterizedTest
   @MethodSource("nonArrayTypes")
   void isArray_when_calledNonArrayTypes_then_false(Type type) {
-    assertFalse(type.isArray());
+    assertThat(type.isArray()).isFalse();
   }
 
   static Stream<Arguments> nonArrayTypes() {
@@ -72,20 +70,20 @@ class TypeTest {
   @Test
   void getRelation_when_unrelatedTypes_then_noRelationReturned() {
     final Optional<OptionalFieldRelation> relation = Types.string().getRelation(Types.integer());
-    assertFalse(relation.isPresent());
+    assertThat(relation.isPresent()).isFalse();
   }
 
   @Test
   void getRelation_when_stringAndOptionalString_then_relationIsWrapIntoOptional() {
     final Optional<OptionalFieldRelation> relation =
         Types.string().getRelation(Types.optional(Types.string()));
-    assertEquals(Optional.of(OptionalFieldRelation.WRAP_INTO_OPTIONAL), relation);
+    assertThat(relation).isEqualTo(Optional.of(OptionalFieldRelation.WRAP_INTO_OPTIONAL));
   }
 
   @Test
   void getRelation_when_bothAreStrings_then_relationIsSameType() {
     final Optional<OptionalFieldRelation> relation = Types.string().getRelation(Types.string());
-    assertEquals(Optional.of(OptionalFieldRelation.SAME_TYPE), relation);
+    assertThat(relation).isEqualTo(Optional.of(OptionalFieldRelation.SAME_TYPE));
   }
 
   @Test
@@ -95,9 +93,8 @@ class TypeTest {
     final Function<DeclaredType, String> getTypeDeclaration =
         declaredType -> declaredType.getTypeDeclaration().asString();
 
-    assertEquals(
-        "Optional<String>",
-        type.fold(getTypeDeclaration, ignore -> "", ignore -> "", ignore -> ""));
+    assertThat(type.fold(getTypeDeclaration, ignore -> "", ignore -> "", ignore -> ""))
+        .isEqualTo("Optional<String>");
   }
 
   @Test
@@ -106,7 +103,8 @@ class TypeTest {
 
     final Function<ArrayType, String> getItemTypeName =
         arrayType -> arrayType.getItemType().getName().asString();
-    assertEquals("String", type.fold(ignore -> "", getItemTypeName, ignore -> "", ignore -> ""));
+    assertThat(type.fold(ignore -> "", getItemTypeName, ignore -> "", ignore -> ""))
+        .isEqualTo("String");
   }
 
   @Test
@@ -115,7 +113,8 @@ class TypeTest {
 
     final Function<PrimitiveType, String> getPrimitiveName =
         primitiveType -> primitiveType.getName().asString();
-    assertEquals("boolean", type.fold(ignore -> "", ignore -> "", getPrimitiveName, ignore -> ""));
+    assertThat(type.fold(ignore -> "", ignore -> "", getPrimitiveName, ignore -> ""))
+        .isEqualTo("boolean");
   }
 
   @Test
@@ -125,8 +124,9 @@ class TypeTest {
     final Function<TypeVariableType, Boolean> compareTypeVariableName =
         typeVariableType -> typeVariableType.getName().equals(Name.fromString("T"));
 
-    assertTrue(
-        type.fold(ignore -> false, ignore -> false, ignore -> false, compareTypeVariableName));
+    assertThat(
+            type.fold(ignore -> false, ignore -> false, ignore -> false, compareTypeVariableName))
+        .isTrue();
   }
 
   @Test
@@ -137,7 +137,7 @@ class TypeTest {
         declaredType -> declaredType.getTypeDeclaration().asString();
 
     final Optional<String> result = type.onDeclaredType(getTypeDeclaration);
-    assertEquals(Optional.of("Optional<String>"), result);
+    assertThat(result).isEqualTo(Optional.of("Optional<String>"));
   }
 
   @Test
@@ -145,10 +145,12 @@ class TypeTest {
     final Function<DeclaredType, String> getTypeDeclaration =
         declaredType -> declaredType.getTypeDeclaration().asString();
 
-    assertFalse(Types.array(Types.string()).onDeclaredType(getTypeDeclaration).isPresent());
-    assertFalse(
-        Types.typeVariable(Name.fromString("T")).onDeclaredType(getTypeDeclaration).isPresent());
-    assertFalse(Types.primitiveBoolean().onDeclaredType(getTypeDeclaration).isPresent());
+    assertThat(Types.array(Types.string()).onDeclaredType(getTypeDeclaration).isPresent())
+        .isFalse();
+    assertThat(
+            Types.typeVariable(Name.fromString("T")).onDeclaredType(getTypeDeclaration).isPresent())
+        .isFalse();
+    assertThat(Types.primitiveBoolean().onDeclaredType(getTypeDeclaration).isPresent()).isFalse();
   }
 
   @Test
@@ -159,7 +161,7 @@ class TypeTest {
         arrayType -> arrayType.getItemType().getTypeDeclaration().asString();
 
     final Optional<String> result = type.onArrayType(getItemType);
-    assertEquals(Optional.of("String"), result);
+    assertThat(result).isEqualTo(Optional.of("String"));
   }
 
   @Test
@@ -167,8 +169,9 @@ class TypeTest {
     final Function<ArrayType, String> getItemType =
         arrayType -> arrayType.getItemType().getTypeDeclaration().asString();
 
-    assertFalse(Types.string().onArrayType(getItemType).isPresent());
-    assertFalse(Types.typeVariable(Name.fromString("T")).onArrayType(getItemType).isPresent());
-    assertFalse(Types.primitiveBoolean().onArrayType(getItemType).isPresent());
+    assertThat(Types.string().onArrayType(getItemType).isPresent()).isFalse();
+    assertThat(Types.typeVariable(Name.fromString("T")).onArrayType(getItemType).isPresent())
+        .isFalse();
+    assertThat(Types.primitiveBoolean().onArrayType(getItemType).isPresent()).isFalse();
   }
 }

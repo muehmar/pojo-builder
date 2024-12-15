@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ class SampleRecordTest {
             .data("Hello World!")
             .build();
 
-    assertEquals(12L, sampleRecord.id());
-    assertEquals("name", sampleRecord.name());
-    assertEquals(Optional.of("Hello World!"), sampleRecord.data());
+    assertThat(sampleRecord.id()).isEqualTo(12L);
+    assertThat(sampleRecord.name()).isEqualTo("name");
+    assertThat(sampleRecord.data()).isEqualTo(Optional.of("Hello World!"));
   }
 }

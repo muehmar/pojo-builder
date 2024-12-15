@@ -14,9 +14,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.Fi
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.NonEmptyList;
 import ch.bluecare.commons.data.PList;
@@ -47,19 +45,19 @@ class FieldBuilderClassTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "public static final class Builder2 {\n"
-            + "  private final Builder builder;\n"
-            + "\n"
-            + "  private Builder2(Builder builder) {\n"
-            + "    this.builder = builder;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder3 id(Integer id) {\n"
-            + "    return new Builder3(builder.id(id));\n"
-            + "  }\n"
-            + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "public static final class Builder2 {\n"
+                + "  private final Builder builder;\n"
+                + "\n"
+                + "  private Builder2(Builder builder) {\n"
+                + "    this.builder = builder;\n"
+                + "  }\n"
+                + "\n"
+                + "  public Builder3 id(Integer id) {\n"
+                + "    return new Builder3(builder.id(id));\n"
+                + "  }\n"
+                + "}");
   }
 
   @Test
@@ -71,23 +69,23 @@ class FieldBuilderClassTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "public static final class OptBuilder2 {\n"
-            + "  private final Builder builder;\n"
-            + "\n"
-            + "  private OptBuilder2(Builder builder) {\n"
-            + "    this.builder = builder;\n"
-            + "  }\n"
-            + "\n"
-            + "  public OptBuilder3 id(Integer id) {\n"
-            + "    return new OptBuilder3(builder.id(id));\n"
-            + "  }\n"
-            + "\n"
-            + "  public OptBuilder3 id(Optional<Integer> id) {\n"
-            + "    return new OptBuilder3(builder.id(id));\n"
-            + "  }\n"
-            + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "public static final class OptBuilder2 {\n"
+                + "  private final Builder builder;\n"
+                + "\n"
+                + "  private OptBuilder2(Builder builder) {\n"
+                + "    this.builder = builder;\n"
+                + "  }\n"
+                + "\n"
+                + "  public OptBuilder3 id(Integer id) {\n"
+                + "    return new OptBuilder3(builder.id(id));\n"
+                + "  }\n"
+                + "\n"
+                + "  public OptBuilder3 id(Optional<Integer> id) {\n"
+                + "    return new OptBuilder3(builder.id(id));\n"
+                + "  }\n"
+                + "}");
   }
 
   @Test
@@ -97,22 +95,22 @@ class FieldBuilderClassTest {
     final BuilderField field = BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId(), 2);
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals(
-        "public static final class Builder2<T extends List<String>, S> {\n"
-            + "  private final Builder<T, S> builder;\n"
-            + "\n"
-            + "  private Builder2(Builder<T, S> builder) {\n"
-            + "    this.builder = builder;\n"
-            + "  }\n"
-            + "\n"
-            + "  public Builder3<T, S> id(Integer id) {\n"
-            + "    return new Builder3<>(builder.id(id));\n"
-            + "  }\n"
-            + "}",
-        writer.asString());
+    assertThat(writer.asString())
+        .isEqualTo(
+            "public static final class Builder2<T extends List<String>, S> {\n"
+                + "  private final Builder<T, S> builder;\n"
+                + "\n"
+                + "  private Builder2(Builder<T, S> builder) {\n"
+                + "    this.builder = builder;\n"
+                + "  }\n"
+                + "\n"
+                + "  public Builder3<T, S> id(Integer id) {\n"
+                + "    return new Builder3<>(builder.id(id));\n"
+                + "  }\n"
+                + "}");
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
   }
 
   @Test
@@ -123,26 +121,26 @@ class FieldBuilderClassTest {
         BuilderFields.of(Pojos.genericSample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals(
-        "public static final class OptBuilder2<T extends List<String>, S> {\n"
-            + "  private final Builder<T, S> builder;\n"
-            + "\n"
-            + "  private OptBuilder2(Builder<T, S> builder) {\n"
-            + "    this.builder = builder;\n"
-            + "  }\n"
-            + "\n"
-            + "  public OptBuilder3<T, S> id(Integer id) {\n"
-            + "    return new OptBuilder3<>(builder.id(id));\n"
-            + "  }\n"
-            + "\n"
-            + "  public OptBuilder3<T, S> id(Optional<Integer> id) {\n"
-            + "    return new OptBuilder3<>(builder.id(id));\n"
-            + "  }\n"
-            + "}",
-        writer.asString());
+    assertThat(writer.asString())
+        .isEqualTo(
+            "public static final class OptBuilder2<T extends List<String>, S> {\n"
+                + "  private final Builder<T, S> builder;\n"
+                + "\n"
+                + "  private OptBuilder2(Builder<T, S> builder) {\n"
+                + "    this.builder = builder;\n"
+                + "  }\n"
+                + "\n"
+                + "  public OptBuilder3<T, S> id(Integer id) {\n"
+                + "    return new OptBuilder3<>(builder.id(id));\n"
+                + "  }\n"
+                + "\n"
+                + "  public OptBuilder3<T, S> id(Optional<Integer> id) {\n"
+                + "    return new OptBuilder3<>(builder.id(id));\n"
+                + "  }\n"
+                + "}");
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
   }
 
   @Test
@@ -153,17 +151,17 @@ class FieldBuilderClassTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private final Builder builder;\n"
-            + "\n"
-            + "private Builder2(Builder builder) {\n"
-            + "  this.builder = builder;\n"
-            + "}\n"
-            + "\n"
-            + "public Builder3 id(Integer id) {\n"
-            + "  return new Builder3(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "private final Builder builder;\n"
+                + "\n"
+                + "private Builder2(Builder builder) {\n"
+                + "  this.builder = builder;\n"
+                + "}\n"
+                + "\n"
+                + "public Builder3 id(Integer id) {\n"
+                + "  return new Builder3(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -175,21 +173,21 @@ class FieldBuilderClassTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private final Builder<T, S> builder;\n"
-            + "\n"
-            + "private OptBuilder2(Builder<T, S> builder) {\n"
-            + "  this.builder = builder;\n"
-            + "}\n"
-            + "\n"
-            + "public OptBuilder3<T, S> id(Integer id) {\n"
-            + "  return new OptBuilder3<>(builder.id(id));\n"
-            + "}\n"
-            + "\n"
-            + "public OptBuilder3<T, S> id(Optional<Integer> id) {\n"
-            + "  return new OptBuilder3<>(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "private final Builder<T, S> builder;\n"
+                + "\n"
+                + "private OptBuilder2(Builder<T, S> builder) {\n"
+                + "  this.builder = builder;\n"
+                + "}\n"
+                + "\n"
+                + "public OptBuilder3<T, S> id(Integer id) {\n"
+                + "  return new OptBuilder3<>(builder.id(id));\n"
+                + "}\n"
+                + "\n"
+                + "public OptBuilder3<T, S> id(Optional<Integer> id) {\n"
+                + "  return new OptBuilder3<>(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -200,17 +198,17 @@ class FieldBuilderClassTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private final Builder<T, S> builder;\n"
-            + "\n"
-            + "private Builder2(Builder<T, S> builder) {\n"
-            + "  this.builder = builder;\n"
-            + "}\n"
-            + "\n"
-            + "public Builder3<T, S> id(Integer id) {\n"
-            + "  return new Builder3<>(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "private final Builder<T, S> builder;\n"
+                + "\n"
+                + "private Builder2(Builder<T, S> builder) {\n"
+                + "  this.builder = builder;\n"
+                + "}\n"
+                + "\n"
+                + "public Builder3<T, S> id(Integer id) {\n"
+                + "  return new Builder3<>(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -240,25 +238,25 @@ class FieldBuilderClassTest {
     final String output =
         generator.generate(field, PojoSettings.defaultSettings(), javaWriter()).asString();
 
-    assertEquals(
-        "private final Builder builder;\n"
-            + "\n"
-            + "private Builder2(Builder builder) {\n"
-            + "  this.builder = builder;\n"
-            + "}\n"
-            + "\n"
-            + "public Builder3 id(Integer id) {\n"
-            + "  return new Builder3(builder.id(id));\n"
-            + "}\n"
-            + "\n"
-            + "public Builder3 customMethod1() {\n"
-            + "  return new Builder3(builder.id(Customer.customMethod1()));\n"
-            + "}\n"
-            + "\n"
-            + "public Builder3 customMethod2(Integer val) {\n"
-            + "  return new Builder3(builder.id(Customer.customMethod2(val)));\n"
-            + "}",
-        output);
+    assertThat(output)
+        .isEqualTo(
+            "private final Builder builder;\n"
+                + "\n"
+                + "private Builder2(Builder builder) {\n"
+                + "  this.builder = builder;\n"
+                + "}\n"
+                + "\n"
+                + "public Builder3 id(Integer id) {\n"
+                + "  return new Builder3(builder.id(id));\n"
+                + "}\n"
+                + "\n"
+                + "public Builder3 customMethod1() {\n"
+                + "  return new Builder3(builder.id(Customer.customMethod1()));\n"
+                + "}\n"
+                + "\n"
+                + "public Builder3 customMethod2(Integer val) {\n"
+                + "  return new Builder3(builder.id(Customer.customMethod2(val)));\n"
+                + "}");
   }
 
   @Test
@@ -269,12 +267,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public OptBuilder3 id(Integer id) {\n"
-            + "  return new OptBuilder3(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public OptBuilder3 id(Integer id) {\n"
+                + "  return new OptBuilder3(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -284,10 +282,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public Builder3 id(Integer id) {\n" + "  return new Builder3(builder.id(id));\n" + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public Builder3 id(Integer id) {\n"
+                + "  return new Builder3(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -298,12 +298,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public OptBuilder3<T, S> id(Integer id) {\n"
-            + "  return new OptBuilder3<>(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public OptBuilder3<T, S> id(Integer id) {\n"
+                + "  return new OptBuilder3<>(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -313,12 +313,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public Builder3<T, S> id(Integer id) {\n"
-            + "  return new Builder3<>(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public Builder3<T, S> id(Integer id) {\n"
+                + "  return new Builder3<>(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -331,12 +331,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, settings, javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public Builder3<T, S> setId(Integer id) {\n"
-            + "  return new Builder3<>(builder.setId(id));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public Builder3<T, S> setId(Integer id) {\n"
+                + "  return new Builder3<>(builder.setId(id));\n"
+                + "}");
   }
 
   @Test
@@ -347,9 +347,9 @@ class FieldBuilderClassTest {
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
   }
 
   @Test
@@ -369,7 +369,7 @@ class FieldBuilderClassTest {
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals("", writer.asString());
+    assertThat(writer.asString()).isEqualTo("");
   }
 
   @Test
@@ -389,7 +389,7 @@ class FieldBuilderClassTest {
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
-    assertFalse(writer.asString().isEmpty());
+    assertThat(writer.asString().isEmpty()).isFalse();
   }
 
   @Test
@@ -400,13 +400,13 @@ class FieldBuilderClassTest {
         BuilderFields.of(Pojos.sample(), PojoFields.requiredId().withNecessity(OPTIONAL), 2);
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public OptBuilder3 id(Optional<Integer> id) {\n"
-            + "  return new OptBuilder3(builder.id(id));\n"
-            + "}",
-        writer.asString());
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(writer.asString())
+        .isEqualTo(
+            "public OptBuilder3 id(Optional<Integer> id) {\n"
+                + "  return new OptBuilder3(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -420,13 +420,13 @@ class FieldBuilderClassTest {
 
     final Writer writer = generator.generate(field, settings, javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public OptBuilder3 setId(Optional<Integer> id) {\n"
-            + "  return new OptBuilder3(builder.setId(id));\n"
-            + "}",
-        writer.asString());
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(writer.asString())
+        .isEqualTo(
+            "public OptBuilder3 setId(Optional<Integer> id) {\n"
+                + "  return new OptBuilder3(builder.setId(id));\n"
+                + "}");
   }
 
   @Test
@@ -438,13 +438,13 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public OptBuilder3<T, S> id(Optional<Integer> id) {\n"
-            + "  return new OptBuilder3<>(builder.id(id));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public OptBuilder3<T, S> id(Optional<Integer> id) {\n"
+                + "  return new OptBuilder3<>(builder.id(id));\n"
+                + "}");
   }
 
   @Test
@@ -456,10 +456,10 @@ class FieldBuilderClassTest {
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_LIST::equals));
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertTrue(writer.getRefs().exists(JAVA_UTIL_MAP::equals));
+    assertThat(writer.getRefs().exists(JAVA_UTIL_OPTIONAL::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_LIST::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(writer.getRefs().exists(JAVA_UTIL_MAP::equals)).isTrue();
   }
 
   @Test
@@ -480,7 +480,7 @@ class FieldBuilderClassTest {
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
-    assertEquals("", writer.asString());
+    assertThat(writer.asString()).isEqualTo("");
   }
 
   @Test
@@ -501,7 +501,7 @@ class FieldBuilderClassTest {
     final Writer writer =
         generator.generate(builderField, PojoSettings.defaultSettings(), javaWriter());
 
-    assertFalse(writer.asString().isEmpty());
+    assertThat(writer.asString().isEmpty()).isFalse();
   }
 
   @Test
@@ -513,7 +513,7 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertEquals("", output);
+    assertThat(output).isEqualTo("");
   }
 
   @Test
@@ -535,12 +535,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public Builder3 customRandomId(Integer value) {\n"
-            + "  return new Builder3(builder.id(Customer.customRandomId(value)));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public Builder3 customRandomId(Integer value) {\n"
+                + "  return new Builder3(builder.id(Customer.customRandomId(value)));\n"
+                + "}");
   }
 
   @Test
@@ -562,12 +562,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertEquals(
-        "public OptBuilder3 customRandomName(String value) {\n"
-            + "  return new OptBuilder3(builder.name(Customer.customRandomName(value)));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public OptBuilder3 customRandomName(String value) {\n"
+                + "  return new OptBuilder3(builder.name(Customer.customRandomName(value)));\n"
+                + "}");
   }
 
   @Test
@@ -589,12 +589,12 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_INTEGER::equals));
-    assertEquals(
-        "public Builder3<T, S> customRandomId(Integer value) {\n"
-            + "  return new Builder3<>(builder.id(Customer.customRandomId(value)));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_INTEGER::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public Builder3<T, S> customRandomId(Integer value) {\n"
+                + "  return new Builder3<>(builder.id(Customer.customRandomId(value)));\n"
+                + "}");
   }
 
   @Test
@@ -617,11 +617,11 @@ class FieldBuilderClassTest {
     final Writer writer = generator.generate(field, PojoSettings.defaultSettings(), javaWriter());
     final String output = writer.asString();
 
-    assertTrue(writer.getRefs().exists(JAVA_LANG_STRING::equals));
-    assertEquals(
-        "public OptBuilder3 customRandomName(String value) {\n"
-            + "  return new OptBuilder3(builder.name(Customer.NameBuilder.customRandomName(value)));\n"
-            + "}",
-        output);
+    assertThat(writer.getRefs().exists(JAVA_LANG_STRING::equals)).isTrue();
+    assertThat(output)
+        .isEqualTo(
+            "public OptBuilder3 customRandomName(String value) {\n"
+                + "  return new OptBuilder3(builder.name(Customer.NameBuilder.customRandomName(value)));\n"
+                + "}");
   }
 }

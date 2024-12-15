@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.generator.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +11,6 @@ class PackageNameTest {
     final PackageName packageName = PackageName.fromString("io.github.muehmar");
 
     final Name qualifiedName = packageName.qualifiedName(customer);
-    assertEquals("io.github.muehmar.Customer", qualifiedName.asString());
+    assertThat(qualifiedName.asString()).isEqualTo("io.github.muehmar.Customer");
   }
 }

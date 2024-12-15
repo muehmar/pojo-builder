@@ -1,6 +1,7 @@
 package io.github.muehmar.pojobuilder.generator.model.matching;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
@@ -45,13 +46,14 @@ class ConstructorMatchingResultsTest {
     final ConstructorMatchingResults constructorMatchingResults =
         new ConstructorMatchingResults(PList.single(singleConstructorMatchingResult));
 
-    final PojoBuilderException pojoBuilderException =
-        assertThrows(
-            PojoBuilderException.class,
+    final Throwable throwable =
+        catchThrowable(
             () ->
                 constructorMatchingResults.getFirstMatchingConstructorOrThrow(
                     samplePojo, fieldMatching));
 
-    expect.scenario(fieldMatching.name()).toMatchSnapshot(pojoBuilderException.getMessage());
+    assertThat(throwable).isInstanceOf(PojoBuilderException.class);
+
+    expect.scenario(fieldMatching.name()).toMatchSnapshot(throwable.getMessage());
   }
 }

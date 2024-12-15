@@ -6,7 +6,7 @@ import static io.github.muehmar.pojobuilder.generator.model.Necessity.OPTIONAL;
 import static io.github.muehmar.pojobuilder.generator.model.Necessity.REQUIRED;
 import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.SAME_TYPE;
 import static io.github.muehmar.pojobuilder.generator.model.OptionalFieldRelation.WRAP_INTO_OPTIONAL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.bluecare.commons.data.PList;
 import io.github.muehmar.pojobuilder.generator.Names;
@@ -44,7 +44,7 @@ class PojoTest {
 
     final Optional<MatchingConstructor> matchingConstructor =
         constructorMatchingResults.getFirstMatchingConstructor();
-    assertEquals(Optional.of(expected), matchingConstructor);
+    assertThat(matchingConstructor).isEqualTo(Optional.of(expected));
   }
 
   @Test
@@ -54,7 +54,7 @@ class PojoTest {
     final ConstructorMatchingResults constructorMatchingResults =
         pojo.findMatchingConstructor(FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), constructorMatchingResults.getFirstMatchingConstructor());
+    assertThat(constructorMatchingResults.getFirstMatchingConstructor()).isEmpty();
   }
 
   @Test
@@ -65,7 +65,7 @@ class PojoTest {
     final ConstructorMatchingResults constructorMatchingResults =
         pojo.findMatchingConstructor(FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), constructorMatchingResults.getFirstMatchingConstructor());
+    assertThat(constructorMatchingResults.getFirstMatchingConstructor()).isEmpty();
   }
 
   @Test
@@ -77,69 +77,68 @@ class PojoTest {
     final ConstructorMatchingResults constructorMatchingResults =
         pojo.findMatchingConstructor(FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), constructorMatchingResults.getFirstMatchingConstructor());
+    assertThat(constructorMatchingResults.getFirstMatchingConstructor()).isEmpty();
   }
 
   @Test
   void getDiamond_when_calledForNonGenericSample_then_empty() {
-    assertEquals("", Pojos.sample().getDiamond());
+    assertThat(Pojos.sample().getDiamond()).isEqualTo("");
   }
 
   @Test
   void getDiamond_when_calledForGenericSample_then_empty() {
-    assertEquals("<>", Pojos.genericSample().getDiamond());
+    assertThat(Pojos.genericSample().getDiamond()).isEqualTo("<>");
   }
 
   @Test
   void getTypeVariablesSection_when_calledForNonGenericSample_then_empty() {
-    assertEquals("", Pojos.sample().getTypeVariablesFormatted());
+    assertThat(Pojos.sample().getTypeVariablesFormatted()).isEqualTo("");
   }
 
   @Test
   void getTypeVariablesSection_when_calledForGenericSample_then_empty() {
-    assertEquals("<T, S>", Pojos.genericSample().getTypeVariablesFormatted());
+    assertThat(Pojos.genericSample().getTypeVariablesFormatted()).isEqualTo("<T, S>");
   }
 
   @Test
   void getNameWithTypeVariables_when_calledForNonGenericSample_then_onlyName() {
-    assertEquals("Customer", Pojos.sample().getPojoNameWithTypeVariables().asString());
+    assertThat(Pojos.sample().getPojoNameWithTypeVariables().asString()).isEqualTo("Customer");
   }
 
   @Test
   void getNameWithTypeVariables_when_calledForGenericSample_then_nameWithTypeVariables() {
-    assertEquals("Customer<T, S>", Pojos.genericSample().getPojoNameWithTypeVariables().asString());
+    assertThat(Pojos.genericSample().getPojoNameWithTypeVariables().asString())
+        .isEqualTo("Customer<T, S>");
   }
 
   @Test
   void getGenericTypeDeclarations_when_calledForNonGenericSample_then_empty() {
     Pojo pojo = Pojos.sample();
-    assertEquals(
-        PList.empty(),
-        pojo.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString));
+    assertThat(pojo.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
+        .isEqualTo(PList.empty());
   }
 
   @Test
   void getGenericTypeDeclarations_when_calledForGenericSample_then_empty() {
     Pojo pojo = Pojos.genericSample();
-    assertEquals(
-        PList.of("T extends List<String>", "S"),
-        pojo.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString));
+    assertThat(pojo.getGenerics().asList().map(Generic::getTypeDeclaration).map(Name::asString))
+        .isEqualTo(PList.of("T extends List<String>", "S"));
   }
 
   @Test
   void getBoundedTypeVariablesSection_when_calledForNonGenericSample_then_empty() {
-    assertEquals("", Pojos.sample().getBoundedTypeVariablesFormatted());
+    assertThat(Pojos.sample().getBoundedTypeVariablesFormatted()).isEqualTo("");
   }
 
   @Test
   void getBoundedTypeVariablesSection_when_calledForGenericSample_then_empty() {
-    assertEquals(
-        "<T extends List<String>, S>", Pojos.genericSample().getBoundedTypeVariablesFormatted());
+    assertThat(Pojos.genericSample().getBoundedTypeVariablesFormatted())
+        .isEqualTo("<T extends List<String>, S>");
   }
 
   @Test
   void getGenericImports_when_calledForNonGenericSample_then_empty() {
-    assertEquals(PList.empty(), Pojos.sample().getGenericImports());
+    assertThat(Pojos.sample().getGenericImports()).isEqualTo(PList.empty());
   }
 
   @Test
@@ -147,7 +146,7 @@ class PojoTest {
     final Set<Name> actual = Pojos.genericSample().getGenericImports().toHashSet();
     final Set<Name> expected =
         PList.of(Name.fromString(JAVA_UTIL_LIST), Name.fromString(JAVA_LANG_STRING)).toHashSet();
-    assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test
@@ -172,7 +171,7 @@ class PojoTest {
             .map(p -> new FieldArgument(p.first(), p.second(), SAME_TYPE))
             .map(SingleArgumentMatchingResult::fromFieldArgument);
 
-    assertEquals(new ArgumentsMatchingResult(expectedResults), result);
+    assertThat(result).isEqualTo(new ArgumentsMatchingResult(expectedResults));
   }
 
   @Test
@@ -192,7 +191,7 @@ class PojoTest {
     final ArgumentsMatchingResult result =
         pojo.matchArguments(arguments, FieldMatching.TYPE_AND_NAME);
 
-    assertEquals(Optional.empty(), result.getFieldArguments());
+    assertThat(result.getFieldArguments()).isEmpty();
   }
 
   @Test
@@ -211,7 +210,7 @@ class PojoTest {
     // method call
     final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), result.getFieldArguments());
+    assertThat(result.getFieldArguments()).isEmpty();
   }
 
   @Test
@@ -242,7 +241,7 @@ class PojoTest {
                         p.second(),
                         p.first().isRequired() ? SAME_TYPE : WRAP_INTO_OPTIONAL));
 
-    assertEquals(Optional.of(expected), result.getFieldArguments());
+    assertThat(result.getFieldArguments()).isEqualTo(Optional.of(expected));
   }
 
   @Test
@@ -262,7 +261,7 @@ class PojoTest {
     // method call
     final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), result.getFieldArguments());
+    assertThat(result.getFieldArguments()).isEmpty();
   }
 
   @Test
@@ -279,6 +278,6 @@ class PojoTest {
     // method call
     final ArgumentsMatchingResult result = pojo.matchArguments(arguments, FieldMatching.TYPE);
 
-    assertEquals(Optional.empty(), result.getFieldArguments());
+    assertThat(result.getFieldArguments()).isEmpty();
   }
 }

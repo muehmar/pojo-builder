@@ -18,7 +18,11 @@ dependencyResolutionManagement {
             library('junit-api', 'org.junit.jupiter', 'junit-jupiter-api').versionRef('junit')
             library('junit-engine', 'org.junit.jupiter', 'junit-jupiter-engine').versionRef('junit')
             library('junit-params', 'org.junit.jupiter', 'junit-jupiter-params').versionRef('junit')
-            bundle('junit', ['junit-api', 'junit-engine', 'junit-params'])
+
+            version('assertj', '3.26.3')
+            library('assertj', 'org.assertj', 'assertj-core').versionRef('assertj')
+
+            bundle('junit', ['junit-api', 'junit-engine', 'junit-params', 'assertj'])
 
             library('jakarta-annotationApi', 'jakarta.annotation:jakarta.annotation-api:2.1.1')
 

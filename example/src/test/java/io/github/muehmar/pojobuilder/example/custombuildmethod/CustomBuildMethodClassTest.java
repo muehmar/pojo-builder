@@ -1,6 +1,6 @@
 package io.github.muehmar.pojobuilder.example.custombuildmethod;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +16,7 @@ class CustomBuildMethodClassTest {
             .data("data")
             .build();
 
-    assertEquals("CustomBuildMethodClass(prop1=prop1, prop2=prop2, data=Optional[data])", output);
+    assertThat(output)
+        .isEqualTo("CustomBuildMethodClass(prop1=prop1, prop2=prop2, data=Optional[data])");
   }
 }
