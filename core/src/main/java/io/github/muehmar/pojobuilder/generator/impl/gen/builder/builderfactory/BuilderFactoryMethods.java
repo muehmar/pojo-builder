@@ -10,6 +10,7 @@ import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
 import io.github.muehmar.codegenerator.java.MethodGen.Argument;
 import io.github.muehmar.pojobuilder.generator.impl.gen.RefsGen;
+import io.github.muehmar.pojobuilder.generator.impl.gen.builder.builderstages.BuilderStagesGenerator;
 import io.github.muehmar.pojobuilder.generator.model.Generic;
 import io.github.muehmar.pojobuilder.generator.model.Name;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
@@ -47,12 +48,20 @@ public class BuilderFactoryMethods {
   private static Generator<Pojo, PojoSettings> method(
       BuilderType builderType, NameOption nameOption, GenericsOption genericsOption) {
     final Function<Pojo, Object> returnType =
-        p -> builderType.typeUppercase + "Builder0" + p.getTypeVariablesFormatted();
+        p ->
+            String.format(
+                "%s.%sBuilder0%s",
+                BuilderStagesGenerator.BUILDER_STAGES_CLASS_NAME,
+                builderType.typeUppercase,
+                p.getTypeVariablesFormatted());
     final Function<Pojo, String> content =
         p ->
             String.format(
-                "return new %sBuilder0%s(new Builder%s());",
-                builderType.typeUppercase, p.getDiamond(), p.getTypeVariablesFormatted());
+                "return new %s.%sBuilder0%s(new Builder%s());",
+                BuilderStagesGenerator.BUILDER_STAGES_CLASS_NAME,
+                builderType.typeUppercase,
+                p.getDiamond(),
+                p.getTypeVariablesFormatted());
     return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC, STATIC)
         .genericTypes(

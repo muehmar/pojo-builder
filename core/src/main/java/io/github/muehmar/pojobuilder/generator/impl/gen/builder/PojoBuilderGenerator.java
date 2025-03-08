@@ -3,6 +3,7 @@ package io.github.muehmar.pojobuilder.generator.impl.gen.builder;
 import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
 import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.builderfactory.BuilderFactoryMethods.builderFactoryMethods;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.builderstages.BuilderStagesGenerator.builderStagesGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.full.FullBuilderGenerator.fullBuilderGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.standardBuilderGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGenerator.unsafeBuilderGenerator;
@@ -53,8 +54,16 @@ public class PojoBuilderGenerator {
         .appendSingleBlankLine()
         .append(unsafeBuilderGenerator())
         .appendSingleBlankLine()
-        .append(standardBuilderGenerator())
-        .appendSingleBlankLine()
-        .append(fullBuilderGenerator());
+        .append(builderStages());
+  }
+
+  private static Generator<Pojo, PojoSettings> builderStages() {
+    final Generator<Pojo, PojoSettings> content =
+        Generator.<Pojo, PojoSettings>emptyGen()
+            .append(standardBuilderGenerator())
+            .appendSingleBlankLine()
+            .append(fullBuilderGenerator());
+
+    return builderStagesGenerator(content);
   }
 }

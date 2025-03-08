@@ -20,7 +20,8 @@ class InvoiceTest {
 
   @Test
   void fullBuilder_when_lastRequiredBuilder_then_noOptionalsMethods() {
-    final InvoiceBuilder.FullBuilder2 builder = fullInvoiceBuilder().prop1("value1").prop3(3);
+    final InvoiceBuilder.BuilderStages.FullBuilder2 builder =
+        fullInvoiceBuilder().prop1("value1").prop3(3);
 
     assertThat(MethodHelper.hasMethod(builder.getClass(), "andOptionals")).isFalse();
     assertThat(MethodHelper.hasMethod(builder.getClass(), "andAllOptionals")).isFalse();
@@ -28,7 +29,7 @@ class InvoiceTest {
 
   @Test
   void standardBuilder_when_lastRequiredBuilder_then_hasOptionalsMethods() {
-    final InvoiceBuilder.Builder2 builder = invoiceBuilder().prop1("value1").prop3(3);
+    final InvoiceBuilder.BuilderStages.Builder2 builder = invoiceBuilder().prop1("value1").prop3(3);
 
     assertThat(MethodHelper.hasMethod(builder.getClass(), "andOptionals")).isTrue();
     assertThat(MethodHelper.hasMethod(builder.getClass(), "andAllOptionals")).isTrue();

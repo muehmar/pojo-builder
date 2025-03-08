@@ -2,36 +2,36 @@ genericSamplePojo=[
 java.lang.String
 java.util.List
 
-public static <T extends List<String>, S> Builder0<T, S> create() {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> create() {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> Builder0<T, S> customerBuilder() {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> customerBuilder() {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> Builder0<T, S> create(Class<T> classOfT, Class<S> classOfS) {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> create(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> createFull() {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> createFull() {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder() {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> fullCustomerBuilder() {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> createFull(Class<T> classOfT, Class<S> classOfS) {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> createFull(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 ]
 
@@ -40,20 +40,20 @@ genericSamplePojoFullBuilderDisabled=[
 java.lang.String
 java.util.List
 
-public static <T extends List<String>, S> Builder0<T, S> create() {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> create() {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> Builder0<T, S> customerBuilder() {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> customerBuilder() {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> Builder0<T, S> create(Class<T> classOfT, Class<S> classOfS) {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> create(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
-  return new Builder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.Builder0<>(new Builder<T, S>());
 }
 
 ]
@@ -64,20 +64,20 @@ java.lang.String
 java.util.List
 .
 .
-public static <T extends List<String>, S> FullBuilder0<T, S> createFull() {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> createFull() {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder() {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> fullCustomerBuilder() {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> createFull(Class<T> classOfT, Class<S> classOfS) {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> createFull(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 
-public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
-  return new FullBuilder0<>(new Builder<T, S>());
+public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
+  return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
 }
 ]
 
@@ -85,20 +85,20 @@ public static <T extends List<String>, S> FullBuilder0<T, S> fullCustomerBuilder
 samplePojo=[
 .
 .
-public static Builder0 create() {
-  return new Builder0(new Builder());
+public static BuilderStages.Builder0 create() {
+  return new BuilderStages.Builder0(new Builder());
 }
 
-public static Builder0 customerBuilder() {
-  return new Builder0(new Builder());
+public static BuilderStages.Builder0 customerBuilder() {
+  return new BuilderStages.Builder0(new Builder());
 }
 
-public static FullBuilder0 createFull() {
-  return new FullBuilder0(new Builder());
+public static BuilderStages.FullBuilder0 createFull() {
+  return new BuilderStages.FullBuilder0(new Builder());
 }
 
-public static FullBuilder0 fullCustomerBuilder() {
-  return new FullBuilder0(new Builder());
+public static BuilderStages.FullBuilder0 fullCustomerBuilder() {
+  return new BuilderStages.FullBuilder0(new Builder());
 }
 
 ]
@@ -107,12 +107,12 @@ public static FullBuilder0 fullCustomerBuilder() {
 samplePojoFullBuilderDisabled=[
 .
 .
-public static Builder0 create() {
-  return new Builder0(new Builder());
+public static BuilderStages.Builder0 create() {
+  return new BuilderStages.Builder0(new Builder());
 }
 
-public static Builder0 customerBuilder() {
-  return new Builder0(new Builder());
+public static BuilderStages.Builder0 customerBuilder() {
+  return new BuilderStages.Builder0(new Builder());
 }
 
 ]
@@ -122,12 +122,12 @@ samplePojoStandardBuilderDisabled=[
 .
 .
 
-public static FullBuilder0 createFull() {
-  return new FullBuilder0(new Builder());
+public static BuilderStages.FullBuilder0 createFull() {
+  return new BuilderStages.FullBuilder0(new Builder());
 }
 
-public static FullBuilder0 fullCustomerBuilder() {
-  return new FullBuilder0(new Builder());
+public static BuilderStages.FullBuilder0 fullCustomerBuilder() {
+  return new BuilderStages.FullBuilder0(new Builder());
 }
 
 ]
