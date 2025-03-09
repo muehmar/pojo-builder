@@ -19,7 +19,7 @@ class FieldBuilderClassTest {
 
   @Test
   void builderForProp1ContainsOnlyCustomMethods() {
-    final Class<?> clazz = FieldBuilderClassBuilder.Builder0.class;
+    final Class<?> clazz = FieldBuilderClassBuilder.BuilderStages.Builder0.class;
     assertThat(classHasMethod(clazz, "prop1")).isFalse();
     assertThat(classHasMethod(clazz, "randomString")).isTrue();
     assertThat(classHasMethod(clazz, "fromInt")).isTrue();
