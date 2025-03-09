@@ -1,4 +1,4 @@
-package io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe;
+package io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared;
 
 import static io.github.muehmar.pojobuilder.Booleans.not;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.ConstructorCallGenerator.constructorCallGenerator;
@@ -8,10 +8,14 @@ import io.github.muehmar.pojobuilder.generator.impl.gen.instantiation.FactoryMet
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 
-class BuildMethod {
-  private BuildMethod() {}
+/**
+ * Creates the build method content mapping the resulting instance to the desired class if
+ * necessary.
+ */
+public class MappingBuildMethodContentGenerator {
+  private MappingBuildMethodContentGenerator() {}
 
-  public static Generator<Pojo, PojoSettings> buildMethodContent() {
+  public static Generator<Pojo, PojoSettings> mappingBuildMethodContentGenerator() {
     return constructorCall().append(factoryMethodCall());
   }
 

@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public final class CustomerBuilder {
-
-  private CustomerBuilder() {
-  }
+public final class CustomerBuilder<T extends List<String>, S> {
 
   public static <T extends List<String>, S> BuilderStages.Builder0<T, S> create() {
     return new BuilderStages.Builder0<>(new Builder<T, S>());
@@ -40,6 +37,42 @@ public final class CustomerBuilder {
 
   public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
     return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
+  }
+
+  private String id;
+  private T data;
+  private S additionalData;
+
+  private CustomerBuilder(String id, T data, S additionalData) {
+    this.id = id;
+    this.data = data;
+    this.additionalData = additionalData;
+  }
+
+  public CustomerBuilder<T, S> id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> data(T data) {
+    this.data = data;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> additionalData(S additionalData) {
+    this.additionalData = additionalData;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> additionalData(Optional<S> additionalData) {
+    this.additionalData = additionalData.orElse(null);
+    return this;
+  }
+
+  public Customer<T, S> build() throws IOException {
+    final Customer<T, S> instance =
+        new Customer<T, S>(id, data, additionalData);
+    return instance;
   }
 
   public static final class Builder<T extends List<String>, S> {
@@ -213,10 +246,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public final class CustomerBuilder {
-
-  private CustomerBuilder() {
-  }
+public final class CustomerBuilder<T extends List<String>, S> {
 
   public static <T extends List<String>, S> BuilderStages.Builder0<T, S> create() {
     return new BuilderStages.Builder0<>(new Builder<T, S>());
@@ -232,6 +262,42 @@ public final class CustomerBuilder {
 
   public static <T extends List<String>, S> BuilderStages.Builder0<T, S> customerBuilder(Class<T> classOfT, Class<S> classOfS) {
     return new BuilderStages.Builder0<>(new Builder<T, S>());
+  }
+
+  private String id;
+  private T data;
+  private S additionalData;
+
+  private CustomerBuilder(String id, T data, S additionalData) {
+    this.id = id;
+    this.data = data;
+    this.additionalData = additionalData;
+  }
+
+  public CustomerBuilder<T, S> id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> data(T data) {
+    this.data = data;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> additionalData(S additionalData) {
+    this.additionalData = additionalData;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> additionalData(Optional<S> additionalData) {
+    this.additionalData = additionalData.orElse(null);
+    return this;
+  }
+
+  public Customer<T, S> build() throws IOException {
+    final Customer<T, S> instance =
+        new Customer<T, S>(id, data, additionalData);
+    return instance;
   }
 
   public static final class Builder<T extends List<String>, S> {
@@ -354,10 +420,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public final class CustomerBuilder {
-
-  private CustomerBuilder() {
-  }
+public final class CustomerBuilder<T extends List<String>, S> {
 
   public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> createFull() {
     return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
@@ -373,6 +436,42 @@ public final class CustomerBuilder {
 
   public static <T extends List<String>, S> BuilderStages.FullBuilder0<T, S> fullCustomerBuilder(Class<T> classOfT, Class<S> classOfS) {
     return new BuilderStages.FullBuilder0<>(new Builder<T, S>());
+  }
+
+  private String id;
+  private T data;
+  private S additionalData;
+
+  private CustomerBuilder(String id, T data, S additionalData) {
+    this.id = id;
+    this.data = data;
+    this.additionalData = additionalData;
+  }
+
+  public CustomerBuilder<T, S> id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> data(T data) {
+    this.data = data;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> additionalData(S additionalData) {
+    this.additionalData = additionalData;
+    return this;
+  }
+
+  public CustomerBuilder<T, S> additionalData(Optional<S> additionalData) {
+    this.additionalData = additionalData.orElse(null);
+    return this;
+  }
+
+  public Customer<T, S> build() throws IOException {
+    final Customer<T, S> instance =
+        new Customer<T, S>(id, data, additionalData);
+    return instance;
   }
 
   public static final class Builder<T extends List<String>, S> {
@@ -476,9 +575,6 @@ import java.util.Optional;
 
 final class CustomerBuilder {
 
-  private CustomerBuilder() {
-  }
-
   public static BuilderStages.Builder0 create() {
     return new BuilderStages.Builder0(new Builder());
   }
@@ -493,6 +589,42 @@ final class CustomerBuilder {
 
   public static BuilderStages.FullBuilder0 fullCustomerBuilder() {
     return new BuilderStages.FullBuilder0(new Builder());
+  }
+
+  private Integer id;
+  private String username;
+  private String nickname;
+
+  private CustomerBuilder(Integer id, String username, String nickname) {
+    this.id = id;
+    this.username = username;
+    this.nickname = nickname;
+  }
+
+  public CustomerBuilder id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder username(String username) {
+    this.username = username;
+    return this;
+  }
+
+  public CustomerBuilder nickname(String nickname) {
+    this.nickname = nickname;
+    return this;
+  }
+
+  public CustomerBuilder nickname(Optional<String> nickname) {
+    this.nickname = nickname.orElse(null);
+    return this;
+  }
+
+  public Customer build() throws IOException {
+    final Customer instance =
+        new Customer(id, username, nickname);
+    return instance;
   }
 
   public static final class Builder {
@@ -667,9 +799,6 @@ import java.util.Optional;
 
 public final class CustomerBuilder {
 
-  private CustomerBuilder() {
-  }
-
   public static BuilderStages.Builder0 create() {
     return new BuilderStages.Builder0(new Builder());
   }
@@ -684,6 +813,42 @@ public final class CustomerBuilder {
 
   public static BuilderStages.FullBuilder0 fullCustomerBuilder() {
     return new BuilderStages.FullBuilder0(new Builder());
+  }
+
+  private Integer id;
+  private String username;
+  private String nickname;
+
+  private CustomerBuilder(Integer id, String username, String nickname) {
+    this.id = id;
+    this.username = username;
+    this.nickname = nickname;
+  }
+
+  public CustomerBuilder id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder username(String username) {
+    this.username = username;
+    return this;
+  }
+
+  public CustomerBuilder nickname(String nickname) {
+    this.nickname = nickname;
+    return this;
+  }
+
+  public CustomerBuilder nickname(Optional<String> nickname) {
+    this.nickname = nickname.orElse(null);
+    return this;
+  }
+
+  public Customer build() throws IOException {
+    final Customer instance =
+        new Customer(id, username, nickname);
+    return instance;
   }
 
   public static final class Builder {
@@ -858,15 +1023,48 @@ import java.util.Optional;
 
 public final class CustomerBuilder {
 
-  private CustomerBuilder() {
-  }
-
   public static BuilderStages.Builder0 create() {
     return new BuilderStages.Builder0(new Builder());
   }
 
   public static BuilderStages.Builder0 customerBuilder() {
     return new BuilderStages.Builder0(new Builder());
+  }
+
+  private Integer id;
+  private String username;
+  private String nickname;
+
+  private CustomerBuilder(Integer id, String username, String nickname) {
+    this.id = id;
+    this.username = username;
+    this.nickname = nickname;
+  }
+
+  public CustomerBuilder id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder username(String username) {
+    this.username = username;
+    return this;
+  }
+
+  public CustomerBuilder nickname(String nickname) {
+    this.nickname = nickname;
+    return this;
+  }
+
+  public CustomerBuilder nickname(Optional<String> nickname) {
+    this.nickname = nickname.orElse(null);
+    return this;
+  }
+
+  public Customer build() throws IOException {
+    final Customer instance =
+        new Customer(id, username, nickname);
+    return instance;
   }
 
   public static final class Builder {
@@ -990,15 +1188,48 @@ import java.util.Optional;
 
 public final class CustomerBuilder {
 
-  private CustomerBuilder() {
-  }
-
   public static BuilderStages.FullBuilder0 createFull() {
     return new BuilderStages.FullBuilder0(new Builder());
   }
 
   public static BuilderStages.FullBuilder0 fullCustomerBuilder() {
     return new BuilderStages.FullBuilder0(new Builder());
+  }
+
+  private Integer id;
+  private String username;
+  private String nickname;
+
+  private CustomerBuilder(Integer id, String username, String nickname) {
+    this.id = id;
+    this.username = username;
+    this.nickname = nickname;
+  }
+
+  public CustomerBuilder id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  public CustomerBuilder username(String username) {
+    this.username = username;
+    return this;
+  }
+
+  public CustomerBuilder nickname(String nickname) {
+    this.nickname = nickname;
+    return this;
+  }
+
+  public CustomerBuilder nickname(Optional<String> nickname) {
+    this.nickname = nickname.orElse(null);
+    return this;
+  }
+
+  public Customer build() throws IOException {
+    final Customer instance =
+        new Customer(id, username, nickname);
+    return instance;
   }
 
   public static final class Builder {

@@ -1,0 +1,85 @@
+genericPojo=[
+java.io.IOException
+java.lang.String
+java.util.Optional
+
+private String id;
+private T data;
+private S additionalData;
+
+private CustomerBuilder(String id, T data, S additionalData) {
+  this.id = id;
+  this.data = data;
+  this.additionalData = additionalData;
+}
+
+public CustomerBuilder<T, S> id(String id) {
+  this.id = id;
+  return this;
+}
+
+public CustomerBuilder<T, S> data(T data) {
+  this.data = data;
+  return this;
+}
+
+public CustomerBuilder<T, S> additionalData(S additionalData) {
+  this.additionalData = additionalData;
+  return this;
+}
+
+public CustomerBuilder<T, S> additionalData(Optional<S> additionalData) {
+  this.additionalData = additionalData.orElse(null);
+  return this;
+}
+
+public Customer<T, S> build() throws IOException {
+  final Customer<T, S> instance =
+      new Customer<T, S>(id, data, additionalData);
+  return instance;
+}
+]
+
+
+samplePojo=[
+java.io.IOException
+java.lang.Integer
+java.lang.String
+java.util.Optional
+
+private Integer id;
+private String username;
+private String nickname;
+
+private CustomerBuilder(Integer id, String username, String nickname) {
+  this.id = id;
+  this.username = username;
+  this.nickname = nickname;
+}
+
+public CustomerBuilder id(Integer id) {
+  this.id = id;
+  return this;
+}
+
+public CustomerBuilder username(String username) {
+  this.username = username;
+  return this;
+}
+
+public CustomerBuilder nickname(String nickname) {
+  this.nickname = nickname;
+  return this;
+}
+
+public CustomerBuilder nickname(Optional<String> nickname) {
+  this.nickname = nickname.orElse(null);
+  return this;
+}
+
+public Customer build() throws IOException {
+  final Customer instance =
+      new Customer(id, username, nickname);
+  return instance;
+}
+]

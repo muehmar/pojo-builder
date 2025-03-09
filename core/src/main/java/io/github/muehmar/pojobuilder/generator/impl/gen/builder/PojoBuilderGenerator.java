@@ -1,10 +1,10 @@
 package io.github.muehmar.pojobuilder.generator.impl.gen.builder;
 
 import static io.github.muehmar.codegenerator.java.JavaModifier.FINAL;
-import static io.github.muehmar.codegenerator.java.JavaModifier.PRIVATE;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.builderfactory.BuilderFactoryMethods.builderFactoryMethods;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.builderstages.BuilderStagesGenerator.builderStagesGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.full.FullBuilderGenerator.fullBuilderGenerator;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.prepopulated.PrePopulatedBuilderGenerator.prePopulatedBuilderGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.standardBuilderGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.UnsafeBuilderGenerator.unsafeBuilderGenerator;
 
@@ -27,7 +27,7 @@ public class PojoBuilderGenerator {
         .noJavaDoc()
         .noAnnotations()
         .modifierList((pojo, settings) -> createClassModifiers(settings))
-        .className((p, s) -> s.builderName(p).asString())
+        .className((p, s) -> s.builderName(p).asString() + p.getBoundedTypeVariablesFormatted())
         .noSuperClass()
         .noInterfaces()
         .content(pojoBuilderContent())
@@ -39,18 +39,11 @@ public class PojoBuilderGenerator {
   }
 
   private static Generator<Pojo, PojoSettings> pojoBuilderContent() {
-    final Generator<Pojo, PojoSettings> constructor =
-        JavaGenerators.<Pojo, PojoSettings>constructorGen()
-            .modifiers(PRIVATE)
-            .className((p, s) -> s.builderName(p).asString())
-            .noArguments()
-            .noContent()
-            .build();
     return Generator.<Pojo, PojoSettings>emptyGen()
         .appendSingleBlankLine()
-        .append(constructor)
-        .appendSingleBlankLine()
         .append(builderFactoryMethods())
+        .appendSingleBlankLine()
+        .append(prePopulatedBuilderGenerator())
         .appendSingleBlankLine()
         .append(unsafeBuilderGenerator())
         .appendSingleBlankLine()
