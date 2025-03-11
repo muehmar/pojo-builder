@@ -11,7 +11,7 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          packages = [ pkgs.jdk8 ];
+          packages = [ pkgs.jdk17 ];
         };
       });
 }
