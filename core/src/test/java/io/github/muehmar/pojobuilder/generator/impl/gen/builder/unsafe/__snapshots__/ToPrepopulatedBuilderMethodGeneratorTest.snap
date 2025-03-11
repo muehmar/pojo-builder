@@ -1,0 +1,32 @@
+genericSamplePojo=[
+.
+.
+/**
+ * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+ * all required fields are already set.
+ */
+public CustomerBuilder<T, S> toBuilder() {
+  return new CustomerBuilder<>(
+      id,
+      data,
+      additionalData
+  );
+}
+]
+
+
+samplePojo=[
+.
+.
+/**
+ * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+ * all required fields are already set.
+ */
+public CustomerBuilder toBuilder() {
+  return new CustomerBuilder(
+      id,
+      username,
+      nickname
+  );
+}
+]

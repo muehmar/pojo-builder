@@ -108,6 +108,18 @@ public final class CustomerBuilder<T extends List<String>, S> {
           new Customer<T, S>(id, data, additionalData);
       return instance;
     }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder<T, S> toBuilder() {
+      return new CustomerBuilder<>(
+          id,
+          data,
+          additionalData
+      );
+    }
   }
 
   public static final class BuilderStages {
@@ -333,6 +345,18 @@ public final class CustomerBuilder<T extends List<String>, S> {
           new Customer<T, S>(id, data, additionalData);
       return instance;
     }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder<T, S> toBuilder() {
+      return new CustomerBuilder<>(
+          id,
+          data,
+          additionalData
+      );
+    }
   }
 
   public static final class BuilderStages {
@@ -507,6 +531,18 @@ public final class CustomerBuilder<T extends List<String>, S> {
           new Customer<T, S>(id, data, additionalData);
       return instance;
     }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder<T, S> toBuilder() {
+      return new CustomerBuilder<>(
+          id,
+          data,
+          additionalData
+      );
+    }
   }
 
   public static final class BuilderStages {
@@ -659,6 +695,18 @@ final class CustomerBuilder {
       final Customer instance =
           new Customer(id, username, nickname);
       return instance;
+    }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder toBuilder() {
+      return new CustomerBuilder(
+          id,
+          username,
+          nickname
+      );
     }
   }
 
@@ -884,6 +932,18 @@ public final class CustomerBuilder {
           new Customer(id, username, nickname);
       return instance;
     }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder toBuilder() {
+      return new CustomerBuilder(
+          id,
+          username,
+          nickname
+      );
+    }
   }
 
   public static final class BuilderStages {
@@ -1100,6 +1160,18 @@ public final class CustomerBuilder {
           new Customer(id, username, nickname);
       return instance;
     }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder toBuilder() {
+      return new CustomerBuilder(
+          id,
+          username,
+          nickname
+      );
+    }
   }
 
   public static final class BuilderStages {
@@ -1264,6 +1336,18 @@ public final class CustomerBuilder {
       final Customer instance =
           new Customer(id, username, nickname);
       return instance;
+    }
+
+    /**
+     * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+     * all required fields are already set.
+     */
+    public CustomerBuilder toBuilder() {
+      return new CustomerBuilder(
+          id,
+          username,
+          nickname
+      );
     }
   }
 

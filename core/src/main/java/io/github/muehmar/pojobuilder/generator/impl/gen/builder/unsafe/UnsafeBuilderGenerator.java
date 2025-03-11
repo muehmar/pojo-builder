@@ -8,6 +8,7 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLin
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.MappingBuildMethodContentGenerator.mappingBuildMethodContentGenerator;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.SetMethodGenerator.setMethodGenerator;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.ToPrepopulatedBuilderMethodGenerator.toPrepopulatedBuilderMethodGenerator;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
@@ -43,7 +44,9 @@ public class UnsafeBuilderGenerator {
             .append(
                 setMethodGenerator((p, s) -> BUILDER_CLASSNAME, ModifierOption.REQUIRED_PRIVATE))
             .appendSingleBlankLine()
-            .append(buildMethod(mappingBuildMethodContentGenerator()));
+            .append(buildMethod(mappingBuildMethodContentGenerator()))
+            .appendSingleBlankLine()
+            .append(toPrepopulatedBuilderMethodGenerator());
 
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()

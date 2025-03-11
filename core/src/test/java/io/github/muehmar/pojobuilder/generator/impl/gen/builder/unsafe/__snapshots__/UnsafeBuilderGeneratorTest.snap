@@ -36,6 +36,18 @@ public static final class Builder<T extends List<String>, S> {
         new Customer<T, S>(id, data, additionalData);
     return instance;
   }
+
+  /**
+   * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+   * all required fields are already set.
+   */
+  public CustomerBuilder<T, S> toBuilder() {
+    return new CustomerBuilder<>(
+        id,
+        data,
+        additionalData
+    );
+  }
 }
 ]
 
@@ -78,6 +90,18 @@ public static final class Builder {
     final Customer instance =
         new Customer(id, username, nickname);
     return instance;
+  }
+
+  /**
+   * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+   * all required fields are already set.
+   */
+  public CustomerBuilder toBuilder() {
+    return new CustomerBuilder(
+        id,
+        username,
+        nickname
+    );
   }
 }
 ]
