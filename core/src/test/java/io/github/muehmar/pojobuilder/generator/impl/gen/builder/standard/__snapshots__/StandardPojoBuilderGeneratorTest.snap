@@ -82,6 +82,14 @@ public static final class OptBuilder1<T extends List<String>, S> {
   public Customer<T, S> build() throws IOException {
     return builder.build();
   }
+
+  /**
+   * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+   * all required fields are already set.
+   */
+  public CustomerBuilder<T, S> toBuilder() {
+    return builder.toBuilder();
+  }
 }
 ]
 
@@ -170,6 +178,14 @@ public static final class OptBuilder1 {
   public Customer build() throws IOException {
     return builder.build();
   }
+
+  /**
+   * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+   * all required fields are already set.
+   */
+  public CustomerBuilder toBuilder() {
+    return builder.toBuilder();
+  }
 }
 ]
 
@@ -257,6 +273,14 @@ public static final class OptBuilder1 {
 
   public Customer build() throws IOException {
     return builder.build();
+  }
+
+  /**
+   * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+   * all required fields are already set.
+   */
+  public CustomerBuilder toBuilder() {
+    return builder.toBuilder();
   }
 }
 ]

@@ -201,6 +201,14 @@ public final class CustomerBuilder<T extends List<String>, S> {
       public Customer<T, S> build() throws IOException {
         return builder.build();
       }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder<T, S> toBuilder() {
+        return builder.toBuilder();
+      }
     }
 
     public static final class FullBuilder0<T extends List<String>, S> {
@@ -252,6 +260,14 @@ public final class CustomerBuilder<T extends List<String>, S> {
 
       public Customer<T, S> build() throws IOException {
         return builder.build();
+      }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder<T, S> toBuilder() {
+        return builder.toBuilder();
       }
     }
   }
@@ -446,6 +462,14 @@ public final class CustomerBuilder<T extends List<String>, S> {
       public Customer<T, S> build() throws IOException {
         return builder.build();
       }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder<T, S> toBuilder() {
+        return builder.toBuilder();
+      }
     }
 
   }
@@ -612,6 +636,14 @@ public final class CustomerBuilder<T extends List<String>, S> {
 
       public Customer<T, S> build() throws IOException {
         return builder.build();
+      }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder<T, S> toBuilder() {
+        return builder.toBuilder();
       }
     }
   }
@@ -805,6 +837,14 @@ final class CustomerBuilder {
       public Customer build() throws IOException {
         return builder.build();
       }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder toBuilder() {
+        return builder.toBuilder();
+      }
     }
 
     public static final class FullBuilder0 {
@@ -856,6 +896,14 @@ final class CustomerBuilder {
 
       public Customer build() throws IOException {
         return builder.build();
+      }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder toBuilder() {
+        return builder.toBuilder();
       }
     }
   }
@@ -1049,6 +1097,14 @@ public final class CustomerBuilder {
       public Customer build() throws IOException {
         return builder.build();
       }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder toBuilder() {
+        return builder.toBuilder();
+      }
     }
 
     public static final class FullBuilder0 {
@@ -1100,6 +1156,14 @@ public final class CustomerBuilder {
 
       public Customer build() throws IOException {
         return builder.build();
+      }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder toBuilder() {
+        return builder.toBuilder();
       }
     }
   }
@@ -1285,6 +1349,14 @@ public final class CustomerBuilder {
       public Customer build() throws IOException {
         return builder.build();
       }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder toBuilder() {
+        return builder.toBuilder();
+      }
     }
 
   }
@@ -1442,6 +1514,14 @@ public final class CustomerBuilder {
 
       public Customer build() throws IOException {
         return builder.build();
+      }
+
+      /**
+       * Creates a new instance of {@link CustomerBuilder} where it is guaranteed that
+       * all required fields are already set.
+       */
+      public CustomerBuilder toBuilder() {
+        return builder.toBuilder();
       }
     }
   }
