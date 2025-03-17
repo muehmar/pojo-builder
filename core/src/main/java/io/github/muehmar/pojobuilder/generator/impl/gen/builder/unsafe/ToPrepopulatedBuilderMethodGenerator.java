@@ -31,7 +31,7 @@ public class ToPrepopulatedBuilderMethodGenerator {
         .build();
   }
 
-  private static Generator<Pojo, PojoSettings> javaDoc() {
+  public static Generator<Pojo, PojoSettings> javaDoc() {
     return JavaDocGenerator.javaDoc(
         (p, s) ->
             String.format(

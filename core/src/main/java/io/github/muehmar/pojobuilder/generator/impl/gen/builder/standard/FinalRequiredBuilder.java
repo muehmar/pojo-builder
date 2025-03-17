@@ -10,8 +10,10 @@ import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
+import io.github.muehmar.codegenerator.java.MethodGen;
 import io.github.muehmar.pojobuilder.generator.impl.gen.RefsGen;
 import io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuilderFieldDeclaration;
+import io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.ToPrepopulatedBuilderMethodGenerator;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.PojoField;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
@@ -33,7 +35,9 @@ class FinalRequiredBuilder {
             .append(newLine())
             .append(andOptionalsMethod())
             .append(newLine())
-            .append(standardBuilderBuildMethod());
+            .append(standardBuilderBuildMethod())
+            .appendSingleBlankLine()
+            .append(toBuilderMethod());
 
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()
@@ -54,8 +58,8 @@ class FinalRequiredBuilder {
         .append(RefsGen.genericRefs());
   }
 
-  public static <A> Generator<Pojo, A> andAllOptionalsMethod() {
-    return JavaGenerators.<Pojo, A>methodGen()
+  private static Generator<Pojo, PojoSettings> andAllOptionalsMethod() {
+    return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
         .returnType(p -> "OptBuilder0" + p.getTypeVariablesFormatted())
@@ -66,8 +70,8 @@ class FinalRequiredBuilder {
         .build();
   }
 
-  public static <A> Generator<Pojo, A> andOptionalsMethod() {
-    return JavaGenerators.<Pojo, A>methodGen()
+  private static Generator<Pojo, PojoSettings> andOptionalsMethod() {
+    return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
         .returnType(p -> "Builder" + p.getTypeVariablesFormatted())
@@ -76,5 +80,20 @@ class FinalRequiredBuilder {
         .doesNotThrow()
         .content("return builder;")
         .build();
+  }
+
+  private static Generator<Pojo, PojoSettings> toBuilderMethod() {
+    MethodGen<Pojo, PojoSettings> method =
+        JavaGenerators.<Pojo, PojoSettings>methodGen()
+            .modifiers(PUBLIC)
+            .noGenericTypes()
+            .returnType(
+                (p, s, w) -> w.println("%s%s", s.builderName(p), p.getTypeVariablesFormatted()))
+            .methodName("toBuilder")
+            .noArguments()
+            .doesNotThrow()
+            .content("return builder.toBuilder();")
+            .build();
+    return ToPrepopulatedBuilderMethodGenerator.javaDoc().append(method);
   }
 }

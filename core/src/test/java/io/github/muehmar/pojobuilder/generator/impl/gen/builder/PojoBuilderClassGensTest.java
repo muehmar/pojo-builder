@@ -93,6 +93,5 @@ class PojoBuilderClassGensTest {
             Pojos.genericSample(), defaultSettings().withFullBuilderEnabled(false), javaWriter());
 
     expect.toMatchSnapshot(writer.asString());
-    expect.toMatchSnapshot(writer.asString());
   }
 }
