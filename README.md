@@ -11,6 +11,16 @@ is needed. Also in case of refactoring, adding new required properties will fail
 builder until the new property is set for every object creation. This can also be achieved with the optional properties,
 i.e. one can force the initialization of all optional properties.
 
+**Features**
+
+* [Compile-time safety](#compile-time-safety)
+* [Full builder](#full-builder)
+* [Factory methods](#factory-methods)
+* [Prepopulated builder](#prepopulated-builder)
+* [Custom methods for fields](#custom-methods-for-fields-in-pojobuilder)
+* [Custom build method](#custom-build-method)
+* [Custom annotation / Meta annotation](#custom-annotation--meta-annotation)
+
 ## Usage
 
 ### Dependency
@@ -20,8 +30,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:1.8.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:1.8.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:2.0.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:2.0.0"
 }
 ```
 
@@ -263,6 +273,34 @@ customerBuilder(String.class)
 ```
 
 if static imports are preferred.
+
+### Prepopulated builder
+
+After all required properties are set or all properties are set in the full builder, the staged builder provides a
+`toBuilder` method which returns a builder with methods setting every single property (optional method are overloaded
+for convenience). It is guaranteed that an instance of this prepopulated builder has already all required properties
+set. This is especially helpful in testing to support the object mother pattern, where a basic, valid object with
+default values is created and then modified via the prepopulated builder in specific test cases.
+
+Given the customer class from above, this might look like:
+
+```
+// Create an instance of CustomerBuilder which is prepopulated with the required properties
+final CustomerBuilder customerBuilder = CustomerBuilder.builder()
+  .setName("Dexter")
+  .setEmail("dexter@miami-metro.us")
+  .toBuilder();
+  
+// Create a instance of Customer adding the nickname
+final Customer customer1 = customerBuilder
+  .setNickname("Dex")
+  .build();
+
+// Create a second instance of Customer overriding the name
+final Customer customer2 = customerBuilder
+    .setName("Dexter Morgan")
+    .build();
+```
 
 ### Custom methods for fields in PojoBuilder
 
@@ -512,8 +550,18 @@ public @interface AllRequiredPojoBuilder {
 
 * Fields in superclasses of data classes are currently ignored.
 
+## Migration
+
+### Version 1.x to Version 2.0
+
+All builder stages are moved into an inner `BuilderStages` class (see issue `#21`). If one is using intermediates stages
+explicitly in the code, one needs to adjust the import of these stages.
+
 ## Change Log
 
+* 2.0.0
+    * Move all builder stages to an inner class (issue `#21`)
+    * Add Prepopulated builder (issue `#33`)
 * 1.8.0
     * Fix missing import for return type of custom build method (issue `#37`)
     * Support checked exceptions for custom build methods (issue `#38`)
