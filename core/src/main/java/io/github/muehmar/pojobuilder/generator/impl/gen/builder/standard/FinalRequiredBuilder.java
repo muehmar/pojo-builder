@@ -6,6 +6,7 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.standardBuilderBuildMethod;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuilderMethodConstructor.builderMethodConstructor;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.ToBuilderMethod.toBuilderMethod;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.standard.StandardBuilderGenerator.CLASS_NAME_FOR_REQUIRED;
 
 import io.github.muehmar.codegenerator.Generator;
@@ -33,7 +34,9 @@ class FinalRequiredBuilder {
             .append(newLine())
             .append(andOptionalsMethod())
             .append(newLine())
-            .append(standardBuilderBuildMethod());
+            .append(standardBuilderBuildMethod())
+            .appendSingleBlankLine()
+            .append(toBuilderMethod());
 
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()
@@ -54,8 +57,8 @@ class FinalRequiredBuilder {
         .append(RefsGen.genericRefs());
   }
 
-  public static <A> Generator<Pojo, A> andAllOptionalsMethod() {
-    return JavaGenerators.<Pojo, A>methodGen()
+  private static Generator<Pojo, PojoSettings> andAllOptionalsMethod() {
+    return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
         .returnType(p -> "OptBuilder0" + p.getTypeVariablesFormatted())
@@ -66,8 +69,8 @@ class FinalRequiredBuilder {
         .build();
   }
 
-  public static <A> Generator<Pojo, A> andOptionalsMethod() {
-    return JavaGenerators.<Pojo, A>methodGen()
+  private static Generator<Pojo, PojoSettings> andOptionalsMethod() {
+    return JavaGenerators.<Pojo, PojoSettings>methodGen()
         .modifiers(PUBLIC)
         .noGenericTypes()
         .returnType(p -> "Builder" + p.getTypeVariablesFormatted())

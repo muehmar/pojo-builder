@@ -6,13 +6,15 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.PUBLIC;
 import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.buildMethod;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.BuildMethod.buildMethodContent;
-import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.SetMethodGenerator.setMethodGenerator;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.MappingBuildMethodContentGenerator.mappingBuildMethodContentGenerator;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.SetMethodGenerator.setMethodGenerator;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.unsafe.ToPrepopulatedBuilderMethodGenerator.toPrepopulatedBuilderMethodGenerator;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
 import io.github.muehmar.pojobuilder.generator.impl.gen.FieldDeclarationGen;
 import io.github.muehmar.pojobuilder.generator.impl.gen.PackageGen;
+import io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.SetMethodGenerator.ModifierOption;
 import io.github.muehmar.pojobuilder.generator.model.Pojo;
 import io.github.muehmar.pojobuilder.generator.model.settings.PojoSettings;
 
@@ -39,9 +41,12 @@ public class UnsafeBuilderGenerator {
             .append(newLine())
             .appendList(FieldDeclarationGen.ofModifiers(PRIVATE), Pojo::getFields)
             .appendSingleBlankLine()
-            .append(setMethodGenerator())
+            .append(
+                setMethodGenerator((p, s) -> BUILDER_CLASSNAME, ModifierOption.REQUIRED_PRIVATE))
             .appendSingleBlankLine()
-            .append(buildMethod(buildMethodContent()));
+            .append(buildMethod(mappingBuildMethodContentGenerator()))
+            .appendSingleBlankLine()
+            .append(toPrepopulatedBuilderMethodGenerator());
 
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()

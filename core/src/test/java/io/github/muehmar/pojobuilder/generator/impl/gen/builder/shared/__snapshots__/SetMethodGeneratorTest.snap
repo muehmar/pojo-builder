@@ -1,4 +1,7 @@
 builderSetMethodePrefix=[
+java.lang.Integer
+java.util.Optional
+
 public Builder setId(Integer id) {
   this.id = id;
   return this;
@@ -13,6 +16,9 @@ public Builder setId(Optional<Integer> id) {
 
 
 fieldOfGenericClass=[
+java.lang.Integer
+java.util.Optional
+
 public Builder<T, S> id(Integer id) {
   this.id = id;
   return this;
@@ -27,6 +33,9 @@ public Builder<T, S> id(Optional<Integer> id) {
 
 
 genericClass=[
+java.lang.Integer
+java.util.Optional
+
 public Builder<T, S> id(Integer id) {
   this.id = id;
   return this;
@@ -41,6 +50,9 @@ public Builder<T, S> id(Optional<Integer> id) {
 
 
 optionalField=[
+java.lang.Integer
+java.util.Optional
+
 public Builder id(Integer id) {
   this.id = id;
   return this;
@@ -55,7 +67,20 @@ public Builder id(Optional<Integer> id) {
 
 
 requiredField=[
+java.lang.Integer
+
 private Builder id(Integer id) {
+  this.id = id;
+  return this;
+}
+
+]
+
+
+requiredFieldAndPublicModifier=[
+java.lang.Integer
+
+public Builder id(Integer id) {
   this.id = id;
   return this;
 }

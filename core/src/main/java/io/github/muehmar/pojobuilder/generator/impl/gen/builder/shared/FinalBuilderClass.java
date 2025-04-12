@@ -6,6 +6,7 @@ import static io.github.muehmar.codegenerator.java.JavaModifier.STATIC;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.Generators.newLine;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuildMethod.standardBuilderBuildMethod;
 import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.BuilderMethodConstructor.builderMethodConstructor;
+import static io.github.muehmar.pojobuilder.generator.impl.gen.builder.shared.ToBuilderMethod.toBuilderMethod;
 
 import io.github.muehmar.codegenerator.Generator;
 import io.github.muehmar.codegenerator.java.JavaGenerators;
@@ -25,7 +26,9 @@ public class FinalBuilderClass {
             .append(newLine())
             .append(builderMethodConstructor(rawClassNameGenerator, builderNumber))
             .append(newLine())
-            .append(standardBuilderBuildMethod());
+            .append(standardBuilderBuildMethod())
+            .appendSingleBlankLine()
+            .append(toBuilderMethod());
 
     return JavaGenerators.<Pojo, PojoSettings>classGen()
         .clazz()
