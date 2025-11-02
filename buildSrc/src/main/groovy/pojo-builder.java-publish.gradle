@@ -41,11 +41,20 @@ publishing {
     }
     repositories {
         maven {
-            name = 'ossrh'
-            credentials(PasswordCredentials)
-            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            name = 'central'
+            credentials {
+                username = project.findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_USERNAME')
+                password = project.findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PASSWORD')
+            }
+            url = 'https://central.sonatype.com/api/v1/publisher/upload'
+        }
+    }
+}
+
+tasks.withType(PublishToMavenRepository).configureEach {
+    doFirst {
+        if (version.toString().endsWith('-SNAPSHOT')) {
+            throw new GradleException("SNAPSHOT publishing is not supported. Central Portal only accepts release versions.")
         }
     }
 }
