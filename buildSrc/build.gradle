@@ -8,4 +8,5 @@ repositories {
 
 dependencies {
     implementation group: 'com.diffplug.spotless', name: 'spotless-plugin-gradle', version: '7.0.2'
+    implementation group: 'com.vanniktech', name: 'gradle-maven-publish-plugin', version: '0.30.0'
 }

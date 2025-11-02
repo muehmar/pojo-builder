@@ -1,64 +1,43 @@
 plugins {
-    id 'maven-publish'
-    id 'signing'
     id 'pojo-builder.java'
+    id 'com.vanniktech.maven.publish'
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
+mavenPublishing {
+    coordinates('io.github.muehmar', 'pojo-builder' + project.name.replace('core', ''), project.version.toString())
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = 'pojo-builder' + project.name.replace('core', '')
-            from components.java
-            pom {
-                name = 'Pojo Builder'
-                description = 'Java Annotation Processor for advanced Pojo Builder'
-                url = 'https://github.com/muehmar/pojo-builder'
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://github.com/muehmar/pojo-builder/blob/main/LICENSE'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'muehmar'
-                        name = 'Martin Mühlemann'
-                        email = 'poelsi@gmail.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/muehmar/pojo-builder.git'
-                    developerConnection = 'scm:git:ssh://github.com/muehmar/pojo-builder.git'
-                    url = 'https://github.com/muehmar/pojo-builder.git'
-                }
+    pom {
+        name = 'Pojo Builder'
+        description = 'Java Annotation Processor for advanced Pojo Builder'
+        url = 'https://github.com/muehmar/pojo-builder'
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'https://github.com/muehmar/pojo-builder/blob/main/LICENSE'
             }
         }
-    }
-    repositories {
-        maven {
-            name = 'central'
-            credentials {
-                username = project.findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_USERNAME')
-                password = project.findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PASSWORD')
+        developers {
+            developer {
+                id = 'muehmar'
+                name = 'Martin Mühlemann'
+                email = 'poelsi@gmail.com'
             }
-            url = 'https://central.sonatype.com/api/v1/publisher/upload'
+        }
+        scm {
+            connection = 'scm:git:git://github.com/muehmar/pojo-builder.git'
+            developerConnection = 'scm:git:ssh://github.com/muehmar/pojo-builder.git'
+            url = 'https://github.com/muehmar/pojo-builder.git'
         }
     }
+
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, true)
+    signAllPublications()
 }
 
-tasks.withType(PublishToMavenRepository).configureEach {
+tasks.named('publishToMavenCentral').configure {
     doFirst {
         if (version.toString().endsWith('-SNAPSHOT')) {
             throw new GradleException("SNAPSHOT publishing is not supported. Central Portal only accepts release versions.")
         }
     }
-}
-
-signing {
-    sign publishing.publications.mavenJava
 }
