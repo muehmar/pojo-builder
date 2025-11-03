@@ -559,6 +559,8 @@ explicitly in the code, one needs to adjust the import of these stages.
 
 ## Change Log
 
+* 2.0.1
+    * Update the publishing process
 * 2.0.0
     * Move all builder stages to an inner class (issue `#21`)
     * Add Prepopulated builder (issue `#33`)
