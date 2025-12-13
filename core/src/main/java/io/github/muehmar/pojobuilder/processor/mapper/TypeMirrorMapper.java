@@ -49,6 +49,7 @@ public class TypeMirrorMapper {
         declaredTypeMapper(),
         arrayTypeMapper(),
         typeVariableMapper(),
+        wildcardTypeMapper(),
         Mapper.forFixMapping(BOOLEAN, Types.primitiveBoolean()),
         Mapper.forFixMapping(CHAR, Types.primitiveChar()),
         Mapper.forFixMapping(INT, Types.primitiveInt()),
@@ -57,8 +58,7 @@ public class TypeMirrorMapper {
         Mapper.forFixMapping(LONG, Types.primitiveLong()),
         Mapper.forFixMapping(SHORT, Types.primitiveShort()),
         Mapper.forFixMapping(BYTE, Types.primitiveByte()),
-        Mapper.forFixMapping(VOID, Types.voidType()),
-        Mapper.forFixMapping(WILDCARD, Type.fromSpecificType(WildcardType.create())));
+        Mapper.forFixMapping(VOID, Types.voidType()));
   }
 
   private static Mapper declaredTypeMapper() {
@@ -87,6 +87,23 @@ public class TypeMirrorMapper {
         TypeKind.TYPEVAR,
         TypeVariable.class,
         typeVariable -> Types.typeVariable(Name.fromString(typeVariable.toString())));
+  }
+
+  private static Mapper wildcardTypeMapper() {
+    return Mapper.forKindAndClass(
+        WILDCARD,
+        javax.lang.model.type.WildcardType.class,
+        wildcardType -> {
+          final TypeMirror extendsBound = wildcardType.getExtendsBound();
+          final TypeMirror superBound = wildcardType.getSuperBound();
+          if (extendsBound != null) {
+            return Type.fromSpecificType(WildcardType.upperBound(map(extendsBound)));
+          } else if (superBound != null) {
+            return Type.fromSpecificType(WildcardType.lowerBound(map(superBound)));
+          } else {
+            return Type.fromSpecificType(WildcardType.create());
+          }
+        });
   }
 
   private static class Mapper {
