@@ -8,18 +8,18 @@ include 'example-java17'
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            version('pojobuilder', '1.6.0')
+            version('pojobuilder', '2.1.0')
             library('pojobuilder-core', 'io.github.muehmar','pojo-builder').versionRef('pojobuilder')
             library('pojobuilder-annotations', 'io.github.muehmar','pojo-builder-annotations').versionRef('pojobuilder')
 
-            library('codeGenerator', 'io.github.muehmar:code-generator:0.22.0')
+            library('codeGenerator', 'io.github.muehmar:code-generator:0.25.0')
 
             version('junit', '5.10.0')
             library('junit-api', 'org.junit.jupiter', 'junit-jupiter-api').versionRef('junit')
             library('junit-engine', 'org.junit.jupiter', 'junit-jupiter-engine').versionRef('junit')
             library('junit-params', 'org.junit.jupiter', 'junit-jupiter-params').versionRef('junit')
 
-            version('assertj', '3.26.3')
+            version('assertj', '3.27.6')
             library('assertj', 'org.assertj', 'assertj-core').versionRef('assertj')
 
             bundle('junit', ['junit-api', 'junit-engine', 'junit-params', 'assertj'])
@@ -29,14 +29,14 @@ dependencyResolutionManagement {
             library('google-autoservice', 'com.google.auto.service:auto-service:1.1.1')
             library('joor', 'org.jooq:joor-java-8:0.9.15')
 
-            library('lombok', 'org.projectlombok:lombok:1.18.32')
+            library('lombok', 'org.projectlombok:lombok:1.18.42')
 
             library('snapshotTesting','io.github.origin-energy:java-snapshot-testing-junit5:4.0.8')
 
-            library('slf4j', 'org.slf4j:slf4j-api:2.0.7')
+            library('slf4j', 'org.slf4j:slf4j-api:2.0.17')
 
             plugin('release', 'net.researchgate.release').version('2.8.1')
-            plugin('versions', 'com.github.ben-manes.versions').version('0.51.0')
+            plugin('versions', 'com.github.ben-manes.versions').version('0.53.0')
             plugin('maven-publish-central', 'com.vanniktech.maven.publish').version('0.30.0')
         }
     }
