@@ -91,6 +91,18 @@ public class Types {
     return new Type(TypeVariableType.ofName(name));
   }
 
+  public static Type wildcard() {
+    return new Type(WildcardType.create());
+  }
+
+  public static Type wildcardUpperBound(Type bound) {
+    return new Type(WildcardType.upperBound(bound));
+  }
+
+  public static Type wildcardLowerBound(Type bound) {
+    return new Type(WildcardType.lowerBound(bound));
+  }
+
   public static Type declaredType(Classname name, PackageName pkg) {
     return new Type(DeclaredType.fromNameAndPackage(name, pkg));
   }
