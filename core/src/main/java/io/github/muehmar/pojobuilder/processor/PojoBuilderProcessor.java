@@ -74,7 +74,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
         .filter(ExecutableElement.class::isInstance)
         .map(ExecutableElement.class::cast)
         .filter(this::isStaticMethod)
-        .distinct(Object::toString)
+        .distinct(this::getFullyQualifiedMethodSignature)
         .flatMapOptional(this::findAnnotationPath)
         .forEach(
             elementAndPath ->
@@ -87,7 +87,7 @@ public class PojoBuilderProcessor extends AbstractProcessor {
         .filter(this::isConstructor)
         .filter(ExecutableElement.class::isInstance)
         .map(ExecutableElement.class::cast)
-        .distinct(Object::toString)
+        .distinct(this::getFullyQualifiedMethodSignature)
         .flatMapOptional(this::findAnnotationPath)
         .forEach(
             elementAndPath ->
@@ -109,6 +109,10 @@ public class PojoBuilderProcessor extends AbstractProcessor {
 
   private boolean isStaticMethod(ExecutableElement executableElement) {
     return executableElement.getModifiers().contains(Modifier.STATIC);
+  }
+
+  private String getFullyQualifiedMethodSignature(ExecutableElement executableElement) {
+    return executableElement.getEnclosingElement().toString() + "." + executableElement.toString();
   }
 
   private <T extends Element> Optional<ElementAndAnnotationPath<T>> findAnnotationPath(T element) {
