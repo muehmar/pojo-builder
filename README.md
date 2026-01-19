@@ -554,55 +554,67 @@ public @interface AllRequiredPojoBuilder {
 
 ### Version 1.x to Version 2.0
 
-All builder stages are moved into an inner `BuilderStages` class (see issue `#21`). If one is using intermediates stages
+All builder stages are moved into an inner `BuilderStages` class (see [#21](https://github.com/muehmar/pojo-builder/issues/21)). If one is using intermediates stages
 explicitly in the code, one needs to adjust the import of these stages.
 
 ## Change Log
 
-* 2.1.1 - Fix generation of builder for factory methods and constructors with identicaly signatures (issue `#49`)
-* 2.1.0 - Support upper and lower bounds for wildcard types (pr `#47`)
+* 2.1.1
+    * [#49](https://github.com/muehmar/pojo-builder/issues/49) - Fix generation of builder for factory methods and constructors with identicaly signatures
+* 2.1.0
+    * [#47](https://github.com/muehmar/pojo-builder/pull/47) - Support upper and lower bounds for wildcard types
 * 2.0.1
     * Update the publishing process
 * 2.0.0
-    * Move all builder stages to an inner class (issue `#21`)
-    * Add Prepopulated builder (issue `#33`)
+    * [#21](https://github.com/muehmar/pojo-builder/issues/21) - Move all builder stages to an inner class
+    * [#33](https://github.com/muehmar/pojo-builder/issues/33) - Add Prepopulated builder
 * 1.8.0
-    * Fix missing import for return type of custom build method (issue `#37`)
-    * Support checked exceptions for custom build methods (issue `#38`)
-    * Support checked exceptions for constructors (issue `#36`)
-* 1.7.0 - Support static imports of factory methods for generic classes
+    * [#37](https://github.com/muehmar/pojo-builder/issues/37) - Fix missing import for return type of custom build method
+    * [#38](https://github.com/muehmar/pojo-builder/issues/38) - Support checked exceptions for custom build methods
+    * [#36](https://github.com/muehmar/pojo-builder/issues/36) - Support checked exceptions for constructors
+* 1.7.0
+    * Support static imports of factory methods for generic classes
 * 1.6.0
-    * Improve compile time safety by adding the possibility to check the argument names for used constructor (
-      issue `#32`)
-    * Improve error message in case no suitable constructor is found (issue `#29`)
-    * Add possibility to annotate the constructor of a pojo (issue `#26`)
+    * [#32](https://github.com/muehmar/pojo-builder/issues/32) - Improve compile time safety by adding the possibility to check the argument names for used constructor
+    * [#29](https://github.com/muehmar/pojo-builder/issues/29) - Improve error message in case no suitable constructor is found
+    * [#26](https://github.com/muehmar/pojo-builder/issues/26) - Add possibility to annotate the constructor of a pojo
 * 1.5.0
-    * Support `javax.annotation.Nullable` (issue `#27`)
-    * Support checked exceptions for factory methods (issue `#16`)
+    * [#27](https://github.com/muehmar/pojo-builder/issues/27) - Support `javax.annotation.Nullable`
+    * [#16](https://github.com/muehmar/pojo-builder/issues/16) - Support checked exceptions for factory methods
 * 1.4.2
-    * Fix arguments order for field builders (issue `#22`)
-    * Remove redundant explicit `Object` type upper bound of generic parameters (issue `#9`)
-* 1.4.1 - Fix missing type variables in build method (issue `#17`)
-* 1.4.0 - Support annotation of factory methods (issue `#4`)
-* 1.3.0 - Add annotation element to use only the inner class name for the builder (issue `#12`)
-* 1.2.0 - Add full builder (issue `#2`)
-* 1.1.0 - Add second factory method with the pojo name for static imports (issue `#7`)
-* 1.0.0 - Fork and Release of PojoBuilder
+    * [#22](https://github.com/muehmar/pojo-builder/issues/22) - Fix arguments order for field builders
+    * [#9](https://github.com/muehmar/pojo-builder/issues/9) - Remove redundant explicit `Object` type upper bound of generic parameters
+* 1.4.1
+    * [#17](https://github.com/muehmar/pojo-builder/issues/17) - Fix missing type variables in build method
+* 1.4.0
+    * [#4](https://github.com/muehmar/pojo-builder/issues/4) - Support annotation of factory methods
+* 1.3.0
+    * [#12](https://github.com/muehmar/pojo-builder/issues/12) - Add annotation element to use only the inner class name for the builder
+* 1.2.0
+    * [#2](https://github.com/muehmar/pojo-builder/issues/2) - Add full builder
+* 1.1.0
+    * [#7](https://github.com/muehmar/pojo-builder/issues/7) - Add second factory method with the pojo name for static imports
+* 1.0.0
+    * Fork and Release of PojoBuilder
     * Remove the pojo extension generation
-* 0.15.1 - Fix import for nested classes (issue `#15`)
+* 0.15.1
+    * [#15](https://github.com/muehmar/pojo-builder/issues/15) - Fix import for nested classes
 * 0.15.0
-    * Add support for wildcards (issue `#13`)
+    * [#13](https://github.com/muehmar/pojo-builder/issues/13) - Add support for wildcards
 * 0.14.0
-    * Add custom build method (issue `#6`)
-    * Remove obsolete base class settings (issue `#8`)
-    * Add option for package-private builder class (issue `#2`)
-* 0.13.0 - Add `@Ignore` annotation
+    * [#6](https://github.com/muehmar/pojo-builder/issues/6) - Add custom build method
+    * [#8](https://github.com/muehmar/pojo-builder/issues/8) - Remove obsolete base class settings
+    * [#2](https://github.com/muehmar/pojo-builder/issues/2) - Add option for package-private builder class
+* 0.13.0
+    * Add `@Ignore` annotation
 * 0.12.0
     * Drop support for `equals/hashCode` and `toString` method
     * Allow to disable the default methods in PojoBuilder when defining custom methods
     * Support varargs in custom PojoBuilder methods
-* 0.11.0 - Add `@FieldBuilder` annotation to create custom methods for the PojoBuilder
-* 0.10.1 - Make the base class and the extension interface package private
+* 0.11.0
+    * Add `@FieldBuilder` annotation to create custom methods for the PojoBuilder
+* 0.10.1
+    * Make the base class and the extension interface package private
 * 0.10.0
     * Add configurable prefix for the builder set methods
     * Generate convenience getters for optional fields
@@ -612,8 +624,10 @@ explicitly in the code, one needs to adjust the import of these stages.
 * 0.8.0
     * Support generic data classes
     * Support newer Java versions
-* 0.7.2 - Fix type conversion for annotated getter method for optional fields
-* 0.7.1 - Fix possible stackoverflow caused by circular annotation paths
+* 0.7.2
+    * Fix type conversion for annotated getter method for optional fields
+* 0.7.1
+    * Fix possible stackoverflow caused by circular annotation paths
 * 0.7.0
     * PojoBuilder can be created as discrete class
     * Improve meta annotation processing
@@ -632,12 +646,21 @@ explicitly in the code, one needs to adjust the import of these stages.
     * Support custom extension name
     * Support meta annotation
     * Support arbitrary getter names with `@Getter` annotation
-* 0.3.1 - Ignore constants in data classes
-* 0.3.0 - Add `equals`, `hashCode` and `withXX` methods
-* 0.2.5 - Remove newline character from writer output
-* 0.2.4 - Fix generated package structure for the extension
-* 0.2.3 - Make the extension be extendable by the pojo itself
-* 0.2.2 - Support constructors with optional fields wrapped into `java.util.Optional`
-* 0.2.1 - Add support for primitives and arrays
-* 0.2.0 - Add PojoBuilder to the extension class
-* 0.1.0 - Initial release, creates empty extension class
+* 0.3.1
+    * Ignore constants in data classes
+* 0.3.0
+    * Add `equals`, `hashCode` and `withXX` methods
+* 0.2.5
+    * Remove newline character from writer output
+* 0.2.4
+    * Fix generated package structure for the extension
+* 0.2.3
+    * Make the extension be extendable by the pojo itself
+* 0.2.2
+    * Support constructors with optional fields wrapped into `java.util.Optional`
+* 0.2.1
+    * Add support for primitives and arrays
+* 0.2.0
+    * Add PojoBuilder to the extension class
+* 0.1.0
+    * Initial release, creates empty extension class
