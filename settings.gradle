@@ -8,7 +8,7 @@ include 'example-java17'
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            version('pojobuilder', '2.1.0')
+            version('pojobuilder', '2.1.1')
             library('pojobuilder-core', 'io.github.muehmar','pojo-builder').versionRef('pojobuilder')
             library('pojobuilder-annotations', 'io.github.muehmar','pojo-builder-annotations').versionRef('pojobuilder')
 
