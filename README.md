@@ -30,8 +30,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:2.1.0"
-    annotationProcessor "io.github.muehmar:pojo-builder:2.1.0"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:2.1.1"
+    annotationProcessor "io.github.muehmar:pojo-builder:2.1.1"
 }
 ```
 
@@ -559,6 +559,7 @@ explicitly in the code, one needs to adjust the import of these stages.
 
 ## Change Log
 
+* 2.1.1 - Fix generation of builder for factory methods and constructors with identicaly signatures (issue `#49`)
 * 2.1.0 - Support upper and lower bounds for wildcard types (pr `#47`)
 * 2.0.1
     * Update the publishing process
