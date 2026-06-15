@@ -194,8 +194,48 @@ class PojoBuilderProcessorTest extends BaseExtensionProcessorTest {
 
   public static Stream<Arguments> nullableAnnotations() {
     return Stream.of(
-            Nullable.class.getName(), "javax.annotation.Nullable", "jakarta.annotation.Nullable")
+            Nullable.class.getName(),
+            "javax.annotation.Nullable",
+            "jakarta.annotation.Nullable",
+            "org.jspecify.annotations.Nullable")
         .map(Arguments::arguments);
+  }
+
+  @Test
+  void run_when_fieldAnnotatedWithJSpecifyNullable_then_pojoFieldIsOptional() {
+    final QualifiedClassname pojoClassname = randomPojoClassname();
+
+    final String classString =
+        TestPojoComposer.ofPackage(PACKAGE)
+            .withImport(PojoBuilder.class)
+            .withImport(org.jspecify.annotations.Nullable.class)
+            .annotation(PojoBuilder.class)
+            .className(pojoClassname.getName())
+            .withField("String", "id", org.jspecify.annotations.Nullable.class)
+            .constructor()
+            .create();
+
+    final PojoAndSettings pojoAndSettings = runAnnotationProcessor(pojoClassname, classString);
+
+    final PojoField m1 = new PojoField(Names.id(), string(), OPTIONAL);
+    final PList<PojoField> fields = PList.single(m1);
+    final Pojo expected =
+        pojoBuilder()
+            .pojoClassname(pojoClassname)
+            .pojoNameWithTypeVariables(pojoClassname.getSimpleName())
+            .pkg(PACKAGE)
+            .fields(fields)
+            .constructors(
+                PList.single(
+                    new Constructor(
+                        pojoClassname.getSimpleName(),
+                        fields.map(PojoFields::toArgument),
+                        PList.empty())))
+            .generics(Generics.empty())
+            .fieldBuilders(PList.empty())
+            .build();
+
+    assertThat(expected).isEqualTo(pojoAndSettings.getPojo());
   }
 
   @ParameterizedTest

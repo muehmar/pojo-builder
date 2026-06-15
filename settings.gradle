@@ -26,6 +26,8 @@ dependencyResolutionManagement {
 
             library('jakarta-annotationApi', 'jakarta.annotation:jakarta.annotation-api:2.1.1')
 
+            library('jspecify', 'org.jspecify:jspecify:1.0.0')
+
             library('google-autoservice', 'com.google.auto.service:auto-service:1.1.1')
             library('joor', 'org.jooq:joor-java-8:0.9.15')
 

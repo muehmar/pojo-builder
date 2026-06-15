@@ -20,6 +20,7 @@ import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.generator.model.type.Types;
 import io.github.muehmar.pojobuilder.generator.model.type.WildcardType;
 import java.util.function.Function;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
@@ -67,7 +68,8 @@ public class TypeMirrorMapper {
         DeclaredType.class,
         declaredType -> {
           final QualifiedClassname qualifiedClassname =
-              ClassnameParser.parseThrowing(declaredType.toString());
+              ClassnameParser.parseThrowing(
+                  ((TypeElement) declaredType.asElement()).getQualifiedName().toString());
           final PList<Type> typeParameters =
               PList.fromIter(declaredType.getTypeArguments()).map(TypeMirrorMapper::map);
           return Types.declaredType(
