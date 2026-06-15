@@ -11,6 +11,7 @@ import io.github.muehmar.pojobuilder.generator.model.PojoField;
 import io.github.muehmar.pojobuilder.generator.model.type.DeclaredType;
 import io.github.muehmar.pojobuilder.generator.model.type.Type;
 import io.github.muehmar.pojobuilder.processor.model.DetectionSettings;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -59,13 +60,13 @@ public class PojoFieldMapper {
       Element element, Name name, Type type, DetectionSettings settings) {
     final PList<String> nullableAnnotationClasses =
         PList.of(
-            Nullable.class.getName(), "javax.annotation.Nullable", "jakarta.annotation.Nullable");
+            Nullable.class.getName(),
+            "javax.annotation.Nullable",
+            "jakarta.annotation.Nullable",
+            "org.jspecify.annotations.Nullable");
 
-    return PList.fromIter(element.getAnnotationMirrors())
-        .map(AnnotationMirror::getAnnotationType)
-        .map(javax.lang.model.type.DeclaredType::asElement)
-        .map(Element::asType)
-        .map(TypeMirror::toString)
+    return annotationClassNames(element.getAnnotationMirrors())
+        .concat(annotationClassNames(element.asType().getAnnotationMirrors()))
         .find(annotationClassName -> nullableAnnotationClasses.exists(annotationClassName::equals))
         .filter(
             ignore ->
@@ -73,6 +74,15 @@ public class PojoFieldMapper {
                     .getOptionalDetections()
                     .exists(OptionalDetection.NULLABLE_ANNOTATION::equals))
         .map(ignore -> new PojoField(name, type, OPTIONAL));
+  }
+
+  private static PList<String> annotationClassNames(
+      List<? extends AnnotationMirror> annotationMirrors) {
+    return PList.fromIter(annotationMirrors)
+        .map(AnnotationMirror::getAnnotationType)
+        .map(javax.lang.model.type.DeclaredType::asElement)
+        .map(Element::asType)
+        .map(TypeMirror::toString);
   }
 
   @FunctionalInterface

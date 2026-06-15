@@ -491,11 +491,11 @@ There are multiple ways to tell the processor which attributes of a pojo are req
 has the parameter `optionalDetection` which is an array of `OptionalDetection` and allows customisation of each pojo if
 necessary:
 
-| OptionalDetection                     | Description                                                                                                                                                                                                                     |
-|---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| OptionalDetection.OPTIONAL_CLASS      | In this case every field in the pojo which is wrapped in an Optional is considered as optional.                                                                                                                                 |
-| OptionalDetection.NULLABLE_ANNOTATION | With this option a field in the pojo can be annotated with the `Nullable` annotation to mark it as optional. The `Nullable` annotation is delivered within this package, `javax.annotation.Nullable` (JSR305) is supported too. |
-| OptionalDetection.NONE                | All fields are treated as required. This setting gets ignored in case it is used in combination with one of the others.                                                                                                         |
+| OptionalDetection                     | Description                                                                                                                                                                                                                                                                                                        |
+|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OptionalDetection.OPTIONAL_CLASS      | In this case every field in the pojo which is wrapped in an Optional is considered as optional.                                                                                                                                                                                                                    |
+| OptionalDetection.NULLABLE_ANNOTATION | With this option a field in the pojo can be annotated with the `Nullable` annotation to mark it as optional. The `Nullable` annotation is delivered within this package, `javax.annotation.Nullable` (JSR305), `jakarta.annotation.Nullable` and `org.jspecify.annotations.Nullable` (JSpecify) are supported too. |
+| OptionalDetection.NONE                | All fields are treated as required. This setting gets ignored in case it is used in combination with one of the others.                                                                                                                                                                                            |
 
 Both options are active as default.
 
@@ -559,6 +559,8 @@ explicitly in the code, one needs to adjust the import of these stages.
 
 ## Change Log
 
+* next
+    * Support `org.jspecify.annotations.Nullable` (JSpecify) for optional field detection
 * 2.1.1
     * [#49](https://github.com/muehmar/pojo-builder/issues/49) - Fix generation of builder for factory methods and constructors with identicaly signatures
 * 2.1.0

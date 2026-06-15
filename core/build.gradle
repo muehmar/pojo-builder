@@ -25,6 +25,7 @@ dependencies {
     testRuntimeOnly libs.slf4j
 
     testImplementation libs.joor
+    testImplementation libs.jspecify
 }
 
 test {
