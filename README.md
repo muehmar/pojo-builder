@@ -559,8 +559,8 @@ explicitly in the code, one needs to adjust the import of these stages.
 
 ## Change Log
 
-* next
-    * Support `org.jspecify.annotations.Nullable` (JSpecify) for optional field detection
+* 2.2.0
+    * [#51](https://github.com/muehmar/pojo-builder/issues/51) - Support `org.jspecify.annotations.Nullable` (JSpecify) for optional field detection
 * 2.1.1
     * [#49](https://github.com/muehmar/pojo-builder/issues/49) - Fix generation of builder for factory methods and constructors with identicaly signatures
 * 2.1.0
