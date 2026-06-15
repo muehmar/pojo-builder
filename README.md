@@ -30,8 +30,8 @@ annotation processor. In gradle this would look like the following:
 
 ```
 dependencies {
-    compileOnly "io.github.muehmar:pojo-builder-annotations:2.1.1"
-    annotationProcessor "io.github.muehmar:pojo-builder:2.1.1"
+    compileOnly "io.github.muehmar:pojo-builder-annotations:2.2.0"
+    annotationProcessor "io.github.muehmar:pojo-builder:2.2.0"
 }
 ```
 
